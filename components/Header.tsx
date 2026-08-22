@@ -155,16 +155,16 @@ export const Header: React.FC<HeaderProps> = ({
                                 window.scrollTo({ top: 0, behavior: 'smooth' });
                             }
                         }}
-                        className="flex items-center gap-2.5 sm:gap-3.5 group shrink-0"
+                        className="flex items-center gap-2.5 sm:gap-3.5 shrink-0"
                     >
                         <CampusLogoBadge size="md" />
                         <div className="flex flex-col justify-center">
                             <div className="flex items-center gap-1.5">
-                                <span className="font-extrabold text-gray-900 text-lg sm:text-xl leading-tight tracking-tight group-hover:text-blue-700 transition-colors">
+                                <span className="font-extrabold text-gray-900 text-lg sm:text-xl leading-tight tracking-tight">
                                     CLUBS
                                 </span>
                                 <span className="hidden lg:inline-block text-xs font-bold text-slate-400">|</span>
-                                <span className="hidden lg:inline-block font-bold text-gray-900 text-sm leading-tight tracking-tight group-hover:text-blue-700 transition-colors">
+                                <span className="hidden lg:inline-block font-bold text-gray-900 text-sm leading-tight tracking-tight">
                                     Aadikavi Bhanubhakta Campus
                                 </span>
                             </div>

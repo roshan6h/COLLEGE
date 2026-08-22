@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   ALL_CLUBS,
@@ -19,6 +18,7 @@ import { HeroSection } from '@/components/HeroSection';
 import { DashboardControls } from '@/components/DashboardControls';
 import { ClubCard } from '@/components/ClubCard';
 import { ClubPage } from '@/components/ClubPage';
+import FSUPage from './fsu/page';
 import { EventsCalendarSection } from '@/components/EventsCalendarSection';
 import { Footer } from '@/components/Footer';
 import { ScrollProgressBar } from '@/components/ScrollProgressBar';
@@ -32,8 +32,6 @@ import {
 } from 'lucide-react';
 
 export default function App() {
-  const router = useRouter();
-
   const [clubs, setClubs] = useState<Club[]>(ALL_CLUBS);
   const [events, setEvents] = useState<ClubEvent[]>(UPCOMING_EVENTS);
 
@@ -140,12 +138,7 @@ export default function App() {
     showToast('Event Pass Registered Successfully! See details in calendar.');
   };
 
-  // If FSU, navigate to the dedicated /fsu route instead of opening the generic ClubPage
   const handleSelectClub = (club: Club | null) => {
-    if (isFSUClub(club)) {
-      router.push('/fsu');
-      return;
-    }
     setSelectedClub(club);
     window.scrollTo({ top: 0, behavior: 'instant' });
   };
@@ -220,29 +213,31 @@ export default function App() {
         </div>
       )}
 
-      <Header
-        clubs={clubs}
-        onSelectClub={handleSelectClub}
-        onSearchChange={(q) => {
-          setSearchQuery(q);
-          if (q.trim() && selectedClub) {
-            handleSelectClub(null);
-          }
-        }}
-        searchQuery={searchQuery}
-        language={language}
-        onLanguageToggle={() => setLanguage(language === 'en' ? 'np' : 'en')}
-        selectedCategory={selectedCategory}
-        onSelectCategory={(cat) => {
-          if (selectedClub) handleSelectClub(null);
-          setSelectedCategory(cat);
-        }}
-        onHomeClick={handleNavigateHome}
-        showBackButton={Boolean(selectedClub)}
-        onBack={selectedClub ? handleNavigateHome : undefined}
-        isClubView={Boolean(selectedClub)}
-        activeClubName={selectedClub ? (language === 'np' && selectedClub.nepaliName ? selectedClub.nepaliName : selectedClub.name) : undefined}
-      />
+      {!isFSUClub(selectedClub) && (
+        <Header
+          clubs={clubs}
+          onSelectClub={handleSelectClub}
+          onSearchChange={(q) => {
+            setSearchQuery(q);
+            if (q.trim() && selectedClub) {
+              handleSelectClub(null);
+            }
+          }}
+          searchQuery={searchQuery}
+          language={language}
+          onLanguageToggle={() => setLanguage(language === 'en' ? 'np' : 'en')}
+          selectedCategory={selectedCategory}
+          onSelectCategory={(cat) => {
+            if (selectedClub) handleSelectClub(null);
+            setSelectedCategory(cat);
+          }}
+          onHomeClick={handleNavigateHome}
+          showBackButton={Boolean(selectedClub)}
+          onBack={selectedClub ? handleNavigateHome : undefined}
+          isClubView={Boolean(selectedClub)}
+          activeClubName={selectedClub ? (language === 'np' && selectedClub.nepaliName ? selectedClub.nepaliName : selectedClub.name) : undefined}
+        />
+      )}
 
       <AnimatePresence mode="wait">
         {selectedClub ? (
@@ -254,28 +249,38 @@ export default function App() {
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             className="flex-1 flex flex-col"
           >
-            <ClubPage
-              club={selectedClub}
-              onBack={handleNavigateHome}
-              events={events}
-              onRegisterEvent={handleRegisterEvent}
-              onApplyJoin={(_clubId) => {
-                showToast('Membership application submitted to committee executive board!');
-              }}
-              language={language}
-            />
+            {isFSUClub(selectedClub) ? (
+              <FSUPage
+                onBack={handleNavigateHome}
+                clubs={clubs}
+                onSelectClub={handleSelectClub}
+              />
+            ) : (
+              <>
+                <ClubPage
+                  club={selectedClub}
+                  onBack={handleNavigateHome}
+                  events={events}
+                  onRegisterEvent={handleRegisterEvent}
+                  onApplyJoin={(_clubId) => {
+                    showToast('Membership application submitted to committee executive board!');
+                  }}
+                  language={language}
+                />
 
-            <Footer
-              language={language}
-              onNavigateHome={handleNavigateHome}
-              onNavigateToAbout={handleNavigateToAbout}
-              onNavigateToCommittees={handleNavigateToCommittees}
-              onNavigateToEvents={handleNavigateToEvents}
-              onNavigateToCategory={(cat) => {
-                setSelectedCategory(cat);
-                handleNavigateToSection('clubs-dashboard-section');
-              }}
-            />
+                <Footer
+                  language={language}
+                  onNavigateHome={handleNavigateHome}
+                  onNavigateToAbout={handleNavigateToAbout}
+                  onNavigateToCommittees={handleNavigateToCommittees}
+                  onNavigateToEvents={handleNavigateToEvents}
+                  onNavigateToCategory={(cat) => {
+                    setSelectedCategory(cat);
+                    handleNavigateToSection('clubs-dashboard-section');
+                  }}
+                />
+              </>
+            )}
           </motion.div>
         ) : (
           <motion.div

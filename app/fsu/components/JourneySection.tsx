@@ -11,37 +11,37 @@ export default function JourneySection({ language }: JourneySectionProps) {
 
     const journeyPhotos = [
         {
-            url: "/1.png",
+            url: "../fsu/1.webp",
             altEn: "Student Protest for Academic Rights",
             altNp: "शैक्षिक अधिकारका लागि विद्यार्थी आन्दोलन",
             gridClass: "col-span-2 md:col-span-2 md:row-span-2 h-[260px] sm:h-[340px] md:h-[480px]"
         },
         {
-            url: "/2.png",
+            url: "../fsu/2.webp",
             altEn: "Unified Student Rally",
             altNp: "विद्यार्थी एकता र्याली प्रदर्शन",
             gridClass: "col-span-2 md:col-span-1 md:row-span-1 h-[170px] sm:h-[210px] md:h-[228px]"
         },
         {
-            url: "/3.png",
+            url: "../fsu/3.webp",
             altEn: "Youth Activists Conference",
             altNp: "युवा अभियन्ता भेला तथा अन्तरक्रिया",
             gridClass: "col-span-2 md:col-span-1 md:row-span-1 h-[170px] sm:h-[210px] md:h-[228px]"
         },
         {
-            url: "/reason.png",
+            url: "../fsu/reason.webp",
             altEn: "National Banner Event",
             altNp: "राष्ट्रिय महाधिवेशन ब्यानर अनावरण",
             gridClass: "col-span-2 md:col-span-1 md:row-span-2 h-[260px] sm:h-[340px] md:h-[480px]"
         },
         {
-            url: "/5.png",
+            url: "../fsu/5.webp",
             altEn: "Neither War Nor Terrorism",
             altNp: "स्ववियु ब्यानर र प्रचार कार्यक्रम",
             gridClass: "col-span-2 md:col-span-2 md:row-span-1 h-[170px] sm:h-[210px] md:h-[228px]"
         },
         {
-            url: "/4.png",
+            url: "../fsu/4.webp",
             altEn: "Peaceful Public Demonstration",
             altNp: "शान्तिपूर्ण प्रदर्शन र ऐक्यवद्धता",
             gridClass: "col-span-2 md:col-span-2 md:row-span-1 h-[170px] sm:h-[210px] md:h-[228px]"
@@ -96,8 +96,8 @@ export default function JourneySection({ language }: JourneySectionProps) {
                                 </div>
 
                                 {/* View Large Overlay on hover */}
-                                <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-20">
-                                    <div className="neu-button bg-[#eef2f7] text-[#052855] px-4 py-2 rounded-2xl flex items-center gap-2 text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-20">
+                                    <div className="bg-white text-[#052855] px-4 py-2 rounded-full flex items-center gap-2 text-xs font-bold border border-slate-200 shadow-md transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
                                         <ZoomIn className="w-4 h-4 text-red-600" />
                                         <span>{language === "en" ? "View Large" : "ठूलो हेर्नुहोस्"}</span>
                                     </div>
@@ -116,11 +116,11 @@ export default function JourneySection({ language }: JourneySectionProps) {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={() => setSelectedPhoto(null)}
-                        className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 cursor-zoom-out"
+                        className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 cursor-zoom-out"
                     >
                         <button
                             onClick={() => setSelectedPhoto(null)}
-                            className="absolute top-6 right-6 neu-button-navy text-white p-2.5 rounded-full transition-colors border border-white/10 cursor-pointer hover:scale-110"
+                            className="absolute top-6 right-6 bg-slate-900/90 hover:bg-slate-800 text-white p-2.5 rounded-full transition-colors border border-white/20 cursor-pointer hover:scale-110 z-10"
                         >
                             <X className="w-6 h-6" />
                         </button>
@@ -129,7 +129,7 @@ export default function JourneySection({ language }: JourneySectionProps) {
                             animate={{ scale: 1 }}
                             exit={{ scale: 0.95 }}
                             onClick={(e) => e.stopPropagation()}
-                            className="relative max-w-4xl w-full max-h-[85vh] rounded-3xl overflow-hidden neu-card bg-[#eef2f7] p-2 shadow-2xl"
+                            className="relative max-w-4xl w-full max-h-[85vh] rounded-3xl overflow-hidden bg-slate-950 p-2 border border-slate-800 shadow-2xl"
                         >
                             <img
                                 src={selectedPhoto}

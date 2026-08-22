@@ -229,15 +229,15 @@ export const abitClubData: Club = {
 
 export const alumniWelfareData: Club = {
     id: 'free-student-union',
-    name: 'Free Student Union & Alumni Welfare',
-    nepaliName: 'स्वतन्त्र विद्यार्थी युनियन तथा पूर्वविद्यार्थी कल्याण',
+    name: 'Free Student Union',
+    nepaliName: 'स्वतन्त्र विद्यार्थी युनियन',
     category: 'Student Welfare',
     logo: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCTjRGdyZbbonJMArck2KAjZKW90z39NnSUFKCejek5yjEyOC_93E0sgxFCj76NJUsqWvFokGGa2RIfFWQikaX4XR8CmX1M8mmcQq4VIqRV0h8QKQDdPR3uExr1dpHswI2HME96rnsuKI2-3x9xOs6G2XLSS-jtc-s2s6IJ7SGOsHHFUSTX2LwSuJpkiB3tSWK1JWeVlBJbM8CUNHcwz7CkdrxWrpyDvRpsLf3jFnFo1pVzCaJqhi7iEdUq2tzHs_StIdsKEhTIIIhNPA',
     accentColor: '#991b1b',
     description: 'The elected official governing body for all students at Aadikavi Bhanubhakta Campus. FSU works tirelessly to protect student rights, enhance campus infrastructure, coordinate cross-committee activities, and connect active students with the global alumni network.',
     shortDescription: 'The central student union guarding student rights, campus welfare, alumni connections, and institutional growth.',
     establishedYear: 1987,
-    memberCount: 2400,
+    memberCount: 3500,
     facultyAdvisor: 'Campus Chief - Prof. Dr. Bhoj Raj Kafle',
     president: 'Anup Aale Magar',
     meetingSchedule: 'Bi-weekly Sunday at 2:00 PM',
@@ -567,105 +567,180 @@ export const abccricket: Club = {
     accentColor: '#b45309',
     description: 'The ABC Cricket Club is dedicated to promoting cricketing excellence and fostering a love for the game among students.',
     shortDescription: 'Promoting cricketing excellence and fostering a love for the game among students.',
-    establishedYear: 1992,
-    memberCount: 7,
-    facultyAdvisor: 'Prof. Ram Chandra Bhattarai',
-    president: 'Manoj Pokharel',
+    establishedYear: 2081,
+    memberCount: 15,
+    clubAdvisor: 'Dikpal Adhikari' + ' ' + 'Shiva Mishra',
+    president: 'Pramish Neupane',
     meetingSchedule: 'Saturdays at 11:00 AM',
-    roomLocation: 'Bhanu Memorial Hall',
-    contactEmail: 'cricket@abcampus.edu.np',
-    vision: 'To keep the immortal literary legacy of Aadikavi Bhanubhakta Acharya alive through youth poetry, creative writing, and linguistic excellence.',
+    roomLocation: 'Campus Main Building',
+    contactEmail: 'npramish1@gmail.com',
+    vision: 'To be a leading sports club on campus that nurtures cricketing talent and builds a strong sporting culture among students.',
     mission: [
-        'Host the annual Bhanu Jayanti Grand Literary Symposium and poetry slam.',
-        'Publish the biannual student literary magazine "Bhanu Srijana".',
-        'Conducted gazal and drama writing workshops for emerging writers.'
+        "ABC Cricket Club is committed to developing players' skills through regular practice, coaching, and friendly matches. The club promotes teamwork, discipline, and physical fitness while encouraging students to actively participate in sports beyond academics.",
     ],
     presidentMessage: {
-        senderName: 'Manoj Pokharel',
-        senderRole: 'President, Literature Forum',
-        message: 'Literature is the mirror of society. We invite all creative minds at Aadikavi Bhanubhakta Campus to express their thoughts through verses, stories, and plays.',
-        avatarUrl: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=300&h=300&fit=crop&crop=face'
+        senderName: 'Pramish Neupane',
+        senderRole: 'President, ABC Cricket Club',
+        message: 'As the President of ABC Cricket Club, I’m proud to be part of a team that believes in cricket, teamwork, and friendship. Grateful to everyone who supports us and helps make the club better. Let’s keep playing, improving, and growing together!',
     },
-    advisorMessage: {
-        senderName: 'Prof. Ram Chandra Bhattarai',
-        senderRole: 'Faculty Advisor, Dept of Nepali',
-        message: 'The Creative Literature Forum serves as a cradle for linguistic art and youth expression on campus.',
-        avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face'
-    },
+
     manifesto: {
-        title: 'Literary Art & Creative Expression Manifesto',
+        title: 'ABC Cricket Club Manifesto',
         points: [
-            'Preserving Cultural & Linguistic Heritage.',
-            'Encouraging Youth Poetry & Ghazal Recitations.',
-            'Providing Publishing Platforms for Student Authors.'
+            'We believe in building a strong team spirit through discipline, hard work, and fair play.',
+            'We aim to develop players cricketing skills while promoting physical fitness and teamwork.',
+            'We encourage sportsmanship, respect, and healthy competition both on and off the field.',
+            'We strive to represent our campus with pride and inspire more students to take up the sport.'
         ]
     },
-    history: 'Founded in 1992, the forum has organized over 30 years of literary symposia, publishing dozens of anthologies and hosting regional poetry competitions.',
+    history: 'Founded in 2081, the club has organized numerous cricket tournaments and matches, fostering a strong sporting culture among students.',
     leadership: [
         {
             id: 'lit1',
-            name: 'Prof. Ram Chandra Bhattarai',
-            role: 'Faculty Advisor',
-            department: 'Department of Nepali Literature',
-            email: 'ramchandra@abcampus.edu.np',
-            phone: '+977 9856022334',
-            avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face'
+            name: 'Shiva Mishra',
+            role: 'Club Advisor',
+            department: 'MA Nepali 2nd Year',
+            email: 'shiva.mishra@student.abcampus.edu.np',
+            phone: '+977 ',
+            avatarUrl: '/cricket/shiva.webp'
         },
         {
             id: 'lit2',
-            name: 'Manoj Pokharel',
-            role: 'President',
+            name: 'Dikpal Adhikari',
+            role: 'Club Advisor',
             department: 'MA Nepali 2nd Year',
-            email: 'manoj.pokharel@student.abcampus.edu.np',
-            phone: '+977 9812345678',
-            avatarUrl: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=300&h=300&fit=crop&crop=face'
+            email: 'dikpal.adhikari@student.abcampus.edu.np',
+            phone: '+977 9846954665',
+            avatarUrl: '/cricket/dikpal.webp'
         },
         {
             id: 'lit3',
-            name: 'Ashim Chhertri',
-            role: 'Member',
-            department: 'BICTE 4th Semester',
-            email: 'ramchandra@abcampus.edu.np',
-            phone: '+977 9856022334',
-            avatarUrl: '/cricket/ashim.webp',
+            name: 'Pramish Neupane',
+            role: 'President',
+            department: 'MA Nepali 2nd Year',
+            email: 'npramish1@gmail.com',
+            phone: '+977 9767279339',
+            avatarUrl: '/cricket/pramish.webp'
         },
         {
             id: 'lit4',
+            name: 'Ram Shrestha',
+            role: 'Vice President',
+            department: 'BBS 2nd Year',
+            email: 'ram.shrestha@student.abcampus.edu.np',
+            phone: '+977 9704703317',
+            avatarUrl: '/cricket/ram.webp'
+        },
+        {
+            id: 'lit6',
+            name: 'Bipin Adhikari',
+            role: 'Secretary',
+            department: 'BICTE 4th Semester',
+            email: 'bipin.adhikari@student.abcampus.edu.np',
+            phone: '+977 9762861361',
+            avatarUrl: '/cricket/bipin.webp',
+        },
+        {
+            id: 'lit7',
+            name: 'Bipu Katila',
+            role: 'Joint Secretary',
+            department: 'BICTE 4th Semester',
+            email: 'ramchandra@abcampus.edu.np',
+            phone: '+977 9704506956',
+            avatarUrl: '/cricket/bipug.webp'
+        },
+        {
+            id: 'lit8',
+            name: 'Bisham Thakuri',
+            role: 'Treasurer',
+            department: 'BICTE 4th Semester',
+            email: 'bisham.thakuri@student.abcampus.edu.np',
+            phone: '+977 9806783037',
+            avatarUrl: '/cricket/bisham.webp'
+        },
+        {
+            id: 'lit9',
             name: 'Sabin Shrestha',
-            role: 'Member',
+            role: 'Joint Treasurer',
             department: 'BICTE 4th Semester',
             email: 'manoj.pokharel@student.abcampus.edu.np',
             phone: '+977 9812345678',
             avatarUrl: '/cricket/sabing.webp'
         },
         {
-            id: 'lit5',
-            name: 'Bipu Katila',
+            id: 'lit10',
+            name: 'Ashim Chhertri',
             role: 'Member',
             department: 'BICTE 4th Semester',
             email: 'ramchandra@abcampus.edu.np',
-            phone: '+977 9856022334',
-            avatarUrl: '/cricket/bipug.webp'
+            phone: '+977 9712062701',
+            avatarUrl: '/cricket/ashim.webp',
         },
         {
-            id: 'lit6',
-            name: 'Ram Shrestha',
+            id: 'lit11',
+            name: 'Ankit Tiwari',
             role: 'Member',
-            department: 'MA Nepali 2nd Year',
-            email: 'manoj.pokharel@student.abcampus.edu.np',
-            phone: '+977 9812345678',
-            avatarUrl: '/cricket/laxg.webp'
+            department: 'BBS 2nd Year',
+            email: 'ankit.tiwari@student.abcampus.edu.np',
+            phone: '+977 9704703317',
+            avatarUrl: '/cricket/ankit.webp'
+        },
+        {
+            id: 'lit12',
+            name: 'Mandip Bishural',
+            role: 'Member',
+            department: 'BBS 2nd Year',
+            email: 'mandip.bishural@student.abcampus.edu.np',
+            phone: '+977 ',
+            avatarUrl: '/cricket/mandip.webp'
+        },
+        {
+            id: 'lit13',
+            name: 'Sandip Thapa',
+            role: 'Member',
+            department: 'BBS 2nd Year',
+            email: 'sandip.thapa@student.abcampus.edu.np',
+            phone: '+977',
+            avatarUrl: '/cricket/sandip.webp'
+        },
+        {
+            id: 'lit14',
+            name: 'Sagar Raj Kumar',
+            role: 'Member',
+            department: 'BBS 2nd Year',
+            email: 'sagar.raj@student.abcampus.edu.np',
+            phone: '+977 9820616913',
+            avatarUrl: '/cricket/sagar.webp'
+        },
+        {
+            id: 'lit15',
+            name: 'Chandan Pariyar',
+            role: 'Member',
+            department: 'BBS 2nd Year',
+            email: 'chandan.pariyar@student.abcampus.edu.np',
+            phone: '+977',
+            avatarUrl: '/cricket/chandan.webp'
+        },
+        {
+            id: 'lit16',
+            name: 'Sandesh Panthi',
+            role: 'Member',
+            department: 'BBS 2nd Year',
+            email: 'sandesh.panthi@student.abcampus.edu.np',
+            phone: '+977',
+            avatarUrl: '/cricket/sandesh.webp'
         }
+
     ],
     achievements: [
-        'Organizes annual Bhanu Jayanti Grand Literary Symposium',
-        'Published 12 editions of campus magazine "Bhanu Srijana"',
-        'Gandaki Provincial Youth Poetry Award winners 2024 & 2025'
+        'Not Available',
     ],
     galleryImages: [
         'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=800&auto=format&fit=crop&q=80'
     ]
 };
+
+
 
 export const managementclub: Club = {
     id: 'bbs-student',
@@ -1002,6 +1077,122 @@ export const human: Club = {
         'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=800&auto=format&fit=crop&q=80'
     ]
 };
+export const vyasABC: Club = {
+    id: 'vyas abc',
+    name: 'VYAS ABC',
+    nepaliName: 'व्यास एबिसी (भिजनरी युथ फर अवेकनिङ सोसाइटी आदिकवि भानुभक्त क्याम्पस)',
+    category: 'Humanitarian & Service',
+    logo: '../vyas/vyaslogo.webp',
+    accentColor: '#c026d3',
+    description: '“Empowering youth with wisdom, values, and a Krishna-centered lifestyle. Visionary Youth for Awakening Society (VYAS).”',
+    shortDescription: 'Preserving Nepalese heritage through folk dance, music ensembles, and cultural pageants.',
+    establishedYear: 2082,
+    memberCount: 5,
+    president: 'Puspa Pandit',
+    meetingSchedule: 'Fridays at 4:00 PM',
+    roomLocation: 'Bhanubhakta Cultural Hall, Room 201',
+    contactEmail: 'vyasabc0123@gmail.com',
+    vision: 'VYAS ABC is dedicated to fostering the holistic development of students by promoting mental, emotional, physical, and spiritual well-being. The club aims to empower students to build resilience, manage stress effectively, and discover their full potential through a balanced and fulfilling approach to personal growth.',
+    mission: [
+        'VYAS ABC works to support the overall growth of students by helping them stay mentally, emotionally, and physically healthy. The club helps students build strength, manage stress, and grow into their full potential.'
+    ],
+    presidentMessage: {
+        senderName: 'Puspa Pandit',
+        senderRole: 'President, VYAS ABC',
+        message: 'It is my great pleasure to welcome you to VYAS ABC, where I get to work with a passionate team of students who want to make a positive difference on our campus and community. VYAS ABC is more than just a place for activities — it helps students build leadership, teamwork, and social responsibility through educational, cultural, and community programs. I believe real change starts with small efforts, and I encourage everyone to work together with unity and dedication. I want to thank the campus administration, teachers, advisors, and members for their constant support. Let us continue to learn, lead, serve, and inspire. Let us continue to learn, lead, serve, and inspire.',
+        avatarUrl: '../vyas/pushpa.webp'
+    },
+
+    manifesto: {
+        title: 'VYAS ABC Manifesto',
+        points: [
+            'We believe in the complete growth of every student — mind, body, and spirit.',
+            'We create a safe and supportive space where students can learn and grow together.',
+            'We help students build strength, manage stress, and reach their full potential.',
+            'We promote a balanced and healthy way of life, both on and off campus.',
+        ]
+    },
+    history: 'Founded in 2082, VYAS ABC has been a beacon of hope and inspiration for countless students, fostering a community dedicated to holistic development and social responsibility.',
+    leadership: [
+
+        {
+            id: 'vy1',
+            name: 'Puspa Pandit',
+            role: 'President',
+            department: 'BICTE 7th Semester',
+            email: 'panditpuspa000@gmail.com',
+            phone: '+977 9814151727',
+            avatarUrl: '../vyas/pushpa.webp'
+        },
+        {
+            id: 'vy2',
+            name: 'Deepika Shrestha',
+            role: 'Vice-President',
+            department: 'BICTE 5th Semester',
+            email: 'vyasabc0123@gmail.com',
+            phone: '+977 9816684940',
+            avatarUrl: '../vyas/deepika.webp'
+        },
+        {
+            id: 'vy3',
+            name: 'Anil Mahato',
+            role: 'Secretary',
+            department: 'BICTE 4th Semester',
+            email: 'vyasabc0123@gmail.com',
+            phone: '+977 9746846173',
+            avatarUrl: '../vyas/anil.webp'
+        },
+        {
+            id: 'vy4',
+            name: 'Sweta khadka',
+            role: 'Joint-secretary',
+            department: 'BICTE 7th Semester',
+            email: 'vyasabc0123@gmail.com',
+            phone: '+977 9826601227',
+            avatarUrl: '../vyas/sweta.webp'
+        },
+        {
+            id: 'vy5',
+            name: 'Kamal dauliya',
+            role: 'Treasurer',
+            department: 'BICTE 7th Semester',
+            email: 'vyasabc0123@gmail.com',
+            phone: '+977 9806561230',
+            avatarUrl: '../vyas/kamal.webp'
+        }
+    ],
+    achievements: [
+        'VYAS ABC organizes an Inter-School Vedic Quiz Competition ',
+    ],
+    achievementItems: [
+        {
+            id: 'vy-1',
+            title: 'Registration and Certification of VYAS ABC as a student club at Aadikavi Bhanubhakta Campus',
+            description: 'VYAS ABC is officially recognized as a student club at Aadikavi Bhanubhakta Campus, marking a significant milestone in our journey to empower youth and promote holistic development.',
+            date: '2082-08-14',
+            category: 'Certification',
+            badge: 'Badge of Recognition',
+            image: '../vyas/certificate.webp'
+        },
+        {
+            id: 'vy-2',
+            title: 'VYAS ABC organizes an Inter-School Vedic Quiz Competition ',
+            description: 'Where knowledge becomes devotion, Where wisdom shapes character, And where young minds rise to enlighten society.',
+            date: 'Jan-21-2025',
+            category: 'Competition',
+            badge: 'Major Milestone',
+            image: '../vyas/quizcom.webp'
+        }
+
+    ],
+
+    galleryImages: [
+        '../vyas/vyas1.webp',
+        '../vyas/vyas2.webp'
+
+
+    ]
+};
 
 
 // Master independent array of all 14 clubs with 0 external file dependencies
@@ -1012,6 +1203,7 @@ export const ALL_CLUBS: Club[] = [
     abccricket,
     managementclub,
     human,
+    vyasABC,
 
 ];
 
@@ -1151,41 +1343,10 @@ export const UPCOMING_EVENTS: ClubEvent[] = [
         registeredCount: 35,
         image: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&auto=format&fit=crop&q=80'
     },
-
-    // Youth Social Service (student-management-circle)
-    {
-        id: 'evt-smc-1',
-        clubId: 'student-management-circle',
-        clubName: 'Youth Social Service & Leadership Circle',
-        title: 'Aadikavi Model United Nations (AMUN 2026)',
-        date: '2026-09-09',
-        time: '09:00 AM - 05:00 PM',
-        venue: 'Main Campus Auditorium',
-        category: 'Debate & Leadership',
-        description: 'Engage in diplomatic negotiation, crisis resolution, and parliamentary oration on pressing global challenges.',
-        capacity: 120,
-        registeredCount: 74,
-        image: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=800&auto=format&fit=crop&q=80'
-    },
-    {
-        id: 'evt-smc-2',
-        clubId: 'student-management-circle',
-        clubName: 'Youth Social Service & Leadership Circle',
-        title: 'Master of Ceremonies (MCing) & Public Oration Bootcamp',
-        date: '2026-09-21',
-        time: '01:00 PM - 04:30 PM',
-        venue: 'Seminar Hall B',
-        category: 'Skill Workshop',
-        description: 'Comprehensive public speaking coaching covering voice modulation, stage presence, and hosting high-profile events.',
-        capacity: 65,
-        registeredCount: 40,
-        image: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&auto=format&fit=crop&q=80'
-    },
-
     // Red Cross Circle (nepal-youth-red-cross)
     {
         id: 'evt-rc-1',
-        clubId: 'nepal-youth-red-cross',
+        clubId: 'abit-club',
         clubName: 'Nepal Youth Red Cross Circle (YRCC)',
         title: 'Mega Blood Donation & Free Health Screening Camp',
         date: '2026-09-10',
@@ -1199,7 +1360,7 @@ export const UPCOMING_EVENTS: ClubEvent[] = [
     },
     {
         id: 'evt-rc-2',
-        clubId: 'nepal-youth-red-cross',
+        clubId: 'abit-club',
         clubName: 'Nepal Youth Red Cross Circle (YRCC)',
         title: 'First Aid Certification & Disaster Preparedness Drill',
         date: '2026-09-22',
@@ -1211,7 +1372,4 @@ export const UPCOMING_EVENTS: ClubEvent[] = [
         registeredCount: 65,
         image: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=800&auto=format&fit=crop&q=80'
     },
-
-    // Humanities
-
 ];

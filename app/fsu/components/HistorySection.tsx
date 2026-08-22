@@ -38,7 +38,7 @@ export default function HistorySection({ language }: HistorySectionProps) {
             <div className="max-w-6xl mx-auto px-6 sm:px-8">
                 {/* Section Header */}
                 <div className="flex flex-col items-center text-center mb-16">
-                    <span className="neu-flat-sm text-red-600 px-4 py-1.5 rounded-full text-xs font-extrabold tracking-widest uppercase flex items-center gap-2">
+                    <span className="neu-flat-sm text-red-600 px-4 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase flex items-center gap-2">
                         <span>History of ANNFSU In Nepal</span>
                         <span className="text-slate-400">|</span>
                         <span className="font-devanagari font-bold">{language === "en" ? "इतिहास" : "इतिहास"}</span>
@@ -67,13 +67,13 @@ export default function HistorySection({ language }: HistorySectionProps) {
                                             {isEven ? (
                                                 /* Text Card on Left */
                                                 <div className="w-full max-w-md neu-flat p-8 rounded-3xl border-r-4 border-r-red-600 flex flex-col items-end text-right space-y-2.5 hover:scale-[1.015] transition-transform">
-                                                    <span className="text-xs sm:text-sm font-black text-red-600 tracking-wider uppercase font-sans neu-pressed-sm px-3 py-1 rounded-full bg-[#eef2f7]">
+                                                    <span className="text-xs sm:text-sm font-bold text-red-600 tracking-wider uppercase neu-pressed-sm px-3.5 py-1 rounded-full bg-[#eef2f7]">
                                                         {item.year}
                                                     </span>
-                                                    <h3 className="text-lg sm:text-xl font-extrabold text-[#052855] tracking-tight leading-snug">
+                                                    <h3 className="text-lg sm:text-xl font-bold text-[#052855] tracking-tight leading-snug">
                                                         {language === "en" ? item.titleEn : item.titleNp}
                                                     </h3>
-                                                    <p className="text-xs sm:text-[13px] text-slate-600 leading-relaxed font-sans font-medium">
+                                                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
                                                         {language === "en" ? item.descEn : item.descNp}
                                                     </p>
                                                 </div>
@@ -95,13 +95,13 @@ export default function HistorySection({ language }: HistorySectionProps) {
                                             {!isEven ? (
                                                 /* Text Card on Right */
                                                 <div className="w-full max-w-md neu-flat p-8 rounded-3xl border-l-4 border-l-red-600 flex flex-col items-start text-left space-y-2.5 hover:scale-[1.015] transition-transform">
-                                                    <span className="text-xs sm:text-sm font-black text-red-600 tracking-wider uppercase font-sans neu-pressed-sm px-3 py-1 rounded-full bg-[#eef2f7]">
+                                                    <span className="text-xs sm:text-sm font-bold text-red-600 tracking-wider uppercase neu-pressed-sm px-3.5 py-1 rounded-full bg-[#eef2f7]">
                                                         {item.year}
                                                     </span>
-                                                    <h3 className="text-lg sm:text-xl font-extrabold text-[#052855] tracking-tight leading-snug">
+                                                    <h3 className="text-lg sm:text-xl font-bold text-[#052855] tracking-tight leading-snug">
                                                         {language === "en" ? item.titleEn : item.titleNp}
                                                     </h3>
-                                                    <p className="text-xs sm:text-[13px] text-slate-600 leading-relaxed font-sans font-medium">
+                                                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
                                                         {language === "en" ? item.descEn : item.descNp}
                                                     </p>
                                                 </div>
@@ -136,13 +136,13 @@ export default function HistorySection({ language }: HistorySectionProps) {
 
                                         {/* Text Card Second on Mobile */}
                                         <div className="w-full neu-flat p-6 rounded-2xl border-l-4 border-l-red-600 flex flex-col items-start text-left space-y-2">
-                                            <span className="text-xs font-black text-red-600 tracking-wider uppercase font-sans">
+                                            <span className="text-xs font-bold text-red-600 tracking-wider uppercase neu-pressed-sm px-3 py-0.5 rounded-full bg-[#eef2f7]">
                                                 {item.year}
                                             </span>
-                                            <h3 className="text-base sm:text-lg font-extrabold text-[#052855] tracking-tight">
+                                            <h3 className="text-base sm:text-lg font-bold text-[#052855] tracking-tight">
                                                 {language === "en" ? item.titleEn : item.titleNp}
                                             </h3>
-                                            <p className="text-xs text-slate-600 leading-relaxed">
+                                            <p className="text-xs text-slate-600 leading-relaxed font-medium">
                                                 {language === "en" ? item.descEn : item.descNp}
                                             </p>
                                         </div>

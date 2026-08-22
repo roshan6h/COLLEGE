@@ -210,8 +210,8 @@ export default function FSUPage({
                                     href={link.href}
                                     onClick={() => setActiveLink(link.href)}
                                     className={`relative text-xs font-bold transition-all py-1.5 px-3.5 rounded-full cursor-pointer select-none ${isActive
-                                            ? "bg-white text-red-600 font-extrabold shadow-sm border border-slate-200/80"
-                                            : "text-slate-600 hover:text-[#052855] hover:bg-white/70"
+                                        ? "bg-white text-red-600 font-extrabold shadow-sm border border-slate-200/80"
+                                        : "text-slate-600 hover:text-[#052855] hover:bg-white/70"
                                         }`}
                                 >
                                     {isActive && (
@@ -322,20 +322,20 @@ export default function FSUPage({
                             </AnimatePresence>
                         </div>
 
-                        {/* Language Switcher Pill */}
+                        {/* Language Switcher Button (Icon Only) */}
                         <button
                             onClick={toggleLanguage}
-                            className="bg-white border border-slate-200 hover:border-slate-300 flex items-center gap-1.5 px-3.5 py-2 text-slate-700 hover:text-blue-900 rounded-full transition-all cursor-pointer text-xs font-bold shadow-sm hover:shadow"
-                            title={language === "en" ? "नेपाली भाषामा हेर्नुहोस्" : "Switch to English"}
+                            className="w-9 h-9 neu-button flex items-center justify-center text-slate-700 hover:text-blue-900 rounded-full transition-all cursor-pointer hover:scale-105 active:scale-95"
+                            title={language === "en" ? "नेपाली भाषामा हेर्नुहोस् (Switch to Nepali)" : "Switch to English"}
+                            aria-label={language === "en" ? "Switch to Nepali" : "Switch to English"}
                         >
-                            <Globe className="w-3.5 h-3.5 text-blue-900" />
-                            <span>{language === "en" ? "नेपाली" : "EN"}</span>
+                            <Globe className="w-4 h-4 text-blue-900" />
                         </button>
 
                         {/* Join Us Pill Button */}
                         <a
                             href="#grievances"
-                            className="bg-[#052855] hover:bg-[#073674] text-white px-5 py-2 rounded-full text-xs font-bold tracking-wider transition-all uppercase flex items-center gap-1.5 shadow hover:shadow-md hover:scale-105 active:scale-95 cursor-pointer"
+                            className="neu-button-navy px-5 py-2 rounded-full text-xs font-bold tracking-wider transition-all uppercase flex items-center gap-1.5 hover:scale-105 active:scale-95 cursor-pointer"
                         >
                             <span>{language === "en" ? "Join Us" : "हामीसँग जोडिनुहोस्"}</span>
                         </a>
@@ -343,19 +343,19 @@ export default function FSUPage({
 
                     {/* Mobile menu toggle */}
                     <div className="flex items-center gap-2 xl:hidden">
-                        {/* Mobile Language switch */}
+                        {/* Mobile Language switch (Icon Only) */}
                         <button
                             onClick={toggleLanguage}
-                            className="bg-white border border-slate-200 hover:border-slate-300 px-3 py-1.5 text-slate-700 hover:text-blue-900 rounded-full text-xs font-bold cursor-pointer flex items-center gap-1.5 shadow-sm"
-                            title="Change Language"
+                            className="w-8 h-8 neu-button text-slate-700 hover:text-blue-900 rounded-full cursor-pointer flex items-center justify-center active:scale-95"
+                            title={language === "en" ? "नेपाली भाषामा हेर्नुहोस् (Switch to Nepali)" : "Switch to English"}
+                            aria-label={language === "en" ? "Switch to Nepali" : "Switch to English"}
                         >
-                            <Globe className="w-3.5 h-3.5 text-blue-900" />
-                            <span>{language === "en" ? "नेपाली" : "EN"}</span>
+                            <Globe className="w-4 h-4 text-blue-900" />
                         </button>
 
                         <button
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                            className="bg-white border border-slate-200 hover:border-slate-300 text-slate-700 hover:text-slate-900 p-2 rounded-xl transition-colors cursor-pointer shadow-sm"
+                            className="neu-button text-slate-700 hover:text-slate-900 p-2 rounded-xl transition-colors cursor-pointer"
                             aria-label="Toggle Menu"
                         >
                             {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
@@ -459,13 +459,13 @@ export default function FSUPage({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.6 }}
-                className="relative min-h-[85vh] flex items-center pt-32 pb-24 overflow-hidden text-white mt-12 w-full max-w-full"
+                className="relative min-h-screen min-h-[100dvh] flex items-center justify-center pt-20 sm:pt-24 pb-16 overflow-hidden text-white w-full max-w-full"
             >
                 {/* Background Image */}
                 <div className="absolute inset-0 z-0">
                     <img
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWW5sJJ_cYRhwOjpLtMuP3mNQ7ynEqagVJnI1OeHoVEoHbdjG50CLbyajjeAq0hfeh41ob9CesPNaUnmhXDCGYcrdUb1SvnGaEBG5QOBmHuTwoRZlqHSk4Kc2dMNr4BAwCwi0OrUWADdehuwZW9Hkm12Fsb_Ohi8Nusuw9DRIy4u2pMbvgrcTxSgbyoGpbvARoJWsbHBBUu9DnW6ddKkkSorZV9yvU3Uy9aBz_crXZGAdJvqgTet816AVUDBApeTdG7HF7dk4A-5c"
-                        alt="ANNFSU Students Gathering"
+                        src="../fsu/img8.webp"
+                        alt="FSU Students Gathering"
                         referrerPolicy="no-referrer"
                         className="w-full h-full object-cover object-center"
                     />
@@ -544,7 +544,7 @@ export default function FSUPage({
                     </motion.div>
 
                     {/* Double Chevron down indicator */}
-                    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex flex-col items-center justify-center">
+                    <div className="absolute bottom-6 sm:bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center justify-center z-20">
                         <motion.div
                             animate={{ y: [0, 8, 0] }}
                             transition={{ repeat: Infinity, duration: 1.5 }}

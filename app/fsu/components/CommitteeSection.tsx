@@ -27,7 +27,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9804141296",
         isExecutive: true,
         order: 1,
-        photoUrl: "/anup1.png"
+        photoUrl: "../fsu/anup1.webp"
     },
     {
         id: "2",
@@ -38,7 +38,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9826101579",
         isExecutive: true,
         order: 2,
-        photoUrl: "/suman2.png"
+        photoUrl: "../fsu/suman2.webp"
     },
     {
         id: "3",
@@ -49,7 +49,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9804153425",
         isExecutive: true,
         order: 3,
-        photoUrl: "/sagar.png"
+        photoUrl: "../fsu/sagar.webp"
     },
     {
         id: "4",
@@ -60,7 +60,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9827133759",
         isExecutive: true,
         order: 4,
-        photoUrl: "/ankit.png"
+        photoUrl: "../fsu/ankit.webp"
     },
     {
         id: "5",
@@ -71,7 +71,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9806722586",
         isExecutive: true,
         order: 5,
-        photoUrl: "/roshan.png"
+        photoUrl: "../fsu/roshan.webp"
     },
     {
         id: "6",
@@ -82,7 +82,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9766602575",
         isExecutive: false,
         order: 6,
-        photoUrl: "/asim.png"
+        photoUrl: "../fsu/asim.webp"
     },
     {
         id: "7",
@@ -93,7 +93,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9824112635",
         isExecutive: false,
         order: 7,
-        photoUrl: "/sisir.png"
+        photoUrl: "../fsu/sisir.webp"
     },
     {
         id: "8",
@@ -104,7 +104,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9806559252",
         isExecutive: false,
         order: 8,
-        photoUrl: "/iman.png"
+        photoUrl: "../fsu/iman.webp"
     },
     {
         id: "9",
@@ -115,7 +115,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9828185669",
         isExecutive: false,
         order: 9,
-        photoUrl: "/roshani.png"
+        photoUrl: "../fsu/roshani.webp"
     },
     {
         id: "10",
@@ -126,7 +126,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9767279339",
         isExecutive: false,
         order: 10,
-        photoUrl: "/pramish.png"
+        photoUrl: "../fsu/pramish.webp"
     },
     {
         id: "11",
@@ -137,7 +137,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9817140789",
         isExecutive: false,
         order: 11,
-        photoUrl: "/anisha.png"
+        photoUrl: "../fsu/anisha.webp"
     },
     {
         id: "12",
@@ -148,7 +148,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9815105797",
         isExecutive: false,
         order: 12,
-        photoUrl: "/sadix.png"
+        photoUrl: "../fsu/sadix.webp"
     },
     {
         id: "13",
@@ -159,7 +159,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9825496647",
         isExecutive: false,
         order: 13,
-        photoUrl: "/prami.png"
+        photoUrl: "../fsu/prami.webp"
     },
     {
         id: "14",
@@ -170,7 +170,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9745456596",
         isExecutive: false,
         order: 14,
-        photoUrl: "/amrit.png"
+        photoUrl: "../fsu/amrit.webp"
     },
     {
         id: "15",
@@ -181,7 +181,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9707528635",
         isExecutive: false,
         order: 15,
-        photoUrl: "/krish.png"
+        photoUrl: "../fsu/krish.webp"
     },
     {
         id: "16",
@@ -192,7 +192,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9826651749",
         isExecutive: false,
         order: 16,
-        photoUrl: "/sarita.png"
+        photoUrl: "../fsu/sarita.webp"
     },
     {
         id: "17",
@@ -203,7 +203,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9826164208",
         isExecutive: false,
         order: 17,
-        photoUrl: "/sugam.png"
+        photoUrl: "../fsu/sugam.webp"
     },
     {
         id: "18",
@@ -214,7 +214,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9804192736",
         isExecutive: false,
         order: 18,
-        photoUrl: "/adina.png"
+        photoUrl: "../fsu/adina.webp"
     },
     {
         id: "19",
@@ -225,7 +225,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9815182475",
         isExecutive: false,
         order: 19,
-        photoUrl: "/om.png"
+        photoUrl: "../fsu/om.webp"
     },
     {
         id: "20",
@@ -236,7 +236,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9821517591",
         isExecutive: false,
         order: 20,
-        photoUrl: "/biwash.png"
+        photoUrl: "../fsu/biwash.webp"
     },
     {
         id: "21",
@@ -247,7 +247,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9828367332",
         isExecutive: false,
         order: 21,
-        photoUrl: "/f1/bis.png"
+        photoUrl: "../fsu/bis.webp"
     },
     {
         id: "22",
@@ -258,7 +258,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9762861361",
         isExecutive: false,
         order: 22,
-        photoUrl: "/bipin.png"
+        photoUrl: "../fsu/bipin.webp"
     }
 ];
 
