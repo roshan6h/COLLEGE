@@ -60,18 +60,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
     return (
         <section className="relative w-full bg-[#eef2f7] text-[#1b1b1e] pt-6 sm:pt-8 lg:pt-10 pb-10 sm:pb-14 border-b border-slate-300/60 overflow-hidden">
-            {/* Background Subtle Gradient Glows for Depth */}
+            {/* Background Subtle Gradient Glows for Depth (Static GPU-accelerated) */}
             <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-                <motion.div
-                    animate={{ scale: [1, 1.15, 1], opacity: [0.4, 0.6, 0.4] }}
-                    transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
-                    className="absolute -top-24 -left-20 w-96 h-96 bg-blue-100/70 rounded-full blur-3xl pointer-events-none"
-                />
-                <motion.div
-                    animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-                    transition={{ repeat: Infinity, duration: 9, ease: "easeInOut", delay: 1 }}
-                    className="absolute top-1/2 -right-20 w-96 h-96 bg-amber-100/60 rounded-full blur-3xl pointer-events-none"
-                />
+                <div className="absolute -top-24 -left-20 w-96 h-96 bg-blue-100/50 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute top-1/2 -right-20 w-96 h-96 bg-amber-100/40 rounded-full blur-3xl pointer-events-none" />
             </div>
 
             <div className="relative z-10 max-w-7xl w-full px-4 sm:px-6 lg:px-8 mx-auto">
@@ -220,7 +212,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                                         src='../campusIMG.png'
                                         alt="Aadikavi Bhanubhakta Campus Building"
                                         referrerPolicy="no-referrer"
-                                        className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                                        loading="lazy"
+                                        decoding="async"
+                                        className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/25 to-transparent pointer-events-none" />
 
@@ -262,7 +256,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 <motion.div
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ once: false, amount: 0.2 }}
+                    viewport={{ once: true, amount: 0.1 }}
                     variants={{
                         hidden: { opacity: 0 },
                         visible: {

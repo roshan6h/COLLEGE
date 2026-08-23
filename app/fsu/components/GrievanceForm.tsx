@@ -184,8 +184,8 @@ _Sent via FSU Aadikavi Official Web Portal_`;
     };
 
     return (
-        <section id="grievances" className="py-14 neu-card rounded-3xl overflow-hidden">
-            <div className="max-w-6xl mx-auto px-6 sm:px-8">
+        <section id="grievances" className="py-6 w-full">
+            <div className="max-w-6xl mx-auto">
                 {/* Header Section */}
                 <div className="text-center mb-12">
                     <span className="neu-flat-sm text-[#052855] px-4 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase inline-flex items-center gap-1.5 mb-3 shadow-xs">

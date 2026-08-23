@@ -345,7 +345,7 @@ export default function App() {
                         <tr>
                           <th className="p-4 rounded-l-xl whitespace-nowrap">Committee Name</th>
                           <th className="p-4 whitespace-nowrap">Category</th>
-                          <th className="p-4 whitespace-nowrap">Faculty Advisor</th>
+                          <th className="p-4 whitespace-nowrap">Club Advisor</th>
                           <th className="p-4 whitespace-nowrap">President</th>
                           <th className="p-4 text-center whitespace-nowrap">Members</th>
                           <th className="p-4 text-right rounded-r-xl whitespace-nowrap">Actions</th>

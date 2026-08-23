@@ -179,7 +179,7 @@ export const ClubDetailModal: React.FC<ClubDetailModalProps> = ({
                                         <Building2 className="w-5 h-5" />
                                     </div>
                                     <div>
-                                        <span className="text-[10px] uppercase font-bold text-gray-500">Faculty Advisor</span>
+                                        <span className="text-[10px] uppercase font-bold text-gray-500">Club Advisor</span>
                                         <p className="text-sm font-bold text-gray-900">{club.facultyAdvisor || 'N/A'}</p>
                                     </div>
                                 </div>
@@ -232,7 +232,7 @@ export const ClubDetailModal: React.FC<ClubDetailModalProps> = ({
                     {activeTab === 'leadership' && (
                         <div className="space-y-4">
                             <h3 className="text-lg font-bold text-[#000d27] font-poppins mb-2">
-                                Executive Leadership & Faculty Advisors
+                                Executive Leadership & Club Advisors
                             </h3>
                             {leadershipList.length === 0 ? (
                                 <p className="text-sm text-gray-500">No leadership records available for this committee.</p>

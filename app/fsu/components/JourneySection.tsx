@@ -49,8 +49,8 @@ export default function JourneySection({ language }: JourneySectionProps) {
     ];
 
     return (
-        <section id="movements" className="py-14 neu-card rounded-3xl overflow-hidden">
-            <div className="max-w-6xl mx-auto px-6 sm:px-8">
+        <section id="movements" className="py-6 w-full">
+            <div className="max-w-6xl mx-auto">
                 {/* Header */}
                 <div className="text-center mb-12">
                     <span className="neu-flat-sm text-red-600 px-4 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase inline-flex items-center gap-1.5 mb-3">

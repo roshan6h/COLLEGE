@@ -8,16 +8,16 @@ interface AboutSectionProps {
 
 export default function AboutSection({ language }: AboutSectionProps) {
     return (
-        <div id="about" className="space-y-16">
+        <div id="about" className="space-y-12">
             {/* About Us Sub-Section */}
-            <section className="py-14 neu-card rounded-3xl overflow-hidden">
-                <div className="max-w-6xl mx-auto px-6 sm:px-8">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <section className="py-6 w-full">
+                <div className="max-w-6xl mx-auto">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
                         {/* Logo Image Column with Neumorphic Plate */}
                         <div className="lg:col-span-5 flex justify-center">
                             <div className="relative w-64 h-64 sm:w-80 sm:h-80 rounded-3xl neu-pressed p-6 flex items-center justify-center bg-[#eef2f7]">
                                 <img
-                                    src="../fsu/logo1.webp"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_VyJwjk3U8Bmc9yTWYqUPrSDvWW3P-2s9TJKPxsRHkalC1ArG2tvmf7H5rIFRAdg-CFYudQYucNgzVVGxJkEAX7sHVZL3AA-f-pjeFXvxATKHZscjXuanNdBg63VU9RsNK-exGjH2L2lWjxkmE9ehLvin4HlaHU3srNjkMp_s8velzwMBLPfOJvvvaJEiJ1-WnvIWOgJ5FNFq5fQa3wiyWLNNu4tIlPJOXyTBdbt4fjCBJRgl6JTH22Vc0qB2YYNWGukAg6G4Ehc"
                                     alt="FSU Logo"
                                     className="w-full h-full object-contain filter drop-shadow-md"
                                     referrerPolicy="no-referrer"

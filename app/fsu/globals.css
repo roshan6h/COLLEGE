@@ -11,6 +11,7 @@ html {
     max-width: 100%;
     overflow-x: hidden;
     box-sizing: border-box;
+    text-rendering: optimizeSpeed;
 }
 
 body {
@@ -24,6 +25,8 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 #root,
@@ -35,6 +38,10 @@ body {
     box-sizing: border-box;
 }
 
+.cv-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 600px;
+}
 
 ::-webkit-scrollbar {
     width: 6px;
@@ -54,7 +61,7 @@ body {
     background: rgba(0, 37, 77, 0.4);
 }
 
-/* Soft UI Utility Classes without harsh white edge glows */
+/* Soft UI Utility Classes with GPU compositing optimization */
 .neu-bg {
     background-color: #f1f5f9;
 }
@@ -63,18 +70,22 @@ body {
     background-color: #ffffff;
     border: 1px solid #e2e8f0;
     box-shadow: 0 2px 4px rgba(15, 23, 42, 0.04);
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
 
 .neu-flat-sm {
     background-color: #ffffff;
     border: 1px solid #e2e8f0;
     box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    transform: translateZ(0);
 }
 
 .neu-flat-lg {
     background-color: #ffffff;
     border: 1px solid #cbd5e1;
     box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+    transform: translateZ(0);
 }
 
 .neu-pressed {
@@ -94,20 +105,21 @@ body {
     border: 1px solid #e2e8f0;
     box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateZ(0);
 }
 
 .neu-button:hover {
     background-color: #f8fafc;
     border-color: #cbd5e1;
     box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
-    transform: translateY(-1px);
+    transform: translateY(-1px) translateZ(0);
 }
 
 .neu-button:active,
 .neu-button-active {
     background-color: #f1f5f9;
     box-shadow: inset 0 1px 3px rgba(15, 23, 42, 0.08);
-    transform: translateY(0);
+    transform: translateY(0) translateZ(0);
 }
 
 .neu-button-primary {
@@ -116,12 +128,13 @@ body {
     border: 1px solid #0a5f99;
     box-shadow: 0 2px 4px rgba(12, 114, 184, 0.2);
     transition: all 0.2s ease-in-out;
+    transform: translateZ(0);
 }
 
 .neu-button-primary:hover {
     background-color: #095990;
     box-shadow: 0 4px 8px rgba(12, 114, 184, 0.25);
-    transform: translateY(-1px);
+    transform: translateY(-1px) translateZ(0);
 }
 
 .neu-button-red {
@@ -130,12 +143,13 @@ body {
     border: 1px solid #991b1b;
     box-shadow: 0 2px 4px rgba(185, 28, 28, 0.2);
     transition: all 0.2s ease-in-out;
+    transform: translateZ(0);
 }
 
 .neu-button-red:hover {
     background-color: #991b1b;
     box-shadow: 0 4px 8px rgba(185, 28, 28, 0.25);
-    transform: translateY(-1px);
+    transform: translateY(-1px) translateZ(0);
 }
 
 .neu-button-navy {
@@ -144,12 +158,13 @@ body {
     border: 1px solid #031b3b;
     box-shadow: 0 2px 4px rgba(5, 40, 85, 0.2);
     transition: all 0.2s ease-in-out;
+    transform: translateZ(0);
 }
 
 .neu-button-navy:hover {
     background-color: #073674;
     box-shadow: 0 4px 8px rgba(5, 40, 85, 0.25);
-    transform: translateY(-1px);
+    transform: translateY(-1px) translateZ(0);
 }
 
 .neu-input {
@@ -170,7 +185,9 @@ body {
     border: 1px solid #e2e8f0;
     box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
     border-radius: 1.5rem;
-    transition: all 0.25s ease-in-out;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
 
 .neu-card:hover {
@@ -182,6 +199,7 @@ body {
     border: 1px solid #e2e8f0;
     box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
     border-radius: 1rem;
+    transform: translateZ(0);
 }
 
 .neu-pill {
@@ -200,6 +218,7 @@ body {
     background-color: #ffffff;
     border: 1px solid #e2e8f0;
     box-shadow: 0 2px 4px rgba(15, 23, 42, 0.05);
+    transform: translateZ(0);
 }
 
 .neu-avatar-inset {
@@ -212,4 +231,14 @@ body {
     background-color: #0f172a;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
     border: 1px solid rgba(51, 65, 85, 0.5);
+    transform: translateZ(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
 }

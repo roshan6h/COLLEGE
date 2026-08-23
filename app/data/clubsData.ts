@@ -59,6 +59,19 @@ export interface AchievementItem {
     badge?: string;
 }
 
+export interface ClubCertificate {
+    isRegistered: boolean;
+    certificateNumber?: string;
+    registeredDate?: string;
+    registeredDateNp?: string;
+    issuingAuthority?: string;
+    issuingAuthorityNp?: string;
+    registrationType?: string;
+    validUntil?: string;
+    certificateImage?: string;
+    remarks?: string;
+}
+
 export interface Club {
     id: string;
     name: string;
@@ -71,6 +84,7 @@ export interface Club {
     establishedYear?: number;
     memberCount?: number;
     facultyAdvisor?: string;
+    clubAdvisor?: string;
     president?: string;
     meetingSchedule?: string;
     roomLocation?: string;
@@ -82,6 +96,7 @@ export interface Club {
     featured?: boolean;
     vision?: string;
     mission?: string[];
+    certificate?: ClubCertificate;
     presidentMessage?: {
         senderName?: string;
         senderRole?: string;
@@ -120,6 +135,18 @@ export const abitClubData: Club = {
     contactEmail: 'abit.club@abcampus.edu.np',
     featured: true,
     vision: 'To position Aadikavi Bhanubhakta Campus as a leading hub of tech talent in Gandaki Province through hands-on software development, AI research, and digital solution delivery.',
+    certificate: {
+        isRegistered: true,
+        certificateNumber: 'ABC-IT-REG-2075/018',
+        registeredDate: 'July 28, 2018 (2075-04-12)',
+        registeredDateNp: '२०७५/०४/१२',
+        issuingAuthority: 'Aadikavi Bhanubhakta Campus - Student Welfare & Extra-Curricular Directorate',
+        issuingAuthorityNp: 'आदिकवि भानुभक्त क्याम्पस - विद्यार्थी कल्याण तथा अतिरिक्त क्रियाकलाप निर्देशनालय',
+        registrationType: 'Recognized Autonomous IT Student Committee',
+        validUntil: 'Academic Year 2083/84 (Active & Renewed)',
+        certificateImage: 'https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?w=1200&auto=format&fit=crop&q=80',
+        remarks: 'Officially accredited student technology committee operating under the Department of Computer Science & Information Technology.'
+    },
     mission: [
         'Host weekly coding bootcamps in React, Python, and Full-Stack Web Development.',
         'Organize annual provincial hackathons and tech innovation fests.',
@@ -134,7 +161,7 @@ export const abitClubData: Club = {
     },
     advisorMessage: {
         senderName: 'Er. Ghan Bahadur Thapa',
-        senderRole: 'Faculty Advisor, Dept of CS & IT',
+        senderRole: 'Club Advisor, Dept of CS & IT',
         message: 'ABIT Club has consistently led technical excellence on campus. We encourage students from all faculties to join our workshops and embrace digital literacy.',
         avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&h=300&fit=crop&crop=face'
     },
@@ -152,7 +179,7 @@ export const abitClubData: Club = {
         {
             id: 'l1',
             name: 'Er. Ghan Bahadur Thapa',
-            role: 'Faculty Advisor',
+            role: 'Club Advisor',
             department: 'Department of Computer Science & IT',
             email: 'ghanbahadur@abcampus.edu.np',
             phone: '+977 9856012345',
@@ -229,15 +256,15 @@ export const abitClubData: Club = {
 
 export const alumniWelfareData: Club = {
     id: 'free-student-union',
-    name: 'Free Student Union',
-    nepaliName: 'स्वतन्त्र विद्यार्थी युनियन',
+    name: 'Free Student Union & Alumni Welfare',
+    nepaliName: 'स्वतन्त्र विद्यार्थी युनियन तथा पूर्वविद्यार्थी कल्याण',
     category: 'Student Welfare',
     logo: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCTjRGdyZbbonJMArck2KAjZKW90z39NnSUFKCejek5yjEyOC_93E0sgxFCj76NJUsqWvFokGGa2RIfFWQikaX4XR8CmX1M8mmcQq4VIqRV0h8QKQDdPR3uExr1dpHswI2HME96rnsuKI2-3x9xOs6G2XLSS-jtc-s2s6IJ7SGOsHHFUSTX2LwSuJpkiB3tSWK1JWeVlBJbM8CUNHcwz7CkdrxWrpyDvRpsLf3jFnFo1pVzCaJqhi7iEdUq2tzHs_StIdsKEhTIIIhNPA',
     accentColor: '#991b1b',
     description: 'The elected official governing body for all students at Aadikavi Bhanubhakta Campus. FSU works tirelessly to protect student rights, enhance campus infrastructure, coordinate cross-committee activities, and connect active students with the global alumni network.',
     shortDescription: 'The central student union guarding student rights, campus welfare, alumni connections, and institutional growth.',
     establishedYear: 1987,
-    memberCount: 3500,
+    memberCount: 2400,
     facultyAdvisor: 'Campus Chief - Prof. Dr. Bhoj Raj Kafle',
     president: 'Anup Aale Magar',
     meetingSchedule: 'Bi-weekly Sunday at 2:00 PM',
@@ -356,6 +383,18 @@ export const bbaClubData: Club = {
     contactEmail: 'bbastudentcloud1@gmail.com',
     featured: true,
     vision: 'To be a leading student platform that empowers BBA students through diverse academic, professional, and leadership opportunities, fostering a skilled and collaborative student community.',
+    certificate: {
+        isRegistered: true,
+        certificateNumber: 'ABC-BBA-REG-2076/009',
+        registeredDate: 'September 4, 2019 (2076-05-18)',
+        registeredDateNp: '२०७६/०५/१८',
+        issuingAuthority: 'Aadikavi Bhanubhakta Campus - Faculty of Management & Student Affairs',
+        issuingAuthorityNp: 'आदिकवि भानुभक्त क्याम्पस - व्यवस्थापन संकाय तथा विद्यार्थी कल्याण शाखा',
+        registrationType: 'Accredited Departmental Student Organization',
+        validUntil: 'Academic Year 2083/84 (Active & Renewed)',
+        certificateImage: 'https://images.unsplash.com/photo-1589330694653-ded6df03f754?w=1200&auto=format&fit=crop&q=80',
+        remarks: 'Certified student association empowering BBA scholars in leadership, management summits, and business innovation.'
+    },
     mission: [
         'ABC BBA Student Cloud is committed to organizing seminars, workshops, training sessions, and community-oriented initiatives in coordination with Aadikavi Bhanubhakta Campus. Through these programs, the club aims to enhance student practical knowledge, leadership abilities, communication skills, and professional competence.'
     ],
@@ -367,7 +406,7 @@ export const bbaClubData: Club = {
     },
     advisorMessage: {
         senderName: 'Chij Kumar Shrestha',
-        senderRole: 'Faculty Advisor, BBA Program Head',
+        senderRole: 'Club Advisor, BBA Program Head',
         message: 'BBA Summit provides an exceptional platform for students to hone strategic thinking, business ethics, and entrepreneurial initiative.',
         avatarUrl: '../bba/chij2.webp'
     },
@@ -385,7 +424,7 @@ export const bbaClubData: Club = {
         {
             id: 'bba1',
             name: 'Chij Kumar Shrestha',
-            role: 'Faculty Advisor',
+            role: 'Club Advisor',
             department: 'Department of Management',
             email: '',
             phone: '+977 9856011223',
@@ -575,6 +614,18 @@ export const abccricket: Club = {
     roomLocation: 'Campus Main Building',
     contactEmail: 'npramish1@gmail.com',
     vision: 'To be a leading sports club on campus that nurtures cricketing talent and builds a strong sporting culture among students.',
+    certificate: {
+        isRegistered: true,
+        certificateNumber: 'ABC-SPT-REG-2081/031',
+        registeredDate: 'May 14, 2024 (2081-02-01)',
+        registeredDateNp: '२०८१/०२/०१',
+        issuingAuthority: 'Aadikavi Bhanubhakta Campus - Sports & Physical Education Board',
+        issuingAuthorityNp: 'आदिकवि भानुभक्त क्याम्पस - खेलकुद तथा शारीरिक शिक्षा परिषद्',
+        registrationType: 'Official Campus Sports Organization',
+        validUntil: 'Academic Year 2082/83 (Active)',
+        certificateImage: 'https://images.unsplash.com/photo-1578269174936-2709b6aeb913?w=1200&auto=format&fit=crop&q=80',
+        remarks: 'Officially accredited student sports committee fostering athletic excellence and tournament coordination.'
+    },
     mission: [
         "ABC Cricket Club is committed to developing players' skills through regular practice, coaching, and friendly matches. The club promotes teamwork, discipline, and physical fitness while encouraging students to actively participate in sports beyond academics.",
     ],
@@ -759,6 +810,18 @@ export const managementclub: Club = {
     roomLocation: 'BBS Block, Hall 102',
     contactEmail: 'bbs.circle@abcampus.edu.np',
     vision: 'To foster physical health, mental resilience, and financial acumen for holistic student success.',
+    certificate: {
+        isRegistered: true,
+        certificateNumber: 'ABC-BBS-REG-2067/004',
+        registeredDate: 'August 10, 2010 (2067-04-26)',
+        registeredDateNp: '२०६७/०४/२६',
+        issuingAuthority: 'Aadikavi Bhanubhakta Campus - Commerce & Accountancy Division',
+        issuingAuthorityNp: 'आदिकवि भानुभक्त क्याम्पस - वाणिज्य तथा लेखा संकाय',
+        registrationType: 'Institutional Commerce & Management Circle',
+        validUntil: 'Academic Year 2083/84 (Active & Renewed)',
+        certificateImage: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1200&auto=format&fit=crop&q=80',
+        remarks: 'Pioneering student commerce circle promoting taxation masterclasses, banking orientations, and professional ethics.'
+    },
     mission: [
         'Host campus health screenings and mental health wellness seminars.',
         'Conduct tax filing and personal financial literacy workshops.',
@@ -772,7 +835,7 @@ export const managementclub: Club = {
     },
     advisorMessage: {
         senderName: 'Ganesh Shrestha',
-        senderRole: 'Faculty Advisor',
+        senderRole: 'Club Advisor',
         message: 'Healthy students build strong academic communities.',
         avatarUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop&crop=face'
     },
@@ -788,7 +851,7 @@ export const managementclub: Club = {
         {
             id: 'bbs1',
             name: 'Ganesh Shrestha',
-            role: 'Faculty Advisor',
+            role: 'Club Advisor',
             department: 'Department of Accountancy',
             email: 'ganesh.shrestha@abcampus.edu.np',
             phone: '+977 9856033445',
@@ -832,7 +895,7 @@ export const human: Club = {
     establishedYear: 2019,
     memberCount: 13,
 
-    facultyAdvisor: 'Faculty Advisor, Department of Humanities',
+    facultyAdvisor: 'Club Advisor, Department of Humanities',
     president: 'Dilip Karki',
 
     meetingSchedule: 'Every Wednesday at 3:30 PM',
@@ -844,6 +907,11 @@ export const human: Club = {
 
     vision:
         'To create a vibrant intellectual and creative community where students develop critical thinking, cultural awareness, communication skills, and a deeper appreciation for literature, arts, and society.',
+
+    certificate: {
+        isRegistered: false,
+        remarks: 'The Humanities Club registration is currently being compiled and reviewed by the Campus Student Affairs Committee for official certification.'
+    },
 
     mission: [
         'Organize literary events, debates, essay competitions, poetry recitals, and creative writing programs.',
@@ -860,8 +928,8 @@ export const human: Club = {
     },
 
     advisorMessage: {
-        senderName: 'Faculty Advisor',
-        senderRole: 'Faculty Advisor, Humanities Department',
+        senderName: 'Club Advisor',
+        senderRole: 'Club Advisor, Humanities Department',
         message:
             'The Humanities Club encourages students to think deeply, express themselves confidently, and appreciate literature, culture, and society. We welcome every student who wishes to learn, create, and contribute.',
         avatarUrl: ''
@@ -885,7 +953,7 @@ export const human: Club = {
         {
             id: 'h1',
             name: '',
-            role: 'Faculty Advisor',
+            role: 'Club Advisor',
             department: 'Department of Humanities',
             email: 'humanities@abcampus.edu.np',
             phone: '+977 9856012345',
@@ -1093,6 +1161,17 @@ export const vyasABC: Club = {
     roomLocation: 'Bhanubhakta Cultural Hall, Room 201',
     contactEmail: 'vyasabc0123@gmail.com',
     vision: 'VYAS ABC is dedicated to fostering the holistic development of students by promoting mental, emotional, physical, and spiritual well-being. The club aims to empower students to build resilience, manage stress effectively, and discover their full potential through a balanced and fulfilling approach to personal growth.',
+    certificate: {
+        isRegistered: true,
+        certificateNumber: '०३/०८२/०८३',
+        registeredDate: '२०८२/०८/१४ (बिहान ८:४३ बजे)',
+        registeredDateNp: '२०८२/०८/१४',
+        issuingAuthority: 'Aadikavi Bhanubhakta Campus, Vyas-01, Bigyanchaur, Tanahun',
+        issuingAuthorityNp: 'आदिकवि भानुभक्त क्याम्पस, व्यास-०१, विज्ञानचौर, तनहुँ',
+        registrationType: 'विद्यार्थी क्लब/संस्था निर्देशिका २०७५ बमोजिम',
+        validUntil: 'शैक्षिक सत्र २०८२/०८३ (Active)',
+        remarks: 'यस आदिकवि भानुभक्त क्याम्पस व्यास-०१, विज्ञानचौर, तनहुँमा विद्यार्थी क्लब/संस्था निर्देशिका २०७५ बमोजिम दर्ता भएको व्यहोरा प्रमाणित गरिन्छ। क्याम्पस प्रमुख: महाप्रसाद हड्खने।'
+    },
     mission: [
         'VYAS ABC works to support the overall growth of students by helping them stay mentally, emotionally, and physically healthy. The club helps students build strength, manage stress, and grow into their full potential.'
     ],
@@ -1225,7 +1304,7 @@ export const UPCOMING_EVENTS: ClubEvent[] = [
         registeredCount: 890,
         image: 'https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=800&auto=format&fit=crop&q=80'
     },
-    {
+     {
         id: 'evt-fsu-2',
         clubId: 'free-student-union',
         clubName: 'Free Student Union & Alumni Welfare',
@@ -1254,122 +1333,5 @@ export const UPCOMING_EVENTS: ClubEvent[] = [
         capacity: 80,
         registeredCount: 42,
         image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&auto=format&fit=crop&q=80'
-    },
-    {
-        id: 'evt-bba-2',
-        clubId: 'bba-cloud',
-        clubName: 'BBA Summit & Management Circle',
-        title: 'NEPSE Stock Trading & Financial Portfolio Masterclass',
-        date: '2026-09-05',
-        time: '01:30 PM - 04:00 PM',
-        venue: 'BBA Interactive Hall',
-        category: 'Financial Seminar',
-        description: 'Deep dive into fundamental company analysis, technical charting, and risk mitigation strategies in the Nepalese capital market.',
-        capacity: 70,
-        registeredCount: 51,
-        image: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&auto=format&fit=crop&q=80'
-    },
-    {
-        id: 'evt-bba-3',
-        clubId: 'bba-cloud',
-        clubName: 'BBA Summit & Management Circle',
-        title: 'Corporate Leadership & Case Study Challenge',
-        date: '2026-09-18',
-        time: '10:00 AM - 02:00 PM',
-        venue: 'Conference Room A',
-        category: 'Case Competition',
-        description: 'Solve real-world brand expansion dilemmas under strict time limits in teams of three. Judged by seasoned corporate consultants.',
-        capacity: 60,
-        registeredCount: 38,
-        image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&auto=format&fit=crop&q=80'
-    },
-
-    // Literature & Creative Forum (aadikavi-nepali-creative-form)
-    {
-        id: 'evt-lit-1',
-        clubId: 'aadikavi-nepali-creative-form',
-        clubName: 'Aadikavi Nepali Literature & Creative Forum',
-        title: 'Inter-College Poetry, Gazal & Short Story Recitation',
-        date: '2026-09-15',
-        time: '01:00 PM - 04:30 PM',
-        venue: 'Bhanu Memorial Hall',
-        category: 'Literature & Poetry',
-        description: 'Showcase your creative writing, poetic recitation, and gazal compositions. Renowned litterateurs and alumni poets on the judge panel.',
-        capacity: 150,
-        registeredCount: 78,
-        image: 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=800&auto=format&fit=crop&q=80'
-    },
-    {
-        id: 'evt-lit-2',
-        clubId: 'aadikavi-nepali-creative-form',
-        clubName: 'Aadikavi Nepali Literature & Creative Forum',
-        title: 'Bhanu Jayanti Cultural Drama & Creative Writing Fest',
-        date: '2026-09-24',
-        time: '11:00 AM - 04:00 PM',
-        venue: 'Main Campus Amphitheater',
-        category: 'Cultural Exhibition',
-        description: 'Celebration of Nepalese traditional folklore, theatrical drama, and instrumental folk performances.',
-        capacity: 400,
-        registeredCount: 220,
-        image: 'https://images.unsplash.com/photo-1460723237483-7a6dc9d0b212?w=800&auto=format&fit=crop&q=80'
-    },
-
-    // Health, Wellness & Commerce (bbs-circle)
-    {
-        id: 'evt-bbs-1',
-        clubId: 'bbs-circle',
-        clubName: 'Health, Wellness & Commerce Forum',
-        title: 'Student Tax Filing, Auditing & Financial Accounting Workshop',
-        date: '2026-09-07',
-        time: '01:00 PM - 04:00 PM',
-        venue: 'BBS Block, Hall 102',
-        category: 'Financial Seminar',
-        description: 'Hands-on training on Nepalese taxation laws, VAT/PAN returns, and preparing corporate balance sheets.',
-        capacity: 80,
-        registeredCount: 46,
-        image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=800&auto=format&fit=crop&q=80'
-    },
-    {
-        id: 'evt-bbs-2',
-        clubId: 'bbs-circle',
-        clubName: 'Health, Wellness & Commerce Forum',
-        title: 'Campus Mental Health Wellness & Ergonomics Seminar',
-        date: '2026-09-17',
-        time: '11:00 AM - 02:00 PM',
-        venue: 'Interactive Room 201',
-        category: 'Wellness & Health',
-        description: 'Practical mindfulness, stress reduction techniques, and ergonomic posture practices for students.',
-        capacity: 70,
-        registeredCount: 35,
-        image: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&auto=format&fit=crop&q=80'
-    },
-    // Red Cross Circle (nepal-youth-red-cross)
-    {
-        id: 'evt-rc-1',
-        clubId: 'abit-club',
-        clubName: 'Nepal Youth Red Cross Circle (YRCC)',
-        title: 'Mega Blood Donation & Free Health Screening Camp',
-        date: '2026-09-10',
-        time: '09:30 AM - 03:30 PM',
-        venue: 'Student Recreation Gazebo',
-        category: 'Health & Humanitarian',
-        description: 'Join hands to donate blood and save lives in Tanahun district. Free blood pressure, blood glucose, and basic health consultation by medical professionals.',
-        capacity: 300,
-        registeredCount: 145,
-        image: 'https://images.unsplash.com/photo-1615461066841-6116e61058f4?w=800&auto=format&fit=crop&q=80'
-    },
-    {
-        id: 'evt-rc-2',
-        clubId: 'abit-club',
-        clubName: 'Nepal Youth Red Cross Circle (YRCC)',
-        title: 'First Aid Certification & Disaster Preparedness Drill',
-        date: '2026-09-22',
-        time: '10:00 AM - 02:00 PM',
-        venue: 'Red Cross Resource Room & Courtyard',
-        category: 'Emergency Training',
-        description: 'Practical training on CPR, emergency bandage techniques, stretcher transport, and rapid earthquake evacuation response.',
-        capacity: 90,
-        registeredCount: 65,
-        image: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=800&auto=format&fit=crop&q=80'
-    },
+    }
 ];

@@ -107,17 +107,13 @@ export const Header: React.FC<HeaderProps> = ({
         : [];
 
     return (
-        <motion.header
-            layout
-            initial={{ y: -40, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        <header
             className="bg-[#eef2f7] sticky top-0 w-full z-50 border-b border-slate-200/80 shadow-xs"
         >
             {/* Main Header Container */}
-            <motion.div layout className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-3 sm:gap-4">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-3 sm:gap-4">
                 {/* Left Side: Optional Back Button + Brand Logo & Name */}
-                <motion.div layout className="flex items-center gap-2 sm:gap-3 shrink-0">
+                <div className="flex items-center gap-2 sm:gap-3 shrink-0">
                     <AnimatePresence initial={false}>
                         {showBackButton && onBack && (
                             <motion.div
@@ -173,7 +169,7 @@ export const Header: React.FC<HeaderProps> = ({
                             </span>
                         </div>
                     </motion.a>
-                </motion.div>
+                </div>
 
                 {/* Center Search Input Bar */}
                 <motion.div
@@ -386,7 +382,7 @@ export const Header: React.FC<HeaderProps> = ({
                 >
                     {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
                 </button>
-            </motion.div>
+            </div>
 
             {/* Mobile Drawer Menu */}
             <AnimatePresence>
@@ -476,7 +472,7 @@ export const Header: React.FC<HeaderProps> = ({
                     </motion.div>
                 )}
             </AnimatePresence>
-        </motion.header>
+        </header>
     );
 };
 

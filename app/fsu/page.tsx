@@ -69,48 +69,57 @@ export default function FSUPage({
     }, []);
 
     useEffect(() => {
+        let ticking = false;
+
         const handleScroll = () => {
-            setScrolled(window.scrollY > 40);
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    setScrolled(window.scrollY > 40);
 
-            // Scroll Spy Logic
-            const sections = [
-                { id: "home", href: "#" },
-                { id: "about", href: "#about" },
-                { id: "notices", href: "#notices" },
-                { id: "manifesto", href: "#manifesto" },
-                { id: "committee", href: "#committee" },
-                { id: "gallery", href: "#gallery" },
-                { id: "movements", href: "#movements" },
-                { id: "grievances", href: "#grievances" }
-            ];
+                    // Scroll Spy Logic
+                    const sections = [
+                        { id: "home", href: "#" },
+                        { id: "about", href: "#about" },
+                        { id: "notices", href: "#notices" },
+                        { id: "manifesto", href: "#manifesto" },
+                        { id: "committee", href: "#committee" },
+                        { id: "gallery", href: "#gallery" },
+                        { id: "movements", href: "#movements" },
+                        { id: "grievances", href: "#grievances" }
+                    ];
 
-            if (window.scrollY < 120) {
-                setActiveLink("#");
-                return;
-            }
-
-            let currentSection = "#";
-
-            for (const section of sections) {
-                if (section.id === "home") continue;
-                const element = document.getElementById(section.id);
-                if (element) {
-                    const rect = element.getBoundingClientRect();
-                    if (rect.top <= 140 && rect.bottom > 140) {
-                        currentSection = section.href;
-                        break;
+                    if (window.scrollY < 120) {
+                        setActiveLink("#");
+                        ticking = false;
+                        return;
                     }
-                }
-            }
 
-            if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 60) {
-                currentSection = "#grievances";
-            }
+                    let currentSection = "#";
 
-            setActiveLink(currentSection);
+                    for (const section of sections) {
+                        if (section.id === "home") continue;
+                        const element = document.getElementById(section.id);
+                        if (element) {
+                            const rect = element.getBoundingClientRect();
+                            if (rect.top <= 140 && rect.bottom > 140) {
+                                currentSection = section.href;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 60) {
+                        currentSection = "#grievances";
+                    }
+
+                    setActiveLink(currentSection);
+                    ticking = false;
+                });
+                ticking = true;
+            }
         };
 
-        window.addEventListener("scroll", handleScroll);
+        window.addEventListener("scroll", handleScroll, { passive: true });
         handleScroll();
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
@@ -210,8 +219,8 @@ export default function FSUPage({
                                     href={link.href}
                                     onClick={() => setActiveLink(link.href)}
                                     className={`relative text-xs font-bold transition-all py-1.5 px-3.5 rounded-full cursor-pointer select-none ${isActive
-                                        ? "bg-white text-red-600 font-extrabold shadow-sm border border-slate-200/80"
-                                        : "text-slate-600 hover:text-[#052855] hover:bg-white/70"
+                                            ? "bg-white text-red-600 font-extrabold shadow-sm border border-slate-200/80"
+                                            : "text-slate-600 hover:text-[#052855] hover:bg-white/70"
                                         }`}
                                 >
                                     {isActive && (
@@ -464,8 +473,8 @@ export default function FSUPage({
                 {/* Background Image */}
                 <div className="absolute inset-0 z-0">
                     <img
-                        src="../fsu/img8.webp"
-                        alt="FSU Students Gathering"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWW5sJJ_cYRhwOjpLtMuP3mNQ7ynEqagVJnI1OeHoVEoHbdjG50CLbyajjeAq0hfeh41ob9CesPNaUnmhXDCGYcrdUb1SvnGaEBG5QOBmHuTwoRZlqHSk4Kc2dMNr4BAwCwi0OrUWADdehuwZW9Hkm12Fsb_Ohi8Nusuw9DRIy4u2pMbvgrcTxSgbyoGpbvARoJWsbHBBUu9DnW6ddKkkSorZV9yvU3Uy9aBz_crXZGAdJvqgTet816AVUDBApeTdG7HF7dk4A-5c"
+                        alt="ANNFSU Students Gathering"
                         referrerPolicy="no-referrer"
                         className="w-full h-full object-cover object-center"
                     />

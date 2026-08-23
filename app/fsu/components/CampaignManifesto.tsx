@@ -62,8 +62,8 @@ const iconMap: Record<string, any> = {
 
 export default function CampaignManifesto({ language }: CampaignManifestoProps) {
     return (
-        <section id="manifesto" className="py-14 neu-card rounded-3xl overflow-hidden relative">
-            <div className="max-w-6xl mx-auto px-6 sm:px-8 relative z-10">
+        <section id="manifesto" className="py-6 w-full relative">
+            <div className="max-w-6xl mx-auto relative z-10">
                 <div className="text-center mb-12">
                     <span className="neu-flat-sm text-blue-900 px-4 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase inline-flex items-center gap-1.5 mb-3">
                         <CheckCircle className="w-3.5 h-3.5 text-blue-800" />

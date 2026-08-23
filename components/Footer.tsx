@@ -86,10 +86,10 @@ export const Footer: React.FC<FooterProps> = ({
     return (
         <footer className="bg-[#0c72b8] pt-16 text-white pb-8 shadow-[0_-10px_25px_rgba(12,114,184,0.25)] overflow-hidden">
             <motion.div
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.15 }}
-                transition={{ duration: 0.6 }}
+                viewport={{ once: true, amount: 0.1 }}
+                transition={{ duration: 0.5 }}
                 className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 items-start"
             >
                 {/* Brand Column */}

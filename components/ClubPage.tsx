@@ -45,7 +45,13 @@ import {
     Filter,
     Crown,
     Briefcase,
-    UserCheck
+    UserCheck,
+    FileCheck,
+    FileX,
+    ShieldAlert,
+    Copy,
+    Download,
+    AlertCircle
 } from 'lucide-react';
 
 import {
@@ -147,7 +153,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
     onApplyJoin = (_clubId: string) => { },
     language = 'en'
 }) => {
-    type TabType = 'home' | 'about' | 'vision' | 'events' | 'manifesto' | 'history' | 'committee' | 'gallery' | 'message';
+    type TabType = 'home' | 'about' | 'vision' | 'certificate' | 'events' | 'manifesto' | 'history' | 'committee' | 'gallery' | 'message';
 
     const [activeTab, setActiveTab] = useState<TabType>('home');
     const [selectedGalleryImg, setSelectedGalleryImg] = useState<string | null>(null);
@@ -155,6 +161,8 @@ export const ClubPage: React.FC<ClubPageProps> = ({
     const [registeredEventIds, setRegisteredEventIds] = useState<Set<string>>(new Set());
     const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
     const [joinSubmitted, setJoinSubmitted] = useState(false);
+    const [isCertLightboxOpen, setIsCertLightboxOpen] = useState(false);
+    const [copiedCertNo, setCopiedCertNo] = useState(false);
     const [joinFormData, setJoinFormData] = useState({
         name: '',
         rollNo: '',
@@ -325,28 +333,37 @@ export const ClubPage: React.FC<ClubPageProps> = ({
     }, []);
 
     useEffect(() => {
+        let ticking = false;
+
         const handleScroll = () => {
             if (isProgrammaticScrollRef.current) return;
 
-            const currentScrollY = window.scrollY || window.pageYOffset || 0;
-            if (currentScrollY < 120) {
-                setActiveTab('home');
-                return;
-            }
-
-            const sectionIds: TabType[] = ['home', 'about', 'vision', 'events', 'manifesto', 'history', 'committee', 'gallery', 'message'];
-
-            for (let i = sectionIds.length - 1; i >= 0; i--) {
-                const id = sectionIds[i];
-                const el = document.getElementById(id);
-                if (el) {
-                    const rect = el.getBoundingClientRect();
-                    // If the section top has reached or scrolled past the sticky navigation bar area (<= 160px)
-                    if (rect.top <= 160) {
-                        setActiveTab(id);
-                        break;
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const currentScrollY = window.scrollY || window.pageYOffset || 0;
+                    if (currentScrollY < 120) {
+                        setActiveTab('home');
+                        ticking = false;
+                        return;
                     }
-                }
+
+                    const sectionIds: TabType[] = ['home', 'about', 'vision', 'events', 'manifesto', 'history', 'committee', 'gallery', 'message'];
+
+                    for (let i = sectionIds.length - 1; i >= 0; i--) {
+                        const id = sectionIds[i];
+                        const el = document.getElementById(id);
+                        if (el) {
+                            const rect = el.getBoundingClientRect();
+                            // If the section top has reached or scrolled past the sticky navigation bar area (<= 160px)
+                            if (rect.top <= 160) {
+                                setActiveTab(id);
+                                break;
+                            }
+                        }
+                    }
+                    ticking = false;
+                });
+                ticking = true;
             }
         };
 
@@ -487,10 +504,10 @@ export const ClubPage: React.FC<ClubPageProps> = ({
         : `977${presidentRawPhone.replace(/\D/g, '').replace(/^0+/, '')}`;
 
     const defaultAdvisorMessage = {
-        senderName: club.advisorMessage?.senderName || club.facultyAdvisor || 'Faculty Advisor',
-        senderRole: club.advisorMessage?.senderRole || `Faculty Advisor, ${club.name}`,
-        message: club.advisorMessage?.message || `At Aadikavi Bhanubhakta Campus, student committees form the heartbeat of experiential learning. ${club.name} has consistently demonstrated excellence in organizing high-impact academic and extracurricular initiatives. As faculty advisor, I take pride in mentoring our dedicated executive board and encourage every student to actively participate in this vibrant platform.`,
-        avatarUrl: club.advisorMessage?.avatarUrl || leadershipList.find((m) => m.role === 'Faculty Advisor')?.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&h=300&fit=crop&crop=face'
+        senderName: club.advisorMessage?.senderName || club.facultyAdvisor || 'Club Advisor',
+        senderRole: club.advisorMessage?.senderRole || `Club Advisor, ${club.name}`,
+        message: club.advisorMessage?.message || `At Aadikavi Bhanubhakta Campus, student committees form the heartbeat of experiential learning. ${club.name} has consistently demonstrated excellence in organizing high-impact academic and extracurricular initiatives. As club advisor, I take pride in mentoring our dedicated executive board and encourage every student to actively participate in this vibrant platform.`,
+        avatarUrl: club.advisorMessage?.avatarUrl || leadershipList.find((m) => m.role === 'Club Advisor' || m.role === 'Faculty Advisor')?.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&h=300&fit=crop&crop=face'
     };
 
     const defaultManifesto = {
@@ -507,10 +524,16 @@ export const ClubPage: React.FC<ClubPageProps> = ({
     const defaultHistory = club.history ||
         `${club.name} was formally established in ${club.establishedYear || '2018'} under the guidance of Aadikavi Bhanubhakta Campus administration and student pioneers. Over the years, the committee has grown from a small group of enthusiastic students into an active hub of ${club.memberCount || 0}+ members. Recognized for its consistency and academic contribution, the committee continues to hold annual elections, organize flagship regional events, and nurture future leaders.`;
 
+    const certData = club.certificate;
+    const isClubRegistered = Boolean(
+        certData ? certData.isRegistered : (club.isRegistered ?? Boolean(club.certificateNumber || club.certificateImage))
+    );
+
     const tabs: { id: TabType; labelEn: string; labelNp: string; icon: React.ReactNode }[] = [
         { id: 'home', labelEn: 'Overview', labelNp: 'परिचय', icon: <Building2 className="w-4 h-4" /> },
         { id: 'about', labelEn: 'About', labelNp: 'बारेमा', icon: <FileText className="w-4 h-4" /> },
         { id: 'vision', labelEn: 'Vision', labelNp: 'दृष्टिकोण', icon: <Target className="w-4 h-4" /> },
+        { id: 'certificate', labelEn: 'Certificate', labelNp: 'दर्ता प्रमाणपत्र', icon: <Award className="w-4 h-4" /> },
         { id: 'events', labelEn: 'Upcoming Events', labelNp: 'आगामी कार्यक्रमहरू', icon: <Calendar className="w-4 h-4" /> },
         { id: 'manifesto', labelEn: 'Manifesto', labelNp: 'घोषणापत्र', icon: <ShieldCheck className="w-4 h-4" /> },
         { id: 'history', labelEn: 'History', labelNp: 'इतिहास', icon: <History className="w-4 h-4" /> },
@@ -847,7 +870,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                             </div>
                             <div className="min-w-0 flex-1">
                                 <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block">
-                                    Faculty Advisor
+                                    Club Advisor
                                 </span>
                                 <h3 className="font-bold text-sm sm:text-base text-slate-900 font-poppins tracking-tight leading-snug">
                                     {club.facultyAdvisor}
@@ -1115,7 +1138,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                 <div className="w-7 h-7 rounded-lg bg-[#eef2f7] flex items-center justify-center shadow-[inset_1.5px_1.5px_3px_#d1d9e6,inset_-1.5px_-1.5px_3px_#ffffff]">
                                     <Building2 className="w-3.5 h-3.5 text-emerald-600" />
                                 </div>
-                                <span>Affiliated Faculty</span>
+                                <span>Club Advisor</span>
                             </h4>
                             <p className="text-xs sm:text-sm text-slate-600 pl-9">{club.facultyAdvisor} (Advisor)</p>
                         </div>
@@ -1191,7 +1214,189 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                     </div>
                 </motion.section>
 
-                {/* 4. UPCOMING EVENTS SECTION */}
+                {/* 4. REGISTRATION CERTIFICATE SECTION */}
+                <motion.section
+                    id="certificate"
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-40px' }}
+                    transition={{ duration: 0.4, ease: 'easeOut' }}
+                    className="space-y-4 scroll-mt-36"
+                >
+                    <div className="flex items-center justify-between gap-4">
+                        <div className="flex items-center gap-2.5">
+                            <div className="w-8 h-8 rounded-xl bg-[#eef2f7] text-[#0c72b8] flex items-center justify-center shadow-[inset_1.5px_1.5px_3px_#d1d9e6,inset_-1.5px_-1.5px_3px_#ffffff] border border-white/60">
+                                <Award className="w-4 h-4" />
+                            </div>
+                            <h3 className="text-lg sm:text-xl font-bold text-slate-900 font-poppins">
+                                {language === 'np' ? 'क्लब दर्ता प्रमाण-पत्र' : 'Club Registration Certificate'}
+                            </h3>
+                        </div>
+                        {isClubRegistered ? (
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#eef2f7] text-emerald-700 text-xs font-bold border border-white/80 shadow-[2px_2px_5px_#d1d9e6,-2px_-2px_5px_#ffffff]">
+                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                                <span>{language === 'np' ? 'दर्ता प्रमाणित' : 'Certified & Registered'}</span>
+                            </span>
+                        ) : (
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#eef2f7] text-slate-600 text-xs font-bold border border-white/80 shadow-[2px_2px_5px_#d1d9e6,-2px_-2px_5px_#ffffff]">
+                                <AlertCircle className="w-3.5 h-3.5 text-slate-500" />
+                                <span>{language === 'np' ? 'दर्ता नभएको' : 'Not Registered'}</span>
+                            </span>
+                        )}
+                    </div>
+
+                    {isClubRegistered ? (
+                        /* MINIMAL NEUMORPHIC REGISTERED VIEW */
+                        <div className="bg-[#eef2f7] rounded-3xl p-5 sm:p-7 border border-white/80 shadow-[7px_7px_18px_#d1d9e6,-7px_-7px_18px_#ffffff]">
+                            <div className="flex flex-col md:flex-row items-center md:items-start gap-6 lg:gap-8">
+                                {/* Portrait Certificate Photo Frame (Exact A4 210/297 document ratio) */}
+                                <div className="w-full max-w-[260px] sm:max-w-[290px] shrink-0">
+                                    <div className="p-3 bg-[#eef2f7] rounded-2xl border border-white/90 shadow-[5px_5px_12px_#d1d9e6,-5px_-5px_12px_#ffffff]">
+                                        <div
+                                            onClick={() => setIsCertLightboxOpen(true)}
+                                            className="relative aspect-[210/297] w-full rounded-xl overflow-hidden bg-white shadow-[inset_2px_2px_5px_#d1d9e6,inset_-2px_-2px_5px_#ffffff] border border-slate-200/60 cursor-pointer group"
+                                            title="Click to view full certificate"
+                                        >
+                                            <img
+                                                src={certData?.certificateImage || 'https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?w=1200&auto=format&fit=crop&q=80'}
+                                                alt={`${club.name} Certificate`}
+                                                referrerPolicy="no-referrer"
+                                                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
+                                            />
+
+                                            {/* Hover Zoom Overlay */}
+                                            <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center text-white gap-1.5 p-3 text-center backdrop-blur-[1px]">
+                                                <div className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center shadow-md">
+                                                    <ZoomIn className="w-5 h-5 text-white" />
+                                                </div>
+                                                <span className="text-[11px] font-bold tracking-wide">
+                                                    {language === 'np' ? 'प्रमाणपत्र हेर्नुहोस्' : 'Click to Expand'}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        {/* Frame bottom hint */}
+                                        <div className="mt-2.5 pt-2 border-t border-slate-300/40 flex items-center justify-between text-[11px] px-1">
+                                            <span className="text-slate-500 font-medium font-mono text-[10px]">
+                                                {certData?.certificateNumber || '०३/०८२/०८३'}
+                                            </span>
+                                            <button
+                                                type="button"
+                                                onClick={() => setIsCertLightboxOpen(true)}
+                                                className="font-bold text-[#0c72b8] hover:text-blue-800 flex items-center gap-1 cursor-pointer"
+                                            >
+                                                <ZoomIn className="w-3 h-3" />
+                                                <span>Expand</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Minimal Neumorphic Details & Metadata */}
+                                <div className="flex-1 w-full space-y-4 pt-1">
+                                    <div className="space-y-1">
+                                        <h4 className="text-base sm:text-lg font-bold text-slate-900 font-poppins">
+                                            {club.name}
+                                        </h4>
+                                        <p className="text-xs text-slate-600 leading-relaxed">
+                                            {certData?.remarks || (language === 'np'
+                                                ? `आदिकवि भानुभक्त क्याम्पसमा विद्यार्थी क्लब/संस्था निर्देशिका २०७५ बमोजिम दर्ता भएको आधिकारिक क्लब।`
+                                                : `Officially registered under the Aadikavi Bhanubhakta Campus Student Club & Association Guidelines 2075.`)}
+                                        </p>
+                                    </div>
+
+                                    {/* Minimal Neumorphic Inset Fields */}
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                                        {/* Reg No */}
+                                        <div className="p-3 bg-[#eef2f7] rounded-2xl border border-white/80 shadow-[inset_1.5px_1.5px_3px_#d1d9e6,inset_-1.5px_-1.5px_3px_#ffffff] flex items-center justify-between gap-2">
+                                            <div className="min-w-0">
+                                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
+                                                    {language === 'np' ? 'दर्ता नं.' : 'Reg. Number'}
+                                                </span>
+                                                <span className="font-mono font-bold text-xs text-slate-900 truncate block">
+                                                    {certData?.certificateNumber || '०३/०८२/०८३'}
+                                                </span>
+                                            </div>
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    const regNo = certData?.certificateNumber || '०३/०८२/०८३';
+                                                    navigator.clipboard.writeText(regNo);
+                                                    setCopiedCertNo(true);
+                                                    setTimeout(() => setCopiedCertNo(false), 2000);
+                                                }}
+                                                className="p-1.5 rounded-lg bg-[#eef2f7] hover:bg-white text-slate-500 hover:text-[#0c72b8] shadow-[2px_2px_4px_#d1d9e6,-2px_-2px_4px_#ffffff] active:shadow-[inset_1px_1px_2px_#d1d9e6] transition-all cursor-pointer shrink-0"
+                                                title="Copy Registration Number"
+                                            >
+                                                {copiedCertNo ? (
+                                                    <Check className="w-3.5 h-3.5 text-emerald-600" />
+                                                ) : (
+                                                    <Copy className="w-3.5 h-3.5" />
+                                                )}
+                                            </button>
+                                        </div>
+
+                                        {/* Issued Date */}
+                                        <div className="p-3 bg-[#eef2f7] rounded-2xl border border-white/80 shadow-[inset_1.5px_1.5px_3px_#d1d9e6,inset_-1.5px_-1.5px_3px_#ffffff]">
+                                            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
+                                                {language === 'np' ? 'दर्ता मिति' : 'Registered Date'}
+                                            </span>
+                                            <span className="font-semibold text-xs text-slate-900 block truncate">
+                                                {language === 'np' ? (certData?.registeredDateNp || certData?.registeredDate) : (certData?.registeredDate || '२०८२/०८/१४')}
+                                            </span>
+                                        </div>
+
+                                        {/* Issuing Authority */}
+                                        <div className="sm:col-span-2 p-3 bg-[#eef2f7] rounded-2xl border border-white/80 shadow-[inset_1.5px_1.5px_3px_#d1d9e6,inset_-1.5px_-1.5px_3px_#ffffff]">
+                                            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
+                                                {language === 'np' ? 'मातृ विभाग / क्याम्पस' : 'Issuing Campus / Authority'}
+                                            </span>
+                                            <span className="font-semibold text-xs text-slate-800 block truncate">
+                                                {language === 'np'
+                                                    ? (certData?.issuingAuthorityNp || certData?.issuingAuthority || 'आदिकवि भानुभक्त क्याम्पस, व्यास-०१, विज्ञानचौर, तनहुँ')
+                                                    : (certData?.issuingAuthority || 'Aadikavi Bhanubhakta Campus, Vyas-01, Bigyanchaur, Tanahun')}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* Action Buttons */}
+                                    <div className="pt-2 flex items-center gap-3">
+                                        <button
+                                            type="button"
+                                            onClick={() => setIsCertLightboxOpen(true)}
+                                            className="px-4 py-2 bg-[#eef2f7] hover:bg-[#e4ebf5] text-[#0c72b8] text-xs font-bold rounded-xl border border-white/80 shadow-[3px_3px_7px_#d1d9e6,-3px_-3px_7px_#ffffff] active:shadow-[inset_2px_2px_4px_#d1d9e6,inset_-2px_-2px_4px_#ffffff] transition-all flex items-center gap-1.5 cursor-pointer"
+                                        >
+                                            <ZoomIn className="w-3.5 h-3.5" />
+                                            <span>{language === 'np' ? 'प्रमाण-पत्र पूर्ण हेर्नुहोस्' : 'View Full Document'}</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ) : (
+                        /* MINIMAL NEUMORPHIC NOT REGISTERED VIEW */
+                        <div className="bg-[#eef2f7] rounded-3xl p-6 sm:p-8 border border-white/80 shadow-[7px_7px_18px_#d1d9e6,-7px_-7px_18px_#ffffff] flex flex-col sm:flex-row items-center sm:items-start gap-4 text-center sm:text-left">
+                            <div className="w-12 h-12 rounded-2xl bg-[#eef2f7] text-slate-400 flex items-center justify-center shrink-0 shadow-[inset_2px_2px_4px_#d1d9e6,inset_-2px_-2px_4px_#ffffff] border border-white/60">
+                                <FileX className="w-6 h-6 text-slate-400" />
+                            </div>
+                            <div className="space-y-1.5">
+                                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#eef2f7] text-slate-600 text-xs font-bold border border-white/80 shadow-[2px_2px_4px_#d1d9e6,-2px_-2px_4px_#ffffff]">
+                                    <span>Not Registered</span>
+                                    <span>•</span>
+                                    <span>दर्ता नभएको</span>
+                                </div>
+                                <h4 className="font-bold text-slate-800 text-sm sm:text-base">
+                                    {club.name}
+                                </h4>
+                                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed max-w-xl">
+                                    {certData?.remarks || 'This club is currently operating as an informal student initiative and is not yet officially registered with the campus administration.'}
+                                </p>
+                            </div>
+                        </div>
+                    )}
+                </motion.section>
+
+                {/* 5. UPCOMING EVENTS SECTION */}
                 <motion.section
                     id="events"
                     initial={{ opacity: 0, y: 24 }}
@@ -1367,7 +1572,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                 </h2>
                             </div>
                             <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                                Elected officers, committee members, and faculty advisors steering {club.name}
+                                Elected officers, committee members, and club advisors steering {club.name}
                             </p>
                         </div>
 
@@ -1562,7 +1767,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                             }`}
                                     >
                                         <GraduationCap className="w-3.5 h-3.5" />
-                                        <span>Faculty & Advisors</span>
+                                        <span>Club Advisors</span>
                                         <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${memberRoleCategory === 'advisors' ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-700'
                                             }`}>
                                             {memberCategoryCounts.advisors}
@@ -1921,10 +2126,10 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                     <div className="flex-1 min-w-0">
                                         <span className="bg-[#eef2f7] text-[#800000] text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-[2px_2px_5px_#d1d9e6,-2px_-2px_5px_#ffffff] border border-white/80 inline-flex items-center gap-1.5 mb-1.5">
                                             <GraduationCap className="w-3 h-3 text-[#800000] shrink-0" />
-                                            <span className="truncate">Faculty Mentorship Guidance</span>
+                                            <span className="truncate">Club Mentorship Guidance</span>
                                         </span>
                                         <h3 className="text-base sm:text-lg lg:text-xl font-extrabold text-slate-900 font-poppins tracking-tight leading-snug">
-                                            Message from Faculty Advisor
+                                            Message from Club Advisor
                                         </h3>
                                         <p className="text-xs sm:text-sm font-bold text-[#800000] mt-0.5 truncate">{defaultAdvisorMessage.senderRole}</p>
                                         <p className="text-[11px] sm:text-xs text-slate-500 font-medium truncate">{defaultAdvisorMessage.senderName}</p>
@@ -1938,11 +2143,11 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                     </p>
                                 </div>
 
-                                {/* Faculty Advisor Correspondence Badge */}
+                                {/* Club Advisor Correspondence Badge */}
                                 <div className="pt-2 flex items-center justify-between px-4 py-2.5 rounded-xl bg-[#eef2f7] border border-white/80 shadow-[inset_2px_2px_4px_#d1d9e6,inset_-2px_-2px_4px_#ffffff] text-xs text-slate-600">
                                     <span className="font-bold text-slate-800 flex items-center gap-1.5">
                                         <GraduationCap className="w-4 h-4 text-[#800000]" />
-                                        Academic Supervision
+                                        Club Advisory Mentorship
                                     </span>
                                     <span className="text-[11px] text-slate-500 font-medium">Aadikavi Bhanubhakta Campus</span>
                                 </div>
@@ -1991,7 +2196,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                 </div>
                                 <h4 className="text-base font-bold text-slate-900">Application Submitted Successfully!</h4>
                                 <p className="text-xs text-slate-600 max-w-xs mx-auto">
-                                    Your membership request has been dispatched to {club.president} and Faculty Advisor {club.facultyAdvisor}.
+                                    Your membership request has been dispatched to {club.president} and Club Advisor {club.facultyAdvisor}.
                                 </p>
                             </div>
                         ) : (
@@ -2216,6 +2421,67 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                     {selectedEventForModal.description}
                                 </p>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal: Full-size Certificate Lightbox */}
+            {isCertLightboxOpen && (
+                <div
+                    onClick={() => setIsCertLightboxOpen(false)}
+                    className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 cursor-pointer backdrop-blur-sm animate-in fade-in"
+                >
+                    <div
+                        onClick={(e) => e.stopPropagation()}
+                        className="max-w-lg w-full rounded-3xl overflow-hidden shadow-2xl bg-[#eef2f7] border border-white/90 cursor-default animate-in zoom-in-95 duration-200"
+                    >
+                        <div className="p-4 sm:p-5 bg-[#eef2f7] border-b border-slate-300/60 flex items-center justify-between shadow-xs">
+                            <div className="flex items-center gap-2.5">
+                                <div className="w-8 h-8 rounded-xl bg-[#eef2f7] text-emerald-700 flex items-center justify-center shadow-[inset_1.5px_1.5px_3px_#d1d9e6,inset_-1.5px_-1.5px_3px_#ffffff] border border-white/60">
+                                    <ShieldCheck className="w-4 h-4" />
+                                </div>
+                                <div className="min-w-0">
+                                    <h4 className="font-bold text-xs sm:text-sm text-slate-900 truncate">
+                                        {club.name} • {language === 'np' ? 'दर्ता प्रमाण-पत्र' : 'Registration Certificate'}
+                                    </h4>
+                                    <p className="text-[10px] sm:text-[11px] text-slate-500 font-mono">
+                                        {certData?.certificateNumber || '०३/०८२/०८३'}
+                                    </p>
+                                </div>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => setIsCertLightboxOpen(false)}
+                                className="w-8 h-8 rounded-xl bg-[#eef2f7] text-slate-500 hover:text-slate-900 flex items-center justify-center shadow-[2px_2px_5px_#d1d9e6,-2px_-2px_5px_#ffffff] active:shadow-[inset_1px_1px_2px_#d1d9e6] transition-all cursor-pointer"
+                            >
+                                <X className="w-4 h-4" />
+                            </button>
+                        </div>
+
+                        {/* Portrait A4 Document Viewport */}
+                        <div className="p-4 sm:p-6 bg-[#eef2f7] flex items-center justify-center">
+                            <div className="w-full max-w-sm aspect-[210/297] rounded-2xl overflow-hidden shadow-[inset_2px_2px_5px_#d1d9e6,inset_-2px_-2px_5px_#ffffff] border border-white/80 bg-white">
+                                <img
+                                    src={certData?.certificateImage || 'https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?w=1200&auto=format&fit=crop&q=80'}
+                                    alt={`${club.name} Certificate`}
+                                    referrerPolicy="no-referrer"
+                                    className="w-full h-full object-contain object-center"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="p-3.5 sm:p-4 bg-[#eef2f7] border-t border-slate-300/50 flex items-center justify-between text-xs text-slate-600">
+                            <span className="text-[11px] text-slate-500 font-medium">
+                                Aadikavi Bhanubhakta Campus
+                            </span>
+                            <button
+                                type="button"
+                                onClick={() => setIsCertLightboxOpen(false)}
+                                className="px-4 py-1.5 bg-[#eef2f7] text-[#0c72b8] font-bold text-xs rounded-xl border border-white/80 shadow-[2px_2px_5px_#d1d9e6,-2px_-2px_5px_#ffffff] active:shadow-[inset_1px_1px_2px_#d1d9e6] transition-all cursor-pointer"
+                            >
+                                Close
+                            </button>
                         </div>
                     </div>
                 </div>

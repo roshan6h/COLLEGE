@@ -72,10 +72,10 @@ export const DashboardControls: React.FC<DashboardControlsProps> = ({
 
     return (
         <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.15 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
+            viewport={{ once: true, amount: 0.1 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
             className="neu-flat rounded-2xl p-4 sm:p-5 mb-8"
         >
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-gray-300/40">

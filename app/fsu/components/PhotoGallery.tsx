@@ -155,7 +155,7 @@ interface PhotoGalleryProps {
 
 export default function PhotoGallery({ language }: PhotoGalleryProps) {
     const [activeCategory, setActiveCategory] = useState<string>("all");
-    const [searchQuery, setSearchQuery] = useState<string>("");
+    const [searchQuery, setSearchQuery] = useState<string>("" );
     const [selectedImg, setSelectedImg] = useState<GalleryImage | null>(null);
     const [showAll, setShowAll] = useState<boolean>(false);
 
@@ -192,8 +192,8 @@ export default function PhotoGallery({ language }: PhotoGalleryProps) {
     };
 
     return (
-        <section id="gallery" className="py-14 neu-card rounded-3xl overflow-hidden scroll-mt-24">
-            <div className="max-w-6xl mx-auto px-5 sm:px-8">
+        <section id="gallery" className="py-6 w-full scroll-mt-24">
+            <div className="max-w-6xl mx-auto">
                 {/* Header with Title and Search */}
                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-8 gap-6 w-full min-w-0 max-w-full">
                     <div className="min-w-0 max-w-full">
@@ -247,10 +247,11 @@ export default function PhotoGallery({ language }: PhotoGalleryProps) {
                                 <button
                                     key={cat}
                                     onClick={() => handleCategoryChange(cat)}
-                                    className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all capitalize cursor-pointer flex items-center gap-1.5 ${isActive
-                                        ? "neu-button-navy text-white shadow-md scale-105"
-                                        : "neu-button text-slate-700 hover:text-blue-900 hover:scale-102"
-                                        }`}
+                                    className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all capitalize cursor-pointer flex items-center gap-1.5 ${
+                                        isActive
+                                            ? "neu-button-navy text-white shadow-md scale-105"
+                                            : "neu-button text-slate-700 hover:text-blue-900 hover:scale-102"
+                                    }`}
                                 >
                                     <span>
                                         {cat === "all"
@@ -258,22 +259,23 @@ export default function PhotoGallery({ language }: PhotoGalleryProps) {
                                                 ? "All Media"
                                                 : "सबै झलक"
                                             : language === "en"
-                                                ? cat
-                                                : cat === "Protest"
-                                                    ? "आन्दोलन"
-                                                    : cat === "Sports"
-                                                        ? "खेलकुद"
-                                                        : cat === "Solidarity"
-                                                            ? "ऐक्यवद्धता"
-                                                            : cat === "Campaign"
-                                                                ? "ज्ञापनपत्र"
-                                                                : "अन्तरक्रिया"}
+                                            ? cat
+                                            : cat === "Protest"
+                                            ? "आन्दोलन"
+                                            : cat === "Sports"
+                                            ? "खेलकुद"
+                                            : cat === "Solidarity"
+                                            ? "ऐक्यवद्धता"
+                                            : cat === "Campaign"
+                                            ? "ज्ञापनपत्र"
+                                            : "अन्तरक्रिया"}
                                     </span>
                                     <span
-                                        className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold ${isActive
-                                            ? "bg-white/20 text-white"
-                                            : "bg-slate-200/80 text-slate-600"
-                                            }`}
+                                        className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold ${
+                                            isActive
+                                                ? "bg-white/20 text-white"
+                                                : "bg-slate-200/80 text-slate-600"
+                                        }`}
                                     >
                                         {count}
                                     </span>
@@ -290,11 +292,10 @@ export default function PhotoGallery({ language }: PhotoGalleryProps) {
                             {displayedImages.map((img) => (
                                 <motion.div
                                     key={img.id}
-                                    layout
-                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    initial={{ opacity: 0, scale: 0.96 }}
                                     animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0, scale: 0.95 }}
-                                    transition={{ duration: 0.3 }}
+                                    exit={{ opacity: 0, scale: 0.96 }}
+                                    transition={{ duration: 0.25 }}
                                     onClick={() => setSelectedImg(img)}
                                     className="group relative h-72 rounded-3xl overflow-hidden cursor-pointer neu-flat hover:scale-[1.02] transition-all p-2 bg-[#eef2f7]"
                                 >
@@ -305,6 +306,8 @@ export default function PhotoGallery({ language }: PhotoGalleryProps) {
                                                 src={img.imageUrl}
                                                 alt={language === "en" ? img.titleEn : img.titleNp}
                                                 referrerPolicy="no-referrer"
+                                                loading="lazy"
+                                                decoding="async"
                                                 className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                             />
                                         ) : (
@@ -376,8 +379,8 @@ export default function PhotoGallery({ language }: PhotoGalleryProps) {
                                         ? "Show Less"
                                         : "कम देखाउनुहोस्"
                                     : language === "en"
-                                        ? `Show All Media (${filteredImages.length})`
-                                        : `सबै मिडिया हेर्नुहोस् (${filteredImages.length} वटा)`}
+                                    ? `Show All Media (${filteredImages.length})`
+                                    : `सबै मिडिया हेर्नुहोस् (${filteredImages.length} वटा)`}
                             </span>
                             {showAll ? (
                                 <ChevronUp className="w-4 h-4 text-blue-900" />

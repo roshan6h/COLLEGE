@@ -261,7 +261,6 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         photoUrl: "../fsu/bipin.webp"
     }
 ];
-
 interface CommitteeSectionProps {
     language: "en" | "np";
 }
@@ -278,10 +277,9 @@ function CommitteeMemberCard({ member, language, getInitials }: MemberCardProps)
 
     return (
         <motion.div
-            layout
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.25 }}
             className={`p-6 rounded-3xl transition-all relative overflow-hidden group hover:scale-[1.02] ${member.isExecutive
                 ? "neu-card border-l-4 border-red-600"
                 : "neu-flat"
@@ -308,6 +306,8 @@ function CommitteeMemberCard({ member, language, getInitials }: MemberCardProps)
                             src={member.photoUrl}
                             alt={language === "en" ? member.nameEn : member.nameNp}
                             referrerPolicy="no-referrer"
+                            loading="lazy"
+                            decoding="async"
                             className="w-full h-full object-cover select-none rounded-xl"
                             onError={() => setImageError(true)}
                         />
@@ -396,8 +396,8 @@ export default function CommitteeSection({ language }: CommitteeSectionProps) {
     };
 
     return (
-        <section id="committee" className="py-14 neu-card rounded-3xl overflow-hidden">
-            <div className="max-w-6xl mx-auto px-6 sm:px-8">
+        <section id="committee" className="py-6 w-full">
+            <div className="max-w-6xl mx-auto">
                 <div className="text-center mb-12">
                     <span className="neu-flat-sm text-red-600 px-4 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase inline-flex items-center gap-1.5 mb-3">
                         <Shield className="w-3.5 h-3.5 text-red-600" />

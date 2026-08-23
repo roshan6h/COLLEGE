@@ -41,12 +41,12 @@ export const ClubCard: React.FC<ClubCardProps> = ({
 }) => {
     return (
         <motion.div
-            initial={{ opacity: 0, y: 35 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.15 }}
-            whileHover={{ y: -6, scale: 1.012, transition: { duration: 0.2 } }}
-            whileTap={{ scale: 0.985 }}
-            transition={{ duration: 0.45, ease: "easeOut" }}
+            viewport={{ once: true, amount: 0.05 }}
+            whileHover={{ y: -4, scale: 1.01, transition: { duration: 0.2 } }}
+            whileTap={{ scale: 0.99 }}
+            transition={{ duration: 0.35, ease: "easeOut" }}
             onClick={() => onSelect(club)}
             className="group neu-card p-5 sm:p-6 flex flex-col justify-between relative overflow-hidden cursor-pointer"
         >
@@ -71,6 +71,8 @@ export const ClubCard: React.FC<ClubCardProps> = ({
                             src={club.logo}
                             alt={club.name}
                             referrerPolicy="no-referrer"
+                            loading="lazy"
+                            decoding="async"
                             className="w-full h-full object-cover rounded-full"
                         />
                     </div>

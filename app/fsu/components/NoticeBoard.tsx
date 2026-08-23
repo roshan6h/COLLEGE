@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Calendar, Bell, ChevronRight, FileText, ArrowUpRight, ChevronDown } from "lucide-react";
+import { useState, useMemo } from "react";
+import { Calendar, Bell, ChevronRight, FileText, ArrowUpRight, ChevronDown, Search, X, Check, Share2 } from "lucide-react";
 import { motion } from "motion/react";
 
 export interface Notice {
@@ -27,36 +27,6 @@ export const FSU_NOTICES: Notice[] = [
     },
     {
         id: "n2",
-        titleEn: "Annual Sports Week and Jersey Distribution",
-        titleNp: "वार्षिक खेलकुद सप्ताह तथा जर्सी वितरण कार्यक्रम",
-        date: "2026-07-12",
-        category: "Sports",
-        isUrgent: false,
-        contentEn: "FSU President Anup Ale Magar, along with the sports committee, successfully distributed custom football jerseys to our collegiate soccer team representing Aadikavi Bhanubhakta Campus, Vyas-1, Tanahun. The matches begin tomorrow. Let's support our players in red!",
-        contentNp: "स्ववियु अध्यक्ष अनुप आले मगर तथा खेलकुद उपसमितिद्वारा आदिकवि भानुभक्त क्याम्पसको प्रतिनिधित्व गर्ने फुटबल टोलीका खेलाडीहरूलाई जर्सी तथा खेलकुद सामग्री हस्तान्तरण गरिएको छ। प्रतियोगिता भोलिदेखि सुरु हुनेछ।"
-    },
-    {
-        id: "n3",
-        titleEn: "Submission of 15-Point Academic Demand Sheet",
-        titleNp: "क्याम्पस प्रशासन र स्थानीय तहमा १५ बुँदे मागपत्र पेस",
-        date: "2026-07-06",
-        category: "Academic",
-        isUrgent: true,
-        contentEn: "A formal delegation led by FSU President Anup Ale Magar has submitted a 15-point memorandum to Campus Chief and local political heads (including Til Bahadur Thapa). The demands focus on library digitalization, technology-focused workshops, free career guidance, and promoting a vibrant startup culture among students.",
-        contentNp: "स्ववियु अध्यक्ष अनुप आले मगरको नेतृत्वमा क्याम्पस प्रमुख र स्थानीय जनप्रतिनिधिहरू (तिल बहादुर थापा लगायत) समक्ष पुस्तकालय डिजिटलाईजेसन, प्राविधिक कार्यशाला, निःशुल्क करियर परामर्श र स्टार्टअप संस्कृति प्रवर्द्धनका लागि १५ बुँदे मागपत्र पेस गरिएको छ।"
-    },
-    {
-        id: "n4",
-        titleEn: "Classroom Interaction & Student Feedback Survey",
-        titleNp: "कक्षाकोठा अन्तरक्रिया र विद्यार्थी प्रतिक्रिया सर्वेक्षण",
-        date: "2026-06-28",
-        category: "General",
-        isUrgent: false,
-        contentEn: "Our members are visiting classes to gather feedback on facilities, curriculum, and exam management. FSU is committed to voicing your concerns directly to the campus board. Share your suggestions with any of our visiting members or submit online through the portal.",
-        contentNp: "भौतिक पूर्वाधार, पाठ्यक्रम र परीक्षा व्यवस्थापनका विषयमा विद्यार्थी प्रतिक्रिया संकलन गर्न स्ववियु सदस्यहरू विभिन्न कक्षाकोठाहरूमा पुगिरहनुभएको छ। तपाईंका समस्या र सुझावहरू हाम्रो अनलाइन पोर्टल मार्फत पनि पेस गर्न सक्नुहुन्छ।"
-    },
-    {
-        id: "n5",
         titleEn: "Inter-Faculty Futsal Tournament 2026",
         titleNp: "अन्तर-संकाय फुटसल प्रतियोगिता २०८३",
         date: "2026-08-21",
@@ -66,7 +36,7 @@ export const FSU_NOTICES: Notice[] = [
         contentNp: "आदिकवि भानुभक्त क्याम्पसको स्वतन्त्र विद्यार्थी युनियन (FSU) द्वारा आयोजित अन्तर-संकाय फुटसल प्रतियोगिता २०८३ मा सम्पूर्ण विद्यार्थीहरूलाई हार्दिक निमन्त्रणा गरिन्छ। प्रतियोगिता २०८३ भदौ ५ देखि ७ गते (२१–२३ अगस्ट २०२६) सम्म दमौली फुटसल कोर्टमा सञ्चालन हुनेछ। सबै संकायका विद्यार्थीहरूले आफ्नो संकायको प्रतिनिधित्व गर्दै सहभागिता जनाउन सक्नेछन्। छात्रतर्फ प्रथम पुरस्कार रु. ८,000 तथा द्वितीय पुरस्कार रु. ५,000, छात्रीतर्फ प्रथम पुरस्कार रु. ५,000 तथा द्वितीय पुरस्कार रु. ३,000 प्रदान गरिनेछ। सबै विजेताहरूलाई मेडल र प्रमाणपत्र पनि प्रदान गरिनेछ। समयमै दर्ता गरी प्रतियोगितामा सहभागी बन्नुहोस्।"
     },
     {
-        id: "n6",
+        id: "n3",
         titleEn: "Inter-Faculty Original Teej Song Competition 2026",
         titleNp: "अन्तर-संकाय मौलिक तीज गीत प्रतियोगिता २०८३",
         date: "2026-08-25",
@@ -82,22 +52,37 @@ interface NoticeBoardProps {
 }
 
 export default function NoticeBoard({ language }: NoticeBoardProps) {
-    const [selectedNotice, setSelectedNotice] = useState<Notice | null>(null);
+    // Sort notices by date descending (most recent date first)
+    const sortedNotices = useMemo(() => {
+        return [...FSU_NOTICES].sort((a, b) => {
+            return new Date(b.date).getTime() - new Date(a.date).getTime();
+        });
+    }, []);
+
+    const [selectedNotice, setSelectedNotice] = useState<Notice | null>(sortedNotices[0] || null);
     const [filter, setFilter] = useState<string>("all");
+    const [searchQuery, setSearchQuery] = useState<string>("");
     const [showAll, setShowAll] = useState<boolean>(false);
+    const [copied, setCopied] = useState<boolean>(false);
 
     const categories = ["all", "Solidarity", "Sports", "Academic", "General", "Cultural"];
-    const INITIAL_LIMIT = 3;
+    const INITIAL_LIMIT = 4;
 
-    // Sort notices by date descending (most recent date first)
-    const sortedNotices = [...FSU_NOTICES].sort((a, b) => {
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
-    });
+    const filteredNotices = useMemo(() => {
+        return sortedNotices.filter((n) => {
+            const matchesCategory = filter === "all" || n.category.toLowerCase() === filter.toLowerCase();
+            const q = searchQuery.toLowerCase().trim();
+            const matchesSearch =
+                !q ||
+                n.titleEn.toLowerCase().includes(q) ||
+                n.titleNp.toLowerCase().includes(q) ||
+                n.contentEn.toLowerCase().includes(q) ||
+                n.contentNp.toLowerCase().includes(q) ||
+                n.category.toLowerCase().includes(q);
 
-    const filteredNotices = sortedNotices.filter((n) => {
-        if (filter === "all") return true;
-        return n.category.toLowerCase() === filter.toLowerCase();
-    });
+            return matchesCategory && matchesSearch;
+        });
+    }, [sortedNotices, filter, searchQuery]);
 
     const displayedNotices = showAll ? filteredNotices : filteredNotices.slice(0, INITIAL_LIMIT);
 
@@ -106,53 +91,110 @@ export default function NoticeBoard({ language }: NoticeBoardProps) {
         setShowAll(false);
     };
 
+    const handleCopy = (notice: Notice) => {
+        const text = `${notice.titleEn} / ${notice.titleNp}\nDate: ${notice.date}\nCategory: ${notice.category}\n\n${notice.contentEn}\n\n${notice.contentNp}`;
+        navigator.clipboard.writeText(text);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+
+    // Category count helper
+    const getCategoryCount = (cat: string) => {
+        if (cat === "all") return sortedNotices.length;
+        return sortedNotices.filter((n) => n.category.toLowerCase() === cat.toLowerCase()).length;
+    };
+
     return (
-        <section id="notices" className="py-14 neu-card rounded-3xl overflow-hidden">
-            <div className="max-w-6xl mx-auto px-6 sm:px-8">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4 w-full min-w-0 max-w-full">
+        <section id="notices" className="py-6 w-full scroll-mt-24">
+            <div className="max-w-6xl mx-auto">
+                {/* Header with Title and Search */}
+                <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-8 gap-6 w-full min-w-0 max-w-full">
                     <div className="min-w-0 max-w-full">
                         <span className="neu-flat-sm text-[#052855] px-4 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase inline-flex items-center gap-1.5 mb-3">
                             <Bell className="w-3.5 h-3.5 text-red-600 animate-bounce" />
                             {language === "en" ? "Announcements" : "सूचना तथा गतिविधि"}
                         </span>
-                        <h2 className="text-3xl font-extrabold text-slate-900 font-devanagari tracking-tight sm:text-4xl">
+                        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 font-devanagari tracking-tight">
                             {language === "en" ? "FSU Notice Board" : "स्ववियु सूचना बोर्ड"}
                         </h2>
-                        <p className="mt-2 text-slate-600 max-w-xl text-sm leading-relaxed">
+                        <p className="mt-2 text-slate-600 max-w-xl text-xs sm:text-sm leading-relaxed">
                             {language === "en"
                                 ? "Stay informed on active student issues, administrative submissions, campaigns, and upcoming college events organized by the FSU."
                                 : "स्ववियुले सञ्चालन गरेका आन्दोलन, मागपत्र पेस, जर्सी वितरण तथा महत्वपूर्ण निर्णयहरूका सूचनाहरू प्राप्त गर्नुहोस्।"}
                         </p>
                     </div>
 
-                    {/* Categorized Tabs with Neumorphic buttons */}
-                    <div className="flex gap-2 overflow-x-auto pb-2 w-full md:w-auto min-w-0 max-w-full neu-pressed-sm p-1.5 rounded-2xl bg-[#eef2f7]">
-                        {categories.map((cat) => (
-                            <button
-                                key={cat}
-                                onClick={() => handleFilterChange(cat)}
-                                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all capitalize shrink-0 cursor-pointer ${filter === cat
-                                    ? "neu-button-navy text-white shadow-md"
-                                    : "text-slate-600 hover:text-[#052855]"
+                    {/* Quick Search Bar */}
+                    <div className="w-full lg:w-72 shrink-0">
+                        <div className="relative">
+                            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                            <input
+                                type="text"
+                                value={searchQuery}
+                                onChange={(e) => {
+                                    setSearchQuery(e.target.value);
+                                    setShowAll(true);
+                                }}
+                                placeholder={language === "en" ? "Search notices..." : "सूचना खोज्नुहोस्..."}
+                                className="w-full pl-10 pr-9 py-2.5 neu-input rounded-2xl text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none"
+                            />
+                            {searchQuery && (
+                                <button
+                                    onClick={() => setSearchQuery("")}
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 cursor-pointer"
+                                >
+                                    <X className="w-3.5 h-3.5" />
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Highly Accessible Filter Navigation (Wrap-friendly, no ugly scrollbar) */}
+                <div className="mb-8 neu-pressed p-2 sm:p-2.5 rounded-2xl sm:rounded-3xl bg-[#eef2f7]">
+                    <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                        {categories.map((cat) => {
+                            const count = getCategoryCount(cat);
+                            const isActive = filter === cat;
+                            return (
+                                <button
+                                    key={cat}
+                                    onClick={() => handleFilterChange(cat)}
+                                    className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all capitalize cursor-pointer flex items-center gap-1.5 ${
+                                        isActive
+                                            ? "neu-button-navy text-white shadow-md scale-105"
+                                            : "neu-button text-slate-700 hover:text-blue-900 hover:scale-102"
                                     }`}
-                            >
-                                {cat === "all"
-                                    ? language === "en"
-                                        ? "All"
-                                        : "सबै"
-                                    : language === "en"
-                                        ? cat
-                                        : cat === "Solidarity"
+                                >
+                                    <span>
+                                        {cat === "all"
+                                            ? language === "en"
+                                                ? "All"
+                                                : "सबै"
+                                            : language === "en"
+                                            ? cat
+                                            : cat === "Solidarity"
                                             ? "ऐक्यवद्धता"
                                             : cat === "Sports"
-                                                ? "खेलकुद"
-                                                : cat === "Academic"
-                                                    ? "शैक्षिक"
-                                                    : cat === "Cultural"
-                                                        ? "सांस्कृतिक"
-                                                        : "सामान्य"}
-                            </button>
-                        ))}
+                                            ? "खेलकुद"
+                                            : cat === "Academic"
+                                            ? "शैक्षिक"
+                                            : cat === "Cultural"
+                                            ? "सांस्कृतिक"
+                                            : "सामान्य"}
+                                    </span>
+                                    <span
+                                        className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold ${
+                                            isActive
+                                                ? "bg-white/20 text-white"
+                                                : "bg-slate-200/80 text-slate-600"
+                                        }`}
+                                    >
+                                        {count}
+                                    </span>
+                                </button>
+                            );
+                        })}
                     </div>
                 </div>
 
@@ -160,60 +202,104 @@ export default function NoticeBoard({ language }: NoticeBoardProps) {
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
                     {/* List of Notices */}
                     <div className="lg:col-span-3 space-y-4">
-                        {displayedNotices.map((notice) => (
-                            <div
-                                key={notice.id}
-                                onClick={() => setSelectedNotice(notice)}
-                                className={`p-5 rounded-2xl transition-all cursor-pointer relative ${selectedNotice?.id === notice.id
-                                    ? "neu-pressed border-l-4 border-red-500 bg-[#eef2f7]"
-                                    : "neu-flat hover:scale-[1.01]"
-                                    }`}
-                            >
-                                <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                                    <div className="flex items-center gap-2">
-                                        <span
-                                            className={`px-2.5 py-0.5 rounded-lg text-[10px] font-extrabold tracking-wider uppercase ${notice.isUrgent
-                                                ? "neu-button-red text-white shadow-xs"
-                                                : "neu-pressed-sm text-slate-700"
-                                                }`}
-                                        >
-                                            {notice.category}
-                                        </span>
-                                        {notice.isUrgent && (
-                                            <span className="flex h-2 w-2 rounded-full bg-red-600 relative">
-                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                        {displayedNotices.length > 0 ? (
+                            displayedNotices.map((notice) => {
+                                const isSelected = selectedNotice?.id === notice.id;
+                                return (
+                                    <div
+                                        key={notice.id}
+                                        onClick={() => {
+                                            setSelectedNotice(notice);
+                                            // Smooth scroll on mobile screens to detail
+                                            if (window.innerWidth < 1024) {
+                                                const el = document.getElementById("notice-detail-view");
+                                                if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+                                            }
+                                        }}
+                                        className={`p-5 rounded-2xl transition-all cursor-pointer relative ${
+                                            isSelected
+                                                ? "neu-pressed border-l-4 border-red-500 bg-[#eef2f7]"
+                                                : "neu-flat hover:scale-[1.01]"
+                                        }`}
+                                    >
+                                        <div className="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+                                            <div className="flex items-center gap-2">
+                                                <span
+                                                    className={`px-2.5 py-0.5 rounded-lg text-[10px] font-extrabold tracking-wider uppercase ${
+                                                        notice.isUrgent
+                                                            ? "neu-button-red text-white shadow-xs"
+                                                            : "neu-pressed-sm text-slate-700"
+                                                    }`}
+                                                >
+                                                    {notice.category}
+                                                </span>
+                                                {notice.isUrgent && (
+                                                    <span className="inline-flex items-center gap-1 text-[10px] font-bold text-red-600">
+                                                        <span className="flex h-2 w-2 rounded-full bg-red-600 relative">
+                                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                                        </span>
+                                                        {language === "en" ? "Urgent" : "जरुरी"}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <div className="flex items-center gap-1.5 text-xs text-slate-500 font-mono font-medium">
+                                                <Calendar className="w-3.5 h-3.5" />
+                                                {notice.date}
+                                            </div>
+                                        </div>
+
+                                        <h3 className="font-bold text-slate-900 text-base group-hover:text-blue-900 transition-colors leading-snug">
+                                            {language === "en" ? notice.titleEn : notice.titleNp}
+                                        </h3>
+                                        <p className="mt-2 text-slate-600 text-xs line-clamp-2 leading-relaxed text-justify">
+                                            {language === "en" ? notice.contentEn : notice.contentNp}
+                                        </p>
+
+                                        <div className="mt-4 flex items-center justify-between text-xs text-blue-900 font-bold">
+                                            <span className="inline-flex items-center gap-1">
+                                                <FileText className="w-3.5 h-3.5" />
+                                                {language === "en" ? "Read Details" : "विस्तृत विवरण"}
                                             </span>
-                                        )}
+                                            <ChevronRight
+                                                className={`w-4 h-4 transition-transform ${
+                                                    isSelected ? "translate-x-1 text-red-600" : ""
+                                                }`}
+                                            />
+                                        </div>
                                     </div>
-                                    <div className="flex items-center gap-1.5 text-xs text-slate-500 font-mono font-medium">
-                                        <Calendar className="w-3.5 h-3.5" />
-                                        {notice.date}
-                                    </div>
-                                </div>
-
-                                <h3 className="font-bold text-slate-900 text-base group-hover:text-blue-900 transition-colors">
-                                    {language === "en" ? notice.titleEn : notice.titleNp}
-                                </h3>
-                                <p className="mt-2 text-slate-600 text-xs line-clamp-2 leading-relaxed text-justify">
-                                    {language === "en" ? notice.contentEn : notice.contentNp}
+                                );
+                            })
+                        ) : (
+                            <div className="p-8 neu-pressed rounded-3xl text-center text-slate-500 bg-[#eef2f7]">
+                                <FileText className="w-8 h-8 mx-auto text-slate-400 mb-2" />
+                                <p className="text-sm font-bold text-slate-700">
+                                    {language === "en" ? "No notices found" : "कुनै सूचना भेटिएन"}
                                 </p>
-
-                                <div className="mt-4 flex items-center justify-between text-xs text-blue-900 font-bold">
-                                    <span className="inline-flex items-center gap-1">
-                                        <FileText className="w-3.5 h-3.5" />
-                                        {language === "en" ? "Read Details" : "विस्तृत विवरण"}
-                                    </span>
-                                    <ChevronRight className={`w-4 h-4 transition-transform ${selectedNotice?.id === notice.id ? "translate-x-1 text-red-600" : ""}`} />
-                                </div>
+                                <p className="text-xs text-slate-500 mt-1">
+                                    {language === "en"
+                                        ? "Try adjusting your search query or category filter."
+                                        : "कृपया खोज शब्द वा वर्ग परिवर्तन गर्नुहोस्।"}
+                                </p>
+                                {(searchQuery || filter !== "all") && (
+                                    <button
+                                        onClick={() => {
+                                            setFilter("all");
+                                            setSearchQuery("");
+                                        }}
+                                        className="mt-3 neu-button px-4 py-1.5 rounded-xl text-xs font-bold text-[#052855] cursor-pointer"
+                                    >
+                                        {language === "en" ? "Clear Filters" : "फिल्टर हटाउनुहोस्"}
+                                    </button>
+                                )}
                             </div>
-                        ))}
+                        )}
 
                         {/* Show More / Show Less Button */}
                         {filteredNotices.length > INITIAL_LIMIT && (
                             <div className="pt-2 text-center">
                                 <button
                                     onClick={() => setShowAll(!showAll)}
-                                    className="neu-button inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-2xl text-slate-800 font-bold text-xs transition-all cursor-pointer"
+                                    className="neu-button inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-2xl text-slate-800 font-bold text-xs transition-all cursor-pointer hover:scale-102"
                                 >
                                     <span>
                                         {showAll
@@ -221,21 +307,26 @@ export default function NoticeBoard({ language }: NoticeBoardProps) {
                                                 ? "Show Less"
                                                 : "कम देखाउनुहोस्"
                                             : language === "en"
-                                                ? `Show More Notices (${filteredNotices.length - INITIAL_LIMIT} more)`
-                                                : `थप सूचनाहरू हेर्नुहोस् (अझै ${filteredNotices.length - INITIAL_LIMIT} वटा)`}
+                                            ? `Show All Notices (${filteredNotices.length})`
+                                            : `सबै सूचनाहरू हेर्नुहोस् (${filteredNotices.length} वटा)`}
                                     </span>
-                                    <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${showAll ? "rotate-180" : ""}`} />
+                                    <ChevronDown
+                                        className={`w-4 h-4 transition-transform duration-300 ${
+                                            showAll ? "rotate-180" : ""
+                                        }`}
+                                    />
                                 </button>
                             </div>
                         )}
                     </div>
 
                     {/* Active Notice Detail Frame */}
-                    <div className="lg:col-span-2">
+                    <div id="notice-detail-view" className="lg:col-span-2 scroll-mt-28">
                         {selectedNotice ? (
                             <motion.div
-                                initial={{ opacity: 0, scale: 0.98 }}
-                                animate={{ opacity: 1, scale: 1 }}
+                                key={selectedNotice.id}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
                                 className="neu-card p-6 rounded-3xl sticky top-24 space-y-4"
                             >
                                 <div className="flex justify-between items-center pb-3 border-b border-slate-200">
@@ -256,8 +347,8 @@ export default function NoticeBoard({ language }: NoticeBoardProps) {
                                 </h4>
 
                                 <div className="space-y-3 text-xs sm:text-sm leading-relaxed text-slate-700">
-                                    <p className="font-sans text-justify">{selectedNotice.contentEn}</p>
-                                    <p className="font-devanagari text-slate-800 neu-pressed-sm p-4 rounded-2xl border-l-4 border-red-500 text-justify">
+                                    <p className="font-sans text-justify leading-relaxed">{selectedNotice.contentEn}</p>
+                                    <p className="font-devanagari text-slate-800 neu-pressed-sm p-4 rounded-2xl border-l-4 border-red-500 text-justify leading-relaxed">
                                         {selectedNotice.contentNp}
                                     </p>
                                 </div>
@@ -265,20 +356,27 @@ export default function NoticeBoard({ language }: NoticeBoardProps) {
                                 <div className="pt-4 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
                                     <span className="font-medium text-[11px]">Issued By: FSU Secretariat</span>
                                     <button
-                                        onClick={() => {
-                                            const text = `${selectedNotice.titleEn}\n\n${selectedNotice.contentEn}`;
-                                            navigator.clipboard.writeText(text);
-                                        }}
-                                        className="neu-button px-3.5 py-1.5 rounded-xl font-bold text-[10px] text-slate-700 hover:text-blue-900 cursor-pointer"
+                                        onClick={() => handleCopy(selectedNotice)}
+                                        className="neu-button px-3.5 py-1.5 rounded-xl font-bold text-[10px] text-slate-700 hover:text-blue-900 cursor-pointer flex items-center gap-1.5"
                                     >
-                                        Copy Notice
+                                        {copied ? (
+                                            <>
+                                                <Check className="w-3 h-3 text-emerald-600" />
+                                                <span>Copied!</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Share2 className="w-3 h-3" />
+                                                <span>Copy Notice</span>
+                                            </>
+                                        )}
                                     </button>
                                 </div>
                             </motion.div>
                         ) : (
                             <div className="h-full min-h-[300px] flex flex-col items-center justify-center neu-pressed rounded-3xl p-6 text-center text-slate-500 bg-[#eef2f7]">
                                 <div className="w-14 h-14 neu-flat rounded-2xl flex items-center justify-center text-slate-400 mb-3">
-                                    <FileText className="w-7 h-7 animate-pulse text-blue-900" />
+                                    <FileText className="w-7 h-7 text-blue-900" />
                                 </div>
                                 <p className="text-sm font-bold text-slate-800">
                                     {language === "en" ? "Select a notice to view details" : "विवरण हेर्नको लागि सूचना चयन गर्नुहोस्"}
@@ -305,3 +403,4 @@ export default function NoticeBoard({ language }: NoticeBoardProps) {
         </section>
     );
 }
+

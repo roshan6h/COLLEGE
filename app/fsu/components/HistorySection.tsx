@@ -34,8 +34,8 @@ export default function HistorySection({ language }: HistorySectionProps) {
     ];
 
     return (
-        <section id="history" className="py-16 neu-card rounded-3xl overflow-hidden">
-            <div className="max-w-6xl mx-auto px-6 sm:px-8">
+        <section id="history" className="py-6 w-full">
+            <div className="max-w-6xl mx-auto">
                 {/* Section Header */}
                 <div className="flex flex-col items-center text-center mb-16">
                     <span className="neu-flat-sm text-red-600 px-4 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase flex items-center gap-2">

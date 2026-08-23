@@ -526,6 +526,8 @@ export const EventsCalendarSection: React.FC<EventsCalendarSectionProps> = ({
                                                     src={evt.image || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80'}
                                                     alt={evt.title}
                                                     referrerPolicy="no-referrer"
+                                                    loading="lazy"
+                                                    decoding="async"
                                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                                 />
 

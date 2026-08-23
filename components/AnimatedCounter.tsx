@@ -20,7 +20,7 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
 }) => {
     const [displayValue, setDisplayValue] = useState(0);
     const ref = useRef<HTMLSpanElement>(null);
-    const isInView = useInView(ref, { once: false, margin: '-20px' });
+    const isInView = useInView(ref, { once: true, margin: '-10px' });
 
     useEffect(() => {
         let startTimestamp: number | null = null;
@@ -44,8 +44,6 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
             };
 
             animationFrameId = window.requestAnimationFrame(step);
-        } else {
-            setDisplayValue(0);
         }
 
         return () => {
