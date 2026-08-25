@@ -12,12 +12,12 @@ export const CampusLogoBadge: React.FC<{ size?: 'sm' | 'md' | 'lg'; className?: 
         <div className={`${dimensions} bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/40 shadow-sm shrink-0 ${className}`}>
             <div className="w-full h-full rounded-full bg-white p-0 flex items-center justify-center overflow-hidden">
                 <img
-                    src='/logo.jpg'
+                    src='/logo2.jpg'
                     alt="Aadikavi Bhanubhakta Campus Logo"
                     className="w-full h-full object-contain rounded-full"
                     referrerPolicy="no-referrer"
                     onError={(e) => {
-                        (e.target as HTMLImageElement).src = '/logo.svg';
+                        (e.target as HTMLImageElement).src = '/logo2.jpg';
                     }}
                 />
             </div>
