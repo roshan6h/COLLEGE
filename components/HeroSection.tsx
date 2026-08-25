@@ -81,24 +81,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                         {/* Accreditation Badge */}
                         <motion.div
                             variants={itemVariants}
-                            whileHover={{ scale: 1.02 }}
-                            className="inline-flex items-center gap-2 sm:gap-2.5 px-3 sm:px-3.5 py-1.5 rounded-xl sm:rounded-full bg-white/90 sm:bg-[#eef2f7] border border-slate-200/90 text-slate-700 text-xs font-medium mb-4 shadow-2xs cursor-default backdrop-blur-sm"
+                            whileHover={{ scale: 1.01 }}
+                            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#eef2f7] border border-white/90 shadow-[3px_3px_8px_#d1d9e6,-3px_-3px_8px_#ffffff] text-slate-700 text-xs font-medium mb-3.5 select-none"
                         >
-                            <div className="w-5 h-5 rounded-full bg-white p-0.5 flex items-center justify-center shrink-0 border border-slate-200 shadow-2xs">
-                                <img
-                                    src="../logo2.jpg"
-                                    alt="Campus Seal"
-                                    className="w-full h-full object-contain rounded-full"
-                                    onError={(e) => {
-                                        (e.target as HTMLImageElement).src = '../logo2.jpg';
-                                    }}
-                                />
-                            </div>
-                            <span className="text-[#800000] font-bold text-[11px] sm:text-xs uppercase tracking-wider whitespace-nowrap">
-                                {language === 'en' ? 'Official Portal' : 'आधिकारिक पोर्टल'}
+                            <span className="text-[#800000] font-extrabold text-[11px] sm:text-xs tracking-wider uppercase whitespace-nowrap">
+                                {language === 'en' ? 'OFFICIAL PORTAL' : 'आधिकारिक पोर्टल'}
                             </span>
-                            <span className="text-slate-300">•</span>
-                            <span className="text-slate-600 font-medium text-[11px] sm:text-xs truncate sm:whitespace-normal">
+                            <span className="text-slate-300 font-bold text-xs leading-none">•</span>
+                            <span className="text-slate-600 font-medium text-[11px] sm:text-xs whitespace-nowrap">
                                 {language === 'en'
                                     ? 'QAA Certified Public Campus'
                                     : 'QAA प्रमाणित पब्लिक क्याम्पस'}
@@ -108,7 +98,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                         {/* Institution Eyebrow */}
                         <motion.div
                             variants={itemVariants}
-                            className="flex items-center gap-2 text-xs sm:text-sm font-bold tracking-widest uppercase text-[#0c72b8] mb-2"
+                            className="flex items-center gap-2 text-xs sm:text-sm font-bold tracking-widest uppercase text-[#0c72b8] mb-2 pl-3.5"
                         >
                             <GraduationCap className="w-4 h-4 text-[#800000] inline shrink-0" />
                             <span>
@@ -171,26 +161,26 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                                 className="px-5 py-3 bg-white hover:bg-slate-50 border border-slate-200/90 text-slate-700 hover:text-slate-900 font-semibold text-sm rounded-xl transition-colors shadow-2xs hover:shadow-xs active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer"
                             >
                                 <FileText className="w-4 h-4 text-[#800000]" />
-                                <span>{language === 'en' ? 'Academic Calendar' : 'शैक्षिक पात्रो'}</span>
+                                <span>{language === 'en' ? 'Events' : 'कार्यक्रमहरू'}</span>
                             </motion.button>
                         </motion.div>
 
                         {/* Trust Markers */}
                         <motion.div
                             variants={itemVariants}
-                            className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-6 pt-4 border-t border-slate-300/60 text-xs sm:text-sm text-slate-600 font-medium w-full"
+                            className="w-full pt-4 border-t border-slate-300/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 text-xs sm:text-sm text-slate-600 font-medium"
                         >
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 shrink-0">
                                 <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-                                <span>{language === 'en' ? 'Official Campus Charter' : 'आधिकारिक क्याम्पस मान्यता'}</span>
+                                <span className="whitespace-nowrap">{language === 'en' ? 'Official Campus Charter' : 'आधिकारिक क्याम्पस मान्यता'}</span>
                             </div>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 shrink-0">
                                 <Building2 className="w-4 h-4 text-[#800000] shrink-0" />
-                                <span>{language === 'en' ? 'TU Affiliated' : 'त्रिभुवन विश्वविद्यालय सम्बद्ध'}</span>
+                                <span className="whitespace-nowrap">{language === 'en' ? 'TU Affiliated' : 'त्रिभुवन विश्वविद्यालय सम्बद्ध'}</span>
                             </div>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 shrink-0">
                                 <CheckCircle2 className="w-4 h-4 text-[#0c72b8] shrink-0" />
-                                <span>{language === 'en' ? 'Estd. 2044 BS (1987 AD)' : 'स्था. २०४४ (१९८७ एडी)'}</span>
+                                <span className="whitespace-nowrap">{language === 'en' ? 'Estd. 2044 BS (1987 AD)' : 'स्था. २०४४ (१९८७ एडी)'}</span>
                             </div>
                         </motion.div>
 
@@ -209,11 +199,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                             <div className="bg-white p-3 sm:p-3.5 rounded-2xl shadow-xl border border-slate-200/90 relative overflow-hidden group">
                                 <div className="relative h-72 sm:h-80 lg:h-[400px] w-full rounded-xl overflow-hidden bg-slate-900">
                                     <img
-                                        src='../campusIMG.png'
+                                        src="/campusIMG.png"
                                         alt="Aadikavi Bhanubhakta Campus Building"
                                         referrerPolicy="no-referrer"
                                         loading="lazy"
                                         decoding="async"
+                                        onError={(e) => {
+                                            (e.target as HTMLImageElement).src = '/campus_building.jpg';
+                                        }}
                                         className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/25 to-transparent pointer-events-none" />

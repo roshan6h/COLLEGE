@@ -12,7 +12,7 @@ export const CampusLogoBadge: React.FC<{ size?: 'sm' | 'md' | 'lg'; className?: 
         <div className={`${dimensions} bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/40 shadow-sm shrink-0 ${className}`}>
             <div className="w-full h-full rounded-full bg-white p-0 flex items-center justify-center overflow-hidden">
                 <img
-                    src='../logo2.jpg'
+                    src='/logo.jpg'
                     alt="Aadikavi Bhanubhakta Campus Logo"
                     className="w-full h-full object-contain rounded-full"
                     referrerPolicy="no-referrer"
@@ -115,11 +115,12 @@ export const Footer: React.FC<FooterProps> = ({
                         <motion.a
                             whileHover={{ scale: 1.1, y: -2 }}
                             whileTap={{ scale: 0.95 }}
-                            href="https://abcampus.edu.np"
+                            href="https://aadikavicampus.edu.np/"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 shadow-[inset_1px_1px_3px_rgba(255,255,255,0.2),2px_2px_6px_rgba(0,0,0,0.2)] flex items-center justify-center text-blue-100 hover:text-white transition-all duration-200"
                             aria-label="Website"
+                            title="Aadikavi Bhanubhakta Campus Website"
                         >
                             <Globe className="w-4 h-4" />
                         </motion.a>
@@ -199,7 +200,7 @@ export const Footer: React.FC<FooterProps> = ({
                         <motion.a
                             whileHover={{ scale: 1.1, y: -2 }}
                             whileTap={{ scale: 0.95 }}
-                            href="https://facebook.com"
+                            href="https://www.facebook.com/aadikavicampus"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-xl flex items-center justify-center text-white shadow-[inset_1px_1px_3px_rgba(255,255,255,0.2),3px_3px_8px_rgba(0,0,0,0.25)] transition-all duration-200"
@@ -229,7 +230,7 @@ export const Footer: React.FC<FooterProps> = ({
                         <motion.a
                             whileHover={{ scale: 1.1, y: -2 }}
                             whileTap={{ scale: 0.95 }}
-                            href="https://linkedin.com"
+                            href="https://www.linkedin.com/company/aadikavi-bhanubhakta-campus/"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-xl flex items-center justify-center text-white shadow-[inset_1px_1px_3px_rgba(255,255,255,0.2),3px_3px_8px_rgba(0,0,0,0.25)] transition-all duration-200"
@@ -244,7 +245,7 @@ export const Footer: React.FC<FooterProps> = ({
                         <motion.a
                             whileHover={{ scale: 1.1, y: -2 }}
                             whileTap={{ scale: 0.95 }}
-                            href="https://youtube.com"
+                            href="https://www.youtube.com/channel/UCYRSkB_FvrvQmVps_HxlyAQ"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-xl flex items-center justify-center text-white shadow-[inset_1px_1px_3px_rgba(255,255,255,0.2),3px_3px_8px_rgba(0,0,0,0.25)] transition-all duration-200"

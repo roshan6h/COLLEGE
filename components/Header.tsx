@@ -31,21 +31,21 @@ export interface HeaderProps {
 }
 
 export const CampusLogoBadge: React.FC<{ size?: 'sm' | 'md' | 'lg'; className?: string }> = ({ size = 'md', className = '' }) => {
-    const dimensions = size === 'sm' ? 'w-8 h-8 p-0.5' : size === 'lg' ? 'w-14 h-14 p-1' : 'w-10 h-10 p-0.5';
+    const dimensions = size === 'sm' ? 'w-8 h-8 p-0.5' : size === 'lg' ? 'w-14 h-14 p-1' : 'w-11 h-11 p-0.5';
 
     return (
         <div
-            className={`${dimensions} bg-[#eef2f7] rounded-full flex items-center justify-center neu-flat-sm border border-white/80 shrink-0 transition-all ${className}`}
+            className={`${dimensions} bg-[#eef2f7] rounded-full flex items-center justify-center shadow-[2px_2px_5px_#d1d9e6,-2px_-2px_5px_#ffffff] border border-white/90 shrink-0 transition-all ${className}`}
             title="Aadikavi Bhanubhakta Campus"
         >
-            <div className="w-full h-full rounded-full bg-white flex items-center justify-center p-0 shadow-2xs overflow-hidden">
+            <div className="w-full h-full rounded-full bg-white flex items-center justify-center p-0.5 shadow-2xs overflow-hidden">
                 <img
-                    src='../logo2.jpg'
+                    src='/logo2.jpg'
                     alt="Aadikavi Bhanubhakta Campus"
                     className="w-full h-full object-contain rounded-full"
                     referrerPolicy="no-referrer"
                     onError={(e) => {
-                        (e.target as HTMLImageElement).src = '/logo.svg';
+                        (e.target as HTMLImageElement).src = '/logo2.jpg';
                     }}
                 />
             </div>
@@ -141,30 +141,20 @@ export const Header: React.FC<HeaderProps> = ({
                     {/* Brand Logo & Name */}
                     <motion.a
                         layout
-                        href="#"
-                        whileHover={{ scale: 1.01 }}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            if (onHomeClick) {
-                                onHomeClick();
-                            } else {
-                                window.scrollTo({ top: 0, behavior: 'smooth' });
-                            }
-                        }}
-                        className="flex items-center gap-2.5 sm:gap-3.5 shrink-0"
+                        href="https://aadikavicampus.edu.np/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        className="flex items-center gap-2.5 sm:gap-3 shrink-0 group cursor-pointer"
+                        title="Aadikavi Bhanubhakta Campus (Official Website)"
                     >
                         <CampusLogoBadge size="md" />
-                        <div className="flex flex-col justify-center">
-                            <div className="flex items-center gap-1.5">
-                                <span className="font-extrabold text-gray-900 text-lg sm:text-xl leading-tight tracking-tight">
-                                    CLUBS
-                                </span>
-                                <span className="hidden lg:inline-block text-xs font-bold text-slate-400">|</span>
-                                <span className="hidden lg:inline-block font-bold text-gray-900 text-sm leading-tight tracking-tight">
-                                    Aadikavi Bhanubhakta Campus
-                                </span>
-                            </div>
-                            <span className="text-[#800000] text-xs sm:text-sm font-bold leading-tight mt-0.5">
+                        <div className="flex flex-col justify-center select-none">
+                            <span className="font-extrabold text-slate-900 text-lg sm:text-xl md:text-2xl leading-none tracking-tight">
+                                CLUBS
+                            </span>
+                            <span className="text-[#800000] text-xs sm:text-sm font-bold leading-tight mt-1">
                                 आदिकवि भानुभक्त क्याम्पस
                             </span>
                         </div>
