@@ -121,7 +121,7 @@ export const abitClubData: Club = {
     id: 'abit-club',
     name: 'ABIT Club',
     nepaliName: 'एबीआइटी क्लब',
-    category: 'Technology & IT',
+    category: 'Technology',
     logo: '../abit.jpg',
     accentColor: '#1d4ed8',
     description: 'The premier Information Technology student committee at Aadikavi Bhanubhakta Campus. Dedicated to fostering software development, artificial intelligence skills, cybersecurity awareness, web technologies, and tech innovation among students.',
@@ -129,12 +129,12 @@ export const abitClubData: Club = {
     establishedYear: 2018,
     memberCount: 120,
     facultyAdvisor: 'Er. Ghan Bahadur Thapa',
-    president: 'Subash Chandra Giri',
+    president: 'Biwash Ranabhat',
     meetingSchedule: 'Every Friday at 3:30 PM',
     roomLocation: 'IT Building, Lab 204',
     contactEmail: 'abit.club@abcampus.edu.np',
     featured: true,
-    vision: 'To position Aadikavi Bhanubhakta Campus as a leading hub of tech talent in Gandaki Province through hands-on software development, AI research, and digital solution delivery.',
+    vision: 'To make Aadikavi Bhanubhakta Campus the leading force in technology across Tanahun District by helping students learn practical skills and inspiring the wider community through innovation.',
     certificate: {
         isRegistered: true,
         certificateNumber: 'ABC-IT-REG-2075/018',
@@ -148,16 +148,16 @@ export const abitClubData: Club = {
         remarks: 'Officially accredited student technology committee operating under the Department of Computer Science & Information Technology.'
     },
     mission: [
-        'Host weekly coding bootcamps in React, Python, and Full-Stack Web Development.',
-        'Organize annual provincial hackathons and tech innovation fests.',
-        'Maintain and update campus web applications and student portals.',
-        'Bridge academia with the IT industry via guest lectures and mentorship.'
+        'Teach students practical coding and tech skills through easy, hands-on learning.',
+        'Organize workshops, bootcamps, and hackathons for all students.',
+        'Connect students with real projects and industry mentors.',
+        'Lead and inspire tech growth across Tanahun District.'
     ],
     presidentMessage: {
-        senderName: 'Subash Chandra Giri',
+        senderName: 'Biwash Ranabhat',
         senderRole: 'President, ABIT Club',
-        message: 'Welcome to the official digital hub of ABIT Club! Technology is expanding rapidly, and our committee ensures every student at Aadikavi Bhanubhakta Campus gains industry-ready coding skills, practical exposure, and problem-solving confidence.',
-        avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face'
+        message: 'ABIT Club is a place where ideas become opportunities and students become confident creators. Together, let us learn from one another, build meaningful solutions and lead with purpose.',
+        avatarUrl: '/public/abit/bibash.webp'
     },
     advisorMessage: {
         senderName: 'Er. Ghan Bahadur Thapa',
@@ -178,40 +178,121 @@ export const abitClubData: Club = {
     leadership: [
         {
             id: 'l1',
+            name: 'Biwash Ranabhat',
+            role: 'President',
+            department: 'BICTE 8th Semester',
+            email: '',
+            phone: '+977 9815178591',
+            avatarUrl: '../abit/bibash.webp'
+        },
+        {
+            id: 'l2',
+            name: 'Rajib Ranabhat',
+            role: 'Vice President',
+            department: 'BICTE 6th Semester',
+            email: '',
+            phone: '+977 9815189764',
+            avatarUrl: '/abit/rajip.webp'
+        },
+        {
+            id: 'l3',
+            name: 'Suraj Bishwakarma',
+            role: 'Secretary',
+            department: 'BICTE 6th Semester',
+            email: '',
+            phone: '+977 9819186920',
+            avatarUrl: '/abit/suraj.webp',
+        },
+        {
+            id: 'l4',
+            name: 'Prerana Thapa',
+            role: 'Treasurer',
+            department: 'BICTE 6th Semester',
+            email: '',
+            phone: '+977 9829161624',
+            avatarUrl: '/abit/prerna.webp',
+        },
+        {
+            id: 'l5',
+            name: 'Ashim Chhetri',
+            role: 'Joint Secretary',
+            department: 'BICTE 5th Semester',
+            email: '',
+            phone: '+977 9712062701',
+            avatarUrl: '/abit/ashim.webp'
+        },
+        {
+            id: 'l6',
+            name: 'Rohit Thapa',
+            role: 'Spokesperson',
+            department: 'BICTE 8th Semester',
+            email: '',
+            phone: '+977 9709018353',
+            avatarUrl: '/abit/rohit.webp'
+        },
+        {
+            id: 'l7',
+            name: 'Samikshya Shrestha',
+            role: 'Member',
+            department: 'BICTE 5th Semester',
+            email: '',
+            phone: '+977 9864378850',
+            avatarUrl: '/abit/samikshya.webp'
+        },
+        {
+            id: 'l8',
+            name: 'Diwash Bastola',
+            role: 'Member',
+            department: 'BICTE 5th Semester',
+            email: '',
+            phone: '+977 9844927162',
+            avatarUrl: '/abit/dibash.webp'
+        },
+        {
+            id: 'l9',
+            name: 'Nisha Giri',
+            role: 'Member',
+            department: 'BICTE 6th Semester',
+            email: '',
+            phone: '+977 9709018440',
+            avatarUrl: '/abit/nisha.webp'
+        },
+        {
+            id: 'l10',
+            name: 'Diwash Ranabhat',
+            role: 'Member',
+            department: 'BICTE 6th Semester',
+            email: '',
+            phone: '+977 9762861070',
+            avatarUrl: '/abit/diwash.webp'
+        },
+        {
+            id: 'l11',
+            name: 'Biwash Ranabhat',
+            role: 'Member',
+            department: 'BICTE 8th Semester',
+            email: '',
+            phone: '+977 9707529958',
+            avatarUrl: '/abit/bibmem.webp'
+        },
+           {
+            id: 'l12',
             name: 'Er. Ghan Bahadur Thapa',
             role: 'Club Advisor',
             department: 'Department of Computer Science & IT',
             email: 'ghanbahadur@abcampus.edu.np',
+            phone: '+977 9841154498',
+            avatarUrl: '/abit/ghan.webp'
+        },
+        {
+            id: 'l23',
+            name: 'Mahaprashad Hadkhale',
+            role: 'Club Advisor',
+            department: 'Department of Computer Science & IT',
+            email: 'mahaprashad@abcampus.edu.np',
             phone: '+977 9856012345',
-            avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&h=300&fit=crop&crop=face'
+            avatarUrl: '/abit/maha.webp'
         },
-        {
-            id: 'l2',
-            name: 'Subash Chandra Giri',
-            role: 'President',
-            department: 'BIM 7th Semester',
-            email: 'subash.giri@student.abcampus.edu.np',
-            phone: '+977 9846054321',
-            avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face'
-        },
-        {
-            id: 'l3',
-            name: 'Pooja Sharma',
-            role: 'Vice President',
-            department: 'BIM 5th Semester',
-            email: 'pooja.sharma@student.abcampus.edu.np',
-            phone: '+977 9846198234',
-            avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&h=300&fit=crop&crop=face'
-        },
-        {
-            id: 'l4',
-            name: 'Suman Shrestha',
-            role: 'Secretary',
-            department: 'BIM 5th Semester',
-            email: 'suman.shrestha@student.abcampus.edu.np',
-            phone: '+977 9860154389',
-            avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&h=300&fit=crop&crop=face'
-        }
     ],
     achievements: [
         'Organized Inter-College Hackathon "Tanahun Tech Fest 2025"',
@@ -221,36 +302,22 @@ export const abitClubData: Club = {
     achievementItems: [
         {
             id: 'ach-1',
-            title: 'Organized Inter-College Hackathon "Tanahun Tech Fest 2025"',
-            description: 'Brought together over 180+ developers, designers, and innovators across 12 colleges in Gandaki Province for 36 hours of competitive coding.',
-            date: 'Jan 2026',
-            category: 'Hackathon & Innovation',
+            title: 'Best Student Club of the Year',
+            description: 'ABIT Club was honored with the Best Student Club Award 2023 for its outstanding contribution to technology education and innovation on campus.',
+            date: 'September 2023',
+            category: 'Best Club',
             badge: 'Major Milestone',
-            image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&auto=format&fit=crop&q=80'
+            image: '/abit/ach/023.webp'
         },
         {
             id: 'ach-2',
-            title: 'Trained 250+ Students in Full-Stack Web Development & React',
-            description: 'Delivered an intensive 6-week hands-on bootcamp covering modern JavaScript, TypeScript, React 18, and API architecture with 94% course completion rate.',
-            date: 'Nov 2024',
-            category: 'Technical Training',
-            badge: 'Capacity Building',
-            image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&auto=format&fit=crop&q=80'
-        },
-        {
-            id: 'ach-3',
-            title: 'Developed Campus Digital Notice Board & Student Feedback Portal',
-            description: 'Engineered an in-house digital signage software and mobile-responsive portal replacing physical paper notices across all campus departments.',
-            date: 'Aug 2024',
-            category: 'Campus Digitalization',
-            badge: 'Institutional Impact',
-            image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&auto=format&fit=crop&q=80'
+            title: 'Best Club of the Year',
+            description: "ABIT Club was honored with the Best Student Club Award 2024, recognizing its continued excellence in technology education, innovation, and student-led digital initiatives. This marked the club's second consecutive year receiving the award, reflecting its sustained impact on campus.",
+            date: 'September 2024',
+            category: 'Best Club',
+            badge: 'Major Milestone',
+            image: '/abit/ach/024.webp'
         }
-    ],
-    galleryImages: [
-        'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&auto=format&fit=crop&q=80'
     ]
 };
 

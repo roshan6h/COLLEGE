@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useState, useMemo, useEffect, useRef } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import Lenis from 'lenis';
 import {
   ALL_CLUBS,
   UPCOMING_EVENTS
@@ -18,7 +17,7 @@ import { Header } from '@/components/Header';
 import { HeroSection } from '@/components/HeroSection';
 import { DashboardControls } from '@/components/DashboardControls';
 import { ClubCard } from '@/components/ClubCard';
-import { ClubPage } from '../components/ClubPage';
+import { ClubPage } from '@/components/ClubPage';
 import FSUPage from './fsu/page';
 import { EventsCalendarSection } from '@/components/EventsCalendarSection';
 import { Footer } from '@/components/Footer';
@@ -48,36 +47,6 @@ export default function App() {
   const INITIAL_COMMITTEES_COUNT = 3;
 
   const [toastMessage, setToastMessage] = useState<string>('');
-  const lenisRef = useRef<Lenis | null>(null);
-
-  // Initialize smooth scrolling with Lenis (mimicking modern smooth-scroll portals)
-  useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
-      smoothWheel: true,
-      wheelMultiplier: 1.0,
-      touchMultiplier: 1.6,
-      infinite: false,
-    });
-
-    lenisRef.current = lenis;
-
-    let rafId: number;
-    function raf(time: number) {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    }
-    rafId = requestAnimationFrame(raf);
-
-    return () => {
-      cancelAnimationFrame(rafId);
-      lenis.destroy();
-      lenisRef.current = null;
-    };
-  }, []);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -171,42 +140,27 @@ export default function App() {
 
   const handleSelectClub = (club: Club | null) => {
     setSelectedClub(club);
-    if (lenisRef.current) {
-      lenisRef.current.scrollTo(0, { immediate: true });
-    } else {
-      window.scrollTo({ top: 0, behavior: 'instant' });
-    }
+    window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   const [pendingTargetSection, setPendingTargetSection] = useState<string | null>(null);
 
   const scrollToTargetElement = (elementId: string, smooth = true) => {
     if (elementId === 'about-campus-section' || elementId === 'top') {
-      if (lenisRef.current) {
-        lenisRef.current.scrollTo(0, { duration: smooth ? 1.2 : 0 });
-      } else {
-        window.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'instant' });
-      }
+      window.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'instant' });
       return;
     }
 
     const checkAndScroll = (attempts = 0) => {
       const el = document.getElementById(elementId);
       if (el) {
-        if (lenisRef.current) {
-          lenisRef.current.scrollTo(el, {
-            offset: -80,
-            duration: smooth ? 1.2 : 0,
-          });
-        } else {
-          const headerOffset = 80;
-          const elementPosition = el.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-          window.scrollTo({
-            top: Math.max(0, offsetPosition),
-            behavior: smooth ? 'smooth' : 'instant'
-          });
-        }
+        const headerOffset = 80;
+        const elementPosition = el.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        window.scrollTo({
+          top: Math.max(0, offsetPosition),
+          behavior: smooth ? 'smooth' : 'instant'
+        });
       } else if (attempts < 25) {
         setTimeout(() => checkAndScroll(attempts + 1), 40);
       }
