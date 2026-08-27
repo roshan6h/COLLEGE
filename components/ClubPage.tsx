@@ -14,44 +14,43 @@ import {
     CheckCircle2,
     UserPlus,
     Sparkles,
-    Bell,
     Eye,
-    Zap,
     FileText,
     Quote,
     Target,
-    Compass,
     History,
     ShieldCheck,
     GraduationCap,
     Calendar,
     X,
     Send,
-    ExternalLink,
     ChevronRight,
     Image as ImageIcon,
     Trophy,
-    Plus,
     ZoomIn,
     Check,
     ChevronDown,
     ChevronUp,
     ChevronLeft,
-    Layers,
     Info,
     Search,
     ArrowUpDown,
     SlidersHorizontal,
-    Filter,
     Crown,
     Briefcase,
     UserCheck,
-    FileCheck,
     FileX,
-    ShieldAlert,
     Copy,
+    AlertCircle,
+    ArrowRight,
+    Compass,
+    Share2,
+    ExternalLink,
+    MoreHorizontal,
     Download,
-    AlertCircle
+    Flag,
+    BarChart3,
+    Box
 } from 'lucide-react';
 
 import {
@@ -59,8 +58,8 @@ import {
     ClubEvent,
     ClubNotice,
     Language,
-    AchievementItem,
     LeadershipMember,
+    ClubGalleryItem,
     UPCOMING_EVENTS
 } from '../app/data/clubsData';
 import { SuggestionMessageBox } from './SuggestionMessageBox';
@@ -77,17 +76,17 @@ export interface AchievementCardData {
 
 const getContextualAchievementImage = (title: string, idx: number, category: string = ''): string => {
     const t = (title + ' ' + category).toLowerCase();
-    if (t.includes('hackathon') || t.includes('code') || t.includes('programming') || t.includes('fest')) {
+    if (t.includes('hackathon') || t.includes('code') || t.includes('programming') || t.includes('fest') || t.includes('tech')) {
         return 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&auto=format&fit=crop&q=80';
     }
-    if (t.includes('train') || t.includes('workshop') || t.includes('bootcamp') || t.includes('react') || t.includes('web')) {
+    if (t.includes('train') || t.includes('workshop') || t.includes('bootcamp') || t.includes('react') || t.includes('web') || t.includes('student')) {
         return 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&auto=format&fit=crop&q=80';
     }
-    if (t.includes('portal') || t.includes('board') || t.includes('digital') || t.includes('software') || t.includes('feedback')) {
+    if (t.includes('portal') || t.includes('board') || t.includes('digital') || t.includes('software') || t.includes('feedback') || t.includes('app')) {
         return 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&auto=format&fit=crop&q=80';
     }
-    if (t.includes('robot') || t.includes('trophy') || t.includes('champion') || t.includes('runner') || t.includes('award') || t.includes('win')) {
-        return 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800&auto=format&fit=crop&q=80';
+    if (t.includes('robot') || t.includes('trophy') || t.includes('champion') || t.includes('runner') || t.includes('award') || t.includes('win') || t.includes('club') || t.includes('year') || t.includes('best')) {
+        return 'https://images.unsplash.com/photo-1567521464027-f127ff144326?w=800&auto=format&fit=crop&q=80';
     }
     if (t.includes('sport') || t.includes('cricket') || t.includes('football') || t.includes('athletics')) {
         return 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=800&auto=format&fit=crop&q=80';
@@ -95,10 +94,10 @@ const getContextualAchievementImage = (title: string, idx: number, category: str
     if (t.includes('blood') || t.includes('health') || t.includes('relief') || t.includes('donation') || t.includes('medical')) {
         return 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=800&auto=format&fit=crop&q=80';
     }
-    if (t.includes('business') || t.includes('market') || t.includes('summit') || t.includes('venture') || t.includes('pitch')) {
+    if (t.includes('business') || t.includes('market') || t.includes('summit') || t.includes('venture') || t.includes('pitch') || t.includes('manage')) {
         return 'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&auto=format&fit=crop&q=80';
     }
-    if (t.includes('literature') || t.includes('poetry') || t.includes('drama') || t.includes('culture') || t.includes('art')) {
+    if (t.includes('literature') || t.includes('poetry') || t.includes('drama') || t.includes('culture') || t.includes('art') || t.includes('music')) {
         return 'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=800&auto=format&fit=crop&q=80';
     }
     const genericList = [
@@ -156,7 +155,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
     type TabType = 'home' | 'about' | 'vision' | 'certificate' | 'events' | 'manifesto' | 'history' | 'committee' | 'gallery' | 'message';
 
     const [activeTab, setActiveTab] = useState<TabType>('home');
-    const [selectedGalleryImg, setSelectedGalleryImg] = useState<string | null>(null);
+    const [selectedGalleryIndex, setSelectedGalleryIndex] = useState<number | null>(null);
     const [selectedEventForModal, setSelectedEventForModal] = useState<ClubEvent | null>(null);
     const [registeredEventIds, setRegisteredEventIds] = useState<Set<string>>(new Set());
     const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
@@ -347,7 +346,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                         return;
                     }
 
-                    const sectionIds: TabType[] = ['home', 'about', 'vision', 'events', 'manifesto', 'history', 'committee', 'gallery', 'message'];
+                    const sectionIds: TabType[] = ['home', 'about', 'vision', 'events', 'manifesto', 'history', 'committee', 'gallery', 'message', 'certificate'];
 
                     for (let i = sectionIds.length - 1; i >= 0; i--) {
                         const id = sectionIds[i];
@@ -371,87 +370,126 @@ export const ClubPage: React.FC<ClubPageProps> = ({
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    const safeEvents = events || [];
-    const safeNotices = notices || [];
     const leadershipList = club.leadership || [];
-    const galleryList = club.galleryImages || [];
+    
+    // Distinct About Section Images (configured via aboutImages or aboutUsImages)
+    const aboutImageList = useMemo(() => {
+        const customAbout = club.aboutImages || club.aboutUsImages;
+        if (customAbout && customAbout.length > 0 && typeof customAbout[0] === 'string' && customAbout[0].startsWith('http')) {
+            return customAbout;
+        }
+        // Elegant reliable curated college & campus images
+        return [
+            'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1000&auto=format&fit=crop&q=80',
+            'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&auto=format&fit=crop&q=80',
+            'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&auto=format&fit=crop&q=80'
+        ];
+    }, [club.aboutImages, club.aboutUsImages]);
 
-    // Achievements State with rich cards
-    const [achievements, setAchievements] = useState<AchievementCardData[]>(() => {
-        if (club.achievementItems && club.achievementItems.length > 0) {
-            return club.achievementItems.map((item, idx) => ({
+    // Normalize gallery images/items to structured items with image, title, date, category, description
+    const rawGallery = club.galleryItems || club.gallery || club.galleryImages || [];
+    const galleryItems: { id: string; image: string; title: string; date?: string; category?: string; description?: string }[] = useMemo(() => {
+        return rawGallery.map((item, idx) => {
+            if (typeof item === 'string') {
+                const defaultTitles = [
+                    'Campus Tech Symposium',
+                    'Hands-on React & AI Workshop',
+                    'Inter-College Hackathon 2025',
+                    'Executive Committee Gathering',
+                    'Annual Tech Exhibition & Showcase',
+                    'Student Mentorship & Code Lab',
+                    'Digital Campus Innovation Meet',
+                    'Youth Leadership Forum'
+                ];
+                const defaultYears = ['2026', '2025', '2024', '2024', '2023', '2023', '2022', '2022'];
+                return {
+                    id: `gal-${idx}`,
+                    image: item,
+                    title: defaultTitles[idx % defaultTitles.length],
+                    date: defaultYears[idx % defaultYears.length]
+                };
+            }
+            return {
+                id: item.id || `gal-${idx}`,
+                image: item.image,
+                title: item.title || `Moment ${idx + 1}`,
+                date: item.date,
+                category: item.category,
+                description: item.description
+            };
+        });
+    }, [rawGallery]);
+
+    const galleryList = useMemo(() => galleryItems.map(g => g.image), [galleryItems]);
+
+    // Keyboard navigation for Gallery Lightbox
+    useEffect(() => {
+        if (selectedGalleryIndex === null) return;
+
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                setSelectedGalleryIndex(null);
+            } else if (e.key === 'ArrowRight') {
+                setSelectedGalleryIndex((prev) => (prev !== null && prev < galleryList.length - 1 ? prev + 1 : 0));
+            } else if (e.key === 'ArrowLeft') {
+                setSelectedGalleryIndex((prev) => (prev !== null && prev > 0 ? prev - 1 : galleryList.length - 1));
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [selectedGalleryIndex, galleryList.length]);
+
+    // Achievements State with rich cards - accurately mapped from club data
+    const achievements = useMemo<AchievementCardData[]>(() => {
+        // Filter out empty items
+        const rawItems = (club.achievementItems || []).filter(
+            (item) => item && item.title && item.title.trim().length > 0 && item.title.trim().toLowerCase() !== 'not available'
+        );
+        if (rawItems.length > 0) {
+            return rawItems.map((item, idx) => ({
                 id: item.id || `ach-${club.id}-${idx}`,
                 title: item.title,
-                description: item.description || 'Major impactful milestone organized and delivered by the committee members and executive leadership.',
-                date: item.date || (['2023', '2024', '2023', '2024'][idx % 4]),
-                category: item.category || (idx === 0 ? 'Business Competition' : idx === 1 ? 'Campus Honor' : idx === 2 ? 'Finance Expo' : 'Academic Contest'),
-                badge: item.badge || (idx === 0 ? 'National Champions' : idx === 1 ? 'Management Honor' : idx === 2 ? '1st Place Gold' : 'Overall Champions'),
+                description: item.description,
+                date: item.date,
+                category: item.category || (idx === 0 ? 'Major Milestone' : idx === 1 ? 'Capacity Building' : 'Campus Impact'),
+                badge: item.badge || (idx === 0 ? 'Major Milestone' : idx === 1 ? 'Capacity Building' : 'Institutional Impact'),
                 image: item.image || getContextualAchievementImage(item.title, idx, club.category)
             }));
         }
-        if (club.achievements && club.achievements.length > 0) {
-            return club.achievements.map((item, idx) => {
+
+        const rawList = (club.achievements || []).filter((item) => {
+            if (!item) return false;
+            if (typeof item === 'string') return item.trim().length > 0 && item.trim().toLowerCase() !== 'not available';
+            return item.title && item.title.trim().length > 0 && item.title.trim().toLowerCase() !== 'not available';
+        });
+
+        if (rawList.length > 0) {
+            return rawList.map((item, idx) => {
                 if (typeof item === 'object') {
                     return {
                         id: item.id || `ach-${club.id}-${idx}`,
                         title: item.title,
-                        description: item.description || 'Major impactful milestone organized and delivered by the committee members and executive leadership.',
-                        date: item.date || (['2023', '2024', '2023', '2024'][idx % 4]),
-                        category: item.category || (idx === 0 ? 'Business Competition' : idx === 1 ? 'Campus Honor' : idx === 2 ? 'Finance Expo' : 'Academic Contest'),
-                        badge: item.badge || (idx === 0 ? 'National Champions' : idx === 1 ? 'Management Honor' : idx === 2 ? '1st Place Gold' : 'Overall Champions'),
+                        description: item.description,
+                        date: item.date,
+                        category: item.category || (idx === 0 ? 'Major Milestone' : idx === 1 ? 'Capacity Building' : 'Campus Impact'),
+                        badge: item.badge || (idx === 0 ? 'Major Milestone' : idx === 1 ? 'Capacity Building' : 'Institutional Impact'),
                         image: item.image || getContextualAchievementImage(item.title, idx, club.category)
                     };
                 }
                 return {
                     id: `ach-${club.id}-${idx}`,
                     title: item,
-                    description: 'Successfully planned, organized, and executed with high student turnout and institutional recognition.',
-                    date: ['2023', '2024', '2023', '2024'][idx % 4],
-                    category: idx === 0 ? 'Business Competition' : idx === 1 ? 'Campus Honor' : idx === 2 ? 'Finance Expo' : 'Academic Contest',
-                    badge: idx === 0 ? 'National Champions' : idx === 1 ? 'Management Honor' : idx === 2 ? '1st Place Gold' : 'Overall Champions',
+                    description: undefined,
+                    date: undefined,
+                    category: (idx === 0 ? 'Major Milestone' : idx === 1 ? 'Capacity Building' : 'Campus Initiative'),
+                    badge: (idx === 0 ? 'Major Milestone' : idx === 1 ? 'Capacity Building' : 'Campus Impact'),
                     image: getContextualAchievementImage(item, idx, club.category)
                 };
             });
         }
-        return [
-            {
-                id: `ach-${club.id}-default-1`,
-                title: 'National Management Case Challenge Winners',
-                description: 'Student delegation won 1st Place in the All-Nepal Inter-College Business Strategy & Corporate Analysis Challenge.',
-                date: '2023',
-                category: 'Business Competition',
-                badge: 'National Champions',
-                image: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&auto=format&fit=crop&q=80'
-            },
-            {
-                id: `ach-${club.id}-default-2`,
-                title: 'Best Student Management Circle Award',
-                description: 'Recognized by Aadikavi Bhanubhakta Campus for outstanding initiative in financial literacy campaigns and corporate networking seminars.',
-                date: '2024',
-                category: 'Campus Honor',
-                badge: 'Management Honor',
-                image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&auto=format&fit=crop&q=80'
-            },
-            {
-                id: `ach-${club.id}-default-3`,
-                title: 'Inter-College Stock Market Trading Champions',
-                description: 'Secured top position in virtual NEPSE trading competition by demonstrating superior portfolio yield and risk management.',
-                date: '2023',
-                category: 'Finance Expo',
-                badge: '1st Place Gold',
-                image: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&auto=format&fit=crop&q=80'
-            },
-            {
-                id: `ach-${club.id}-default-4`,
-                title: 'Inter-Departmental Business Quiz Winners',
-                description: 'Emerged overall winners in the Campus Management Quiz, demonstrating exceptional knowledge in economics, taxation, and international trade.',
-                date: '2024',
-                category: 'Academic Contest',
-                badge: 'Overall Champions',
-                image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&auto=format&fit=crop&q=80'
-            }
-        ];
-    });
+        return [];
+    }, [club]);
 
     const [showAllAchievements, setShowAllAchievements] = useState(false);
     const [activeAchievementPreview, setActiveAchievementPreview] = useState<AchievementCardData | null>(null);
@@ -467,27 +505,32 @@ export const ClubPage: React.FC<ClubPageProps> = ({
         return 'CAMPUS';
     }, [club.name, club.acronym]);
 
+    const displayedAchievements = showAllAchievements ? achievements : achievements.slice(0, 4);
+
     const extractYear = (dateStr?: string, fallbackIndex = 0) => {
         if (!dateStr) return ['2023', '2024', '2023', '2024'][fallbackIndex % 4];
         const match = dateStr.match(/\b(20\d{2})\b/);
         return match ? match[1] : (['2023', '2024', '2025', '2024'][fallbackIndex % 4]);
     };
 
-    const displayedAchievements = showAllAchievements ? achievements : achievements.slice(0, 4);
-
-    const clubEvents = safeEvents.filter((e) => e.clubId === club.id);
-    const clubNotices = safeNotices.filter((n) => n.clubId === club.id);
-
     // Defaults for rich fields if not defined explicitly in data
-    const defaultVision = club.vision ||
-        `To establish ${club.name} as a premier center of student innovation, leadership, and practical excellence at Aadikavi Bhanubhakta Campus, empowering every member through ethical governance, collaborative problem solving, and community advancement.`;
+    const visionStatement = React.useMemo(() => {
+        if (typeof club.vision === 'string' && club.vision.trim()) {
+            return club.vision.trim();
+        }
+        return `To establish ${club.name} as a leading student platform at Aadikavi Bhanubhakta Campus, empowering students through diverse academic, professional, and leadership opportunities while fostering a skilled, collaborative, and socially responsible community.`;
+    }, [club.name, club.vision]);
 
-    const defaultMission = club.mission || [
-        `Deliver regular hands-on workshops, training bootcamps, and project experience in ${(club.category || '').toLowerCase()}.`,
-        'Cultivate an inclusive community where students from all faculties share ideas, build networks, and excel academically.',
-        'Organize campus-wide competitions, seminars, and industry connect sessions to bridge academic learning with career opportunities.',
-        'Maintain 100% student representation and transparent executive leadership under institutional campus guidance.'
-    ];
+    const missionStatement = React.useMemo(() => {
+        const rawMission = (club as any).mission;
+        if (typeof rawMission === 'string' && rawMission.trim()) {
+            return rawMission.trim();
+        }
+        if (Array.isArray(rawMission) && rawMission.length > 0) {
+            return `${club.name} is committed to organizing seminars, workshops, training sessions, and community-oriented initiatives in coordination with Aadikavi Bhanubhakta Campus. Through these programs, the club aims to enhance student practical knowledge, leadership abilities, communication skills, and professional competence.`;
+        }
+        return `${club.name} is committed to organizing seminars, workshops, training sessions, and community-oriented initiatives in coordination with Aadikavi Bhanubhakta Campus. Through these programs, the club aims to enhance student practical knowledge, leadership abilities, communication skills, and professional competence.`;
+    }, [club.name, club.mission]);
 
     const defaultPresidentMessage = {
         senderName: club.presidentMessage?.senderName || club.president || 'President',
@@ -533,13 +576,13 @@ export const ClubPage: React.FC<ClubPageProps> = ({
         { id: 'home', labelEn: 'Overview', labelNp: 'परिचय', icon: <Building2 className="w-4 h-4" /> },
         { id: 'about', labelEn: 'About', labelNp: 'बारेमा', icon: <FileText className="w-4 h-4" /> },
         { id: 'vision', labelEn: 'Vision', labelNp: 'दृष्टिकोण', icon: <Target className="w-4 h-4" /> },
-        { id: 'certificate', labelEn: 'Certificate', labelNp: 'दर्ता प्रमाणपत्र', icon: <Award className="w-4 h-4" /> },
         { id: 'events', labelEn: 'Upcoming Events', labelNp: 'आगामी कार्यक्रमहरू', icon: <Calendar className="w-4 h-4" /> },
         { id: 'manifesto', labelEn: 'Manifesto', labelNp: 'घोषणापत्र', icon: <ShieldCheck className="w-4 h-4" /> },
         { id: 'history', labelEn: 'History', labelNp: 'इतिहास', icon: <History className="w-4 h-4" /> },
         { id: 'committee', labelEn: 'Committee', labelNp: 'कार्यसमिति', icon: <Users className="w-4 h-4" /> },
         { id: 'gallery', labelEn: 'Gallery', labelNp: 'ग्यालेरी', icon: <ImageIcon className="w-4 h-4" /> },
-        { id: 'message', labelEn: 'Message & Contact', labelNp: 'सन्देश तथा सम्पर्क', icon: <Quote className="w-4 h-4" /> }
+        { id: 'message', labelEn: 'Message & Contact', labelNp: 'सन्देश तथा सम्पर्क', icon: <Quote className="w-4 h-4" /> },
+        { id: 'certificate', labelEn: 'Certificate', labelNp: 'दर्ता प्रमाणपत्र', icon: <Award className="w-4 h-4" /> }
     ];
 
     const handleJoinSubmit = (e: React.FormEvent) => {
@@ -699,12 +742,6 @@ export const ClubPage: React.FC<ClubPageProps> = ({
         <div className="min-h-screen bg-[#eef2f7] text-[#1b1b1e] font-quicksand pb-20 animate-in fade-in duration-300">
             {/* Hero Banner Section (Clean Academic Neumorphic Aesthetic) */}
             <section className="relative bg-[#eef2f7] text-[#1b1b1e] pt-6 sm:pt-10 pb-8 sm:pb-12 border-b border-slate-300/60 overflow-hidden">
-                {/* Ambient Subtle Glows */}
-                <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-                    <div className="absolute -top-24 -left-20 w-96 h-96 bg-blue-100/40 rounded-full blur-3xl pointer-events-none" />
-                    <div className="absolute top-1/2 -right-20 w-96 h-96 bg-amber-100/30 rounded-full blur-3xl pointer-events-none" />
-                </div>
-
                 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex flex-col md:flex-row items-center md:items-start gap-6 sm:gap-8">
 
@@ -982,175 +1019,399 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                         </div>
                     </div>
 
-                    {/* Key Achievements & Campus Impact */}
-                    <div className="space-y-6 w-full pt-2">
-                        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pb-2">
-                            <div>
-                                <div className="flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-[#b91c1c] mb-1">
-                                    <Sparkles className="w-3.5 h-3.5 text-[#b91c1c]" />
+                    {/* Key Achievements & Campus Impact - Redesigned Neumorphic Showcase */}
+                    <div id="achievements" className="space-y-4 w-full pt-4 scroll-mt-36">
+                        {/* Section Heading */}
+                        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-slate-300/40 pb-3">
+                            <div className="space-y-0.5">
+                                <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider text-[#0c72b8]">
+                                    <Sparkles className="w-3.5 h-3.5" style={{ color: club.accentColor || '#0c72b8' }} />
                                     <span>HONORS & EXCELLENCE</span>
                                 </div>
-                                <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 font-poppins tracking-tight">
-                                    {club.name} Achievements
+                                <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-900 font-poppins tracking-tight">
+                                    Achievements & Milestones
                                 </h3>
+                                <p className="text-xs text-slate-600 font-normal max-w-2xl leading-relaxed">
+                                    Celebrating key milestones, competitive honors, and institutional contributions of {club.name}.
+                                </p>
                             </div>
-                            <p className="text-xs sm:text-sm text-slate-500 font-medium sm:text-right">
-                                Celebrating key milestones of {clubAcronym} & {club.category || 'Department'}
-                            </p>
+                            {achievements.length > 0 && (
+                                <div className="self-start sm:self-auto shrink-0">
+                                    <span className="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 bg-[#eef2f7] shadow-[inset_2px_2px_4px_#d1d9e6,inset_-2px_-2px_4px_#ffffff] border border-white/80 flex items-center gap-1.5">
+                                        <Trophy className="w-3.5 h-3.5 text-amber-600" />
+                                        <span>{achievements.length} {achievements.length === 1 ? 'Milestone' : 'Milestones'}</span>
+                                    </span>
+                                </div>
+                            )}
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-                            {displayedAchievements.map((ach, idx) => {
-                                const year = extractYear(ach.date, idx);
-                                const categoryTag = ach.category || (idx === 0 ? 'Business Competition' : idx === 1 ? 'Campus Honor' : idx === 2 ? 'Finance Expo' : 'Academic Contest');
-                                const awardBadge = ach.badge || (idx === 0 ? 'National Champions' : idx === 1 ? 'Management Honor' : idx === 2 ? '1st Place Gold' : 'Overall Champions');
+                        {/* ACHIEVEMENTS BODY: Empty State vs Standard Grid Layout */}
+                        {achievements.length === 0 ? (
+                            /* Redesigned Graphic & Animated Empty State */
+                            <motion.div
+                                initial={{ opacity: 0, y: 16 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.5 }}
+                                className="w-full bg-[#eef2f7] rounded-3xl p-8 sm:p-12 border border-white/90 shadow-[6px_6px_18px_#d1d9e6,-6px_-6px_18px_#ffffff] relative overflow-hidden text-center"
+                            >
+                                {/* Ambient Background Glow */}
+                                <div className="absolute -top-16 -right-16 w-56 h-56 bg-amber-400/10 rounded-full blur-3xl pointer-events-none" />
+                                <div className="absolute -bottom-16 -left-16 w-56 h-56 bg-[#0c72b8]/10 rounded-full blur-3xl pointer-events-none" />
 
-                                return (
-                                    <div
-                                        key={ach.id}
-                                        onClick={() => setActiveAchievementPreview(ach)}
-                                        className="group bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-4.5 border border-slate-200/90 shadow-[4px_4px_12px_#d1d9e6,-4px_-4px_12px_#ffffff] hover:shadow-[6px_6px_16px_#c8d2e2,-6px_-6px_16px_#ffffff] transition-all duration-300 flex flex-col justify-between cursor-pointer"
+                                {/* Graphic Animated Trophy & Orbit System */}
+                                <div className="relative mx-auto w-24 h-24 sm:w-28 sm:h-28 mb-5 flex items-center justify-center">
+                                    {/* Pulsing Aura */}
+                                    <motion.div
+                                        animate={{ scale: [1, 1.25, 1], opacity: [0.4, 0.15, 0.4] }}
+                                        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+                                        className="absolute inset-0 rounded-full bg-gradient-to-tr from-amber-400/30 via-yellow-200/40 to-[#0c72b8]/30 blur-md"
+                                    />
+                                    
+                                    {/* Rotating Dashed Orbit */}
+                                    <motion.div
+                                        animate={{ rotate: 360 }}
+                                        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                                        className="absolute inset-1 rounded-full border border-dashed border-amber-400/40"
+                                    />
+
+                                    {/* Orbiting Badge 1: Sparkles */}
+                                    <motion.div
+                                        animate={{ y: [-4, 4, -4], x: [3, -3, 3] }}
+                                        transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
+                                        className="absolute -top-1 right-2 p-1.5 rounded-full bg-amber-100 shadow-md border border-amber-200 text-amber-600 z-10"
                                     >
-                                        <div>
-                                            <div className="flex items-center justify-between gap-2 mb-3">
-                                                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold text-amber-800 bg-amber-50/90 border border-amber-200/80">
-                                                    {year}
-                                                </span>
-                                                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold text-blue-700 bg-blue-50/90 border border-blue-200/70 truncate max-w-[65%]">
-                                                    {categoryTag}
-                                                </span>
-                                            </div>
+                                        <Sparkles className="w-3.5 h-3.5" />
+                                    </motion.div>
 
-                                            <div className="relative w-full h-36 sm:h-40 rounded-xl sm:rounded-2xl overflow-hidden shadow-inner bg-slate-100 mb-3.5">
-                                                <img
-                                                    src={ach.image}
-                                                    alt={ach.title}
-                                                    referrerPolicy="no-referrer"
-                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                                />
-                                                <div className="absolute top-2 right-2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white shadow-md flex items-center justify-center border border-slate-100">
-                                                    {idx % 2 === 0 ? (
-                                                        <Trophy className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500" />
-                                                    ) : (
-                                                        <Award className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500" />
-                                                    )}
-                                                </div>
-                                            </div>
+                                    {/* Orbiting Badge 2: Compass */}
+                                    <motion.div
+                                        animate={{ y: [4, -4, 4], x: [-2, 2, -2] }}
+                                        transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                                        className="absolute -bottom-1 left-2 p-1.5 rounded-full bg-blue-100 shadow-md border border-blue-200 text-[#0c72b8] z-10"
+                                    >
+                                        <Compass className="w-3.5 h-3.5" />
+                                    </motion.div>
 
-                                            <h4 className="text-sm sm:text-[15px] font-bold text-slate-900 font-poppins leading-snug group-hover:text-[#0c72b8] transition-colors line-clamp-2">
-                                                {ach.title}
-                                            </h4>
-
-                                            {ach.description && (
-                                                <p className="text-xs text-slate-600 leading-relaxed mt-2 line-clamp-3">
-                                                    {ach.description}
-                                                </p>
-                                            )}
-                                        </div>
-
-                                        <div className="pt-3 mt-3.5 border-t border-slate-100 flex items-center justify-between gap-2">
-                                            <div className="flex items-center gap-1.5 text-[11px] font-semibold text-amber-600 truncate min-w-0">
-                                                {idx % 2 === 0 ? (
-                                                    <Trophy className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                                                ) : (
-                                                    <Award className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                                                )}
-                                                <span className="truncate">{awardBadge}</span>
-                                            </div>
-
-                                            <span className="text-[10px] sm:text-[11px] font-extrabold text-[#0c72b8] uppercase tracking-wider shrink-0">
-                                                {clubAcronym} HONOR
-                                            </span>
-                                        </div>
+                                    {/* Center Neumorphic Trophy Icon */}
+                                    <div className="relative z-10 w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-[#eef2f7] shadow-[6px_6px_14px_#d1d9e6,-6px_-6px_14px_#ffffff] border border-white flex items-center justify-center">
+                                        <motion.div
+                                            animate={{ scale: [1, 1.08, 1] }}
+                                            transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+                                        >
+                                            <Trophy className="w-8 h-8 sm:w-9 sm:h-9 text-amber-500 stroke-[1.75]" />
+                                        </motion.div>
                                     </div>
-                                );
-                            })}
-                        </div>
+                                </div>
 
-                        {achievements.length > 4 && (
-                            <div className="flex justify-center pt-2">
-                                <button
-                                    onClick={() => setShowAllAchievements((prev) => !prev)}
-                                    className="px-6 py-3 bg-[#eef2f7] hover:bg-white text-slate-800 hover:text-[#0c72b8] text-xs sm:text-sm font-bold rounded-2xl shadow-[4px_4px_10px_#d1d9e6,-4px_-4px_10px_#ffffff] hover:shadow-[6px_6px_14px_#c8d2e2,-6px_-6px_14px_#ffffff] border border-white/80 transition-all duration-200 flex items-center gap-2 cursor-pointer"
+                                {/* Typography & Text Content */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 8 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.4, delay: 0.15 }}
+                                    className="space-y-2 relative z-10 max-w-lg mx-auto"
                                 >
-                                    {showAllAchievements ? (
-                                        <>
-                                            <span>Show Less Achievements</span>
-                                            <ChevronUp className="w-4 h-4 text-[#0c72b8]" />
-                                        </>
-                                    ) : (
-                                        <>
-                                            <span>Show More ({achievements.length - 4} More Achievements)</span>
-                                            <ChevronDown className="w-4 h-4 text-[#0c72b8]" />
-                                        </>
-                                    )}
-                                </button>
+                                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-700 text-[11px] font-extrabold uppercase tracking-wider mb-1 shadow-xs">
+                                        <Sparkles className="w-3 h-3 text-amber-600 animate-pulse" />
+                                        <span>In Progress</span>
+                                    </div>
+
+                                    <h4 className="text-xl sm:text-2xl font-extrabold text-slate-900 font-poppins tracking-tight">
+                                        Milestones in the Making
+                                    </h4>
+
+                                    <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">
+                                        Every great achievement starts with an idea, an effort, and a journey.
+                                    </p>
+
+                                    {/* Animated Progress Journey Dots */}
+                                    <div className="pt-3 flex items-center justify-center gap-2.5">
+                                        {[0, 1, 2].map((dotIdx) => (
+                                            <motion.span
+                                                key={dotIdx}
+                                                animate={{
+                                                    scale: [1, 1.35, 1],
+                                                    backgroundColor: ['#cbd5e1', '#f59e0b', '#cbd5e1'],
+                                                    opacity: [0.45, 1, 0.45]
+                                                }}
+                                                transition={{
+                                                    duration: 1.8,
+                                                    repeat: Infinity,
+                                                    delay: dotIdx * 0.4,
+                                                    ease: "easeInOut"
+                                                }}
+                                                className="w-2 h-2 rounded-full bg-slate-300 inline-block shadow-sm"
+                                            />
+                                        ))}
+                                    </div>
+                                </motion.div>
+                            </motion.div>
+                        ) : (
+                            /* Clean, Flush Left-Aligned Grid - perfectly lined up with the section header */
+                            <div className="space-y-5 w-full">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 w-full">
+                                    {displayedAchievements.map((ach, idx) => {
+                                        const year = extractYear(ach.date, idx);
+                                        const categoryTag = ach.category || (idx === 0 ? 'Hackathon & Innovation' : idx === 1 ? 'Technical Training' : idx === 2 ? 'Campus Impact' : 'Academic Milestone');
+                                        const awardBadge = ach.badge || (idx === 0 ? 'Major Milestone' : idx === 1 ? 'Capacity Building' : idx === 2 ? 'Institutional Impact' : 'Excellence Award');
+                                        const fallbackImg = getContextualAchievementImage(ach.title, idx, club.category);
+
+                                        return (
+                                            <motion.div
+                                                key={ach.id}
+                                                initial={{ opacity: 0, y: 14 }}
+                                                whileInView={{ opacity: 1, y: 0 }}
+                                                viewport={{ once: true }}
+                                                transition={{ duration: 0.3, delay: idx * 0.05 }}
+                                                whileHover={{ y: -3, transition: { duration: 0.15 } }}
+                                                onClick={() => setActiveAchievementPreview(ach)}
+                                                className="group bg-[#eef2f7] rounded-3xl p-4 sm:p-4.5 border border-white/90 shadow-[5px_5px_15px_#d1d9e6,-5px_-5px_15px_#ffffff] hover:shadow-[7px_7px_20px_#c8d2e2,-7px_-7px_20px_#ffffff] transition-all flex flex-col justify-between cursor-pointer relative overflow-hidden text-left"
+                                            >
+                                                <div className="space-y-3">
+                                                    {/* Media Viewport */}
+                                                    <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-slate-200 shadow-[inset_1.5px_1.5px_3px_#d1d9e6,inset_-1.5px_-1.5px_3px_#ffffff]">
+                                                        <img
+                                                            src={ach.image || fallbackImg}
+                                                            alt={ach.title}
+                                                            referrerPolicy="no-referrer"
+                                                            onError={(e) => {
+                                                                e.currentTarget.src = fallbackImg;
+                                                            }}
+                                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                                        />
+                                                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
+
+                                                        {/* Top Date Pill */}
+                                                        <div className="absolute top-2.5 left-2.5 flex items-center gap-1">
+                                                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold text-slate-800 bg-white/95 backdrop-blur-md shadow-xs flex items-center gap-1 border border-white/80">
+                                                                <Calendar className="w-3 h-3 text-[#0c72b8]" />
+                                                                <span>{year}</span>
+                                                            </span>
+                                                        </div>
+
+                                                        {/* Top Category Pill */}
+                                                        <div className="absolute top-2.5 right-2.5">
+                                                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold text-[#0c72b8] bg-white/95 backdrop-blur-md shadow-xs border border-white/80 truncate max-w-[130px]">
+                                                                {categoryTag}
+                                                            </span>
+                                                        </div>
+
+                                                        {/* Hover Quick View Trigger */}
+                                                        <div className="absolute bottom-2.5 right-2.5 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-xs text-white text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex items-center gap-1">
+                                                            <ZoomIn className="w-3 h-3" />
+                                                            <span>View Details</span>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Headline & Description */}
+                                                    <div className="space-y-1.5 pt-0.5">
+                                                        <h4 className="text-sm sm:text-base font-bold text-slate-900 font-poppins leading-snug group-hover:text-[#0c72b8] transition-colors line-clamp-2">
+                                                            {ach.title}
+                                                        </h4>
+                                                        {ach.description && (
+                                                            <p className="text-xs text-slate-600 leading-relaxed line-clamp-2 font-normal">
+                                                                {ach.description}
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                </div>
+
+                                                {/* Bottom Meta & Details Link */}
+                                                <div className="pt-3 mt-3 border-t border-slate-300/40 flex items-center justify-between gap-2">
+                                                    <div className="flex items-center gap-1.5 text-[11px] font-bold text-amber-800 bg-amber-50/90 px-2.5 py-1 rounded-xl border border-amber-200/60 truncate min-w-0">
+                                                        <Trophy className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                                                        <span className="truncate">{awardBadge}</span>
+                                                    </div>
+
+                                                    <span className="text-xs text-slate-500 group-hover:text-[#0c72b8] font-bold flex items-center gap-0.5 transition-colors shrink-0">
+                                                        <span>Details</span>
+                                                        <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                                                    </span>
+                                                </div>
+                                            </motion.div>
+                                        );
+                                    })}
+                                </div>
+
+                                {/* Show More / Less Toggle Button */}
+                                {achievements.length > 3 && (
+                                    <div className="flex justify-start pt-1">
+                                        <button
+                                            onClick={() => setShowAllAchievements((prev) => !prev)}
+                                            className="px-5 py-2.5 bg-[#eef2f7] hover:bg-white text-slate-800 hover:text-[#0c72b8] text-xs font-bold rounded-xl shadow-[3px_3px_8px_#d1d9e6,-3px_-3px_8px_#ffffff] hover:shadow-[5px_5px_12px_#c8d2e2,-5px_-5px_12px_#ffffff] border border-white/80 transition-all duration-200 flex items-center gap-1.5 cursor-pointer"
+                                        >
+                                            {showAllAchievements ? (
+                                                <>
+                                                    <span>Show Less Milestones</span>
+                                                    <ChevronUp className="w-3.5 h-3.5 text-[#0c72b8]" />
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <span>View All ({achievements.length} Milestones)</span>
+                                                    <ChevronDown className="w-3.5 h-3.5 text-[#0c72b8]" />
+                                                </>
+                                            )}
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>
                 </motion.section>
 
-                {/* 2. ABOUT PROFILE SECTION */}
+                {/* 2. ABOUT PROFILE SECTION - EDITORIAL STORYTELLING LAYOUT */}
                 <motion.section
                     id="about"
-                    initial={{ opacity: 0, y: 24 }}
+                    initial={{ opacity: 0, y: 28 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: '-40px' }}
-                    transition={{ duration: 0.5, ease: 'easeOut' }}
-                    className="bg-[#eef2f7] rounded-3xl p-6 sm:p-10 space-y-8 shadow-[7px_7px_18px_#d1d9e6,-7px_-7px_18px_#ffffff] border border-white/80 scroll-mt-36"
+                    transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                    className="bg-[#eef2f7] rounded-3xl p-6 sm:p-9 lg:p-10 shadow-[7px_7px_20px_#d1d9e6,-7px_-7px_20px_#ffffff] border border-white/90 scroll-mt-36 relative overflow-hidden"
                 >
-                    <div>
-                        <span className="bg-[#eef2f7] text-[#0c72b8] text-xs font-bold px-3.5 py-1.5 rounded-full uppercase tracking-wider shadow-[3px_3px_6px_#d1d9e6,-3px_-3px_6px_#ffffff] border border-white/80 inline-block">
-                            Committee Profile & Operational Base
-                        </span>
-                        <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 font-poppins mt-3.5 tracking-tight">
-                            About {club.name}
-                        </h2>
-                    </div>
-
-                    <p className="text-sm sm:text-base text-slate-700 leading-relaxed font-normal">
-                        {club.description}
-                    </p>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-4 border-t border-slate-300/40">
-                        <div className="p-5 bg-[#eef2f7] rounded-2xl border border-white/80 shadow-[4px_4px_10px_#d1d9e6,-4px_-4px_10px_#ffffff] space-y-2">
-                            <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                                <div className="w-7 h-7 rounded-lg bg-[#eef2f7] flex items-center justify-center shadow-[inset_1.5px_1.5px_3px_#d1d9e6,inset_-1.5px_-1.5px_3px_#ffffff]">
-                                    <MapPin className="w-3.5 h-3.5 text-[#0c72b8]" />
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                        {/* LEFT: Curated College & Campus Bento Photo Showcase */}
+                        <div className="lg:col-span-5 space-y-3.5">
+                            {/* Main Feature Campus Photo */}
+                            <motion.div
+                                whileHover={{ scale: 1.01 }}
+                                transition={{ duration: 0.25 }}
+                                className="relative rounded-3xl p-2.5 bg-[#eef2f7] shadow-[inset_3px_3px_6px_#d1d9e6,inset_-3px_-3px_6px_#ffffff] group overflow-hidden"
+                            >
+                                <div className="relative w-full h-56 sm:h-64 rounded-2xl overflow-hidden shadow-xs bg-slate-200">
+                                    <img
+                                        src={aboutImageList[0]}
+                                        alt={`${club.name} About Feature`}
+                                        referrerPolicy="no-referrer"
+                                        onError={(e) => {
+                                            (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1000&auto=format&fit=crop&q=80';
+                                        }}
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                                    />
                                 </div>
-                                <span>Room Location & Campus Base</span>
-                            </h4>
-                            <p className="text-xs sm:text-sm text-slate-600 pl-9">{club.roomLocation}</p>
+                            </motion.div>
+
+                            {/* Bottom 2-Photo Grid */}
+                            <div className="grid grid-cols-2 gap-3.5">
+                                <motion.div
+                                    whileHover={{ scale: 1.02 }}
+                                    transition={{ duration: 0.25 }}
+                                    className="rounded-2xl p-2 bg-[#eef2f7] shadow-[inset_2.5px_2.5px_5px_#d1d9e6,inset_-2.5px_-2.5px_5px_#ffffff] group"
+                                >
+                                    <div className="w-full h-24 sm:h-28 rounded-xl overflow-hidden bg-slate-200 shadow-2xs">
+                                        <img
+                                            src={aboutImageList[1]}
+                                            alt={`${club.name} About Photo 2`}
+                                            referrerPolicy="no-referrer"
+                                            onError={(e) => {
+                                                (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&auto=format&fit=crop&q=80';
+                                            }}
+                                            className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
+                                        />
+                                    </div>
+                                </motion.div>
+
+                                <motion.div
+                                    whileHover={{ scale: 1.02 }}
+                                    transition={{ duration: 0.25 }}
+                                    className="rounded-2xl p-2 bg-[#eef2f7] shadow-[inset_2.5px_2.5px_5px_#d1d9e6,inset_-2.5px_-2.5px_5px_#ffffff] group"
+                                >
+                                    <div className="w-full h-24 sm:h-28 rounded-xl overflow-hidden bg-slate-200 shadow-2xs">
+                                        <img
+                                            src={aboutImageList[2]}
+                                            alt={`${club.name} About Photo 3`}
+                                            referrerPolicy="no-referrer"
+                                            onError={(e) => {
+                                                (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&auto=format&fit=crop&q=80';
+                                            }}
+                                            className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
+                                        />
+                                    </div>
+                                </motion.div>
+                            </div>
                         </div>
 
-                        <div className="p-5 bg-[#eef2f7] rounded-2xl border border-white/80 shadow-[4px_4px_10px_#d1d9e6,-4px_-4px_10px_#ffffff] space-y-2">
-                            <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                                <div className="w-7 h-7 rounded-lg bg-[#eef2f7] flex items-center justify-center shadow-[inset_1.5px_1.5px_3px_#d1d9e6,inset_-1.5px_-1.5px_3px_#ffffff]">
-                                    <Clock className="w-3.5 h-3.5 text-[#800000]" />
+                        {/* RIGHT: Refined Editorial Storytelling & Details */}
+                        <div className="lg:col-span-7 space-y-6">
+                            {/* Header / Eyebrow */}
+                            <div className="space-y-1.5">
+                                <div className="flex items-center gap-2 text-xs font-black tracking-widest text-[#0c72b8] uppercase font-poppins">
+                                    <span>{clubAcronym}</span>
+                                    <span className="w-1.5 h-1.5 rounded-full bg-[#0c72b8]" />
+                                    <span>WHO WE ARE</span>
                                 </div>
-                                <span>Regular Meeting Schedule</span>
-                            </h4>
-                            <p className="text-xs sm:text-sm text-slate-600 pl-9">{club.meetingSchedule}</p>
-                        </div>
+                                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 font-poppins tracking-tight">
+                                    ABOUT US<span className="text-[#0c72b8]">.</span>
+                                </h2>
+                            </div>
 
-                        <div className="p-5 bg-[#eef2f7] rounded-2xl border border-white/80 shadow-[4px_4px_10px_#d1d9e6,-4px_-4px_10px_#ffffff] space-y-2">
-                            <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                                <div className="w-7 h-7 rounded-lg bg-[#eef2f7] flex items-center justify-center shadow-[inset_1.5px_1.5px_3px_#d1d9e6,inset_-1.5px_-1.5px_3px_#ffffff]">
-                                    <Building2 className="w-3.5 h-3.5 text-emerald-600" />
-                                </div>
-                                <span>Club Advisor</span>
-                            </h4>
-                            <p className="text-xs sm:text-sm text-slate-600 pl-9">{club.facultyAdvisor} (Advisor)</p>
-                        </div>
+                            {/* Cohesive Narrative Paragraphs */}
+                            <div className="space-y-3.5 text-slate-600 font-normal leading-relaxed text-sm sm:text-[15px]">
+                                <p className="text-slate-800 font-medium">
+                                    <strong className="text-slate-900 font-bold">{club.name}</strong> is a student-led institutional body at{' '}
+                                    <strong className="text-slate-900 font-bold">Aadikavi Bhanubhakta Campus</strong>, dedicated to nurturing academic brilliance, leadership skills, and collaborative growth among undergraduates.
+                                </p>
+                                <p className="text-slate-600 font-normal">
+                                    {club.description || club.shortDescription || `${club.name} is dedicated to fostering extracurricular excellence, professional development, and student leadership across Aadikavi Bhanubhakta Campus.`}
+                                </p>
+                            </div>
 
-                        <div className="p-5 bg-[#eef2f7] rounded-2xl border border-white/80 shadow-[4px_4px_10px_#d1d9e6,-4px_-4px_10px_#ffffff] space-y-2">
-                            <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                                <div className="w-7 h-7 rounded-lg bg-[#eef2f7] flex items-center justify-center shadow-[inset_1.5px_1.5px_3px_#d1d9e6,inset_-1.5px_-1.5px_3px_#ffffff]">
-                                    <Mail className="w-3.5 h-3.5 text-purple-600" />
+                            {/* Refined Quick Info Chips Grid - Fully Visible Without Truncation */}
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-1">
+                                <div className="p-3.5 sm:p-4 rounded-2xl bg-white/90 border border-white shadow-[3px_3px_10px_#d1d9e6,-3px_-3px_10px_#ffffff] flex items-start gap-3 hover:bg-white transition-colors">
+                                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-50 text-[#0c72b8] flex items-center justify-center shrink-0 border border-blue-100/80 shadow-2xs mt-0.5">
+                                        <MapPin className="w-4 h-4 stroke-[2.2]" />
+                                    </div>
+                                    <div className="flex-1">
+                                        <div className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 font-poppins">Campus Location</div>
+                                        <div className="text-xs sm:text-[13px] font-bold text-slate-800 leading-snug break-words">
+                                            {club.roomLocation || club.location || 'IT Building, Lab 204'}
+                                        </div>
+                                    </div>
                                 </div>
-                                <span>Official Correspondence</span>
-                            </h4>
-                            <p className="text-xs sm:text-sm text-slate-600 pl-9">{club.contactEmail}</p>
+
+                                <div className="p-3.5 sm:p-4 rounded-2xl bg-white/90 border border-white shadow-[3px_3px_10px_#d1d9e6,-3px_-3px_10px_#ffffff] flex items-start gap-3 hover:bg-white transition-colors">
+                                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100/80 shadow-2xs mt-0.5">
+                                        <Building2 className="w-4 h-4 stroke-[2.2]" />
+                                    </div>
+                                    <div className="flex-1">
+                                        <div className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 font-poppins">Club Advisor</div>
+                                        <div className="text-xs sm:text-[13px] font-bold text-slate-800 leading-snug break-words">
+                                            {club.facultyAdvisor || club.advisor || 'Er. Ghan Bahadur Thapa'}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="p-3.5 sm:p-4 rounded-2xl bg-white/90 border border-white shadow-[3px_3px_10px_#d1d9e6,-3px_-3px_10px_#ffffff] flex items-start gap-3 hover:bg-white transition-colors">
+                                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0 border border-purple-100/80 shadow-2xs mt-0.5">
+                                        <Mail className="w-4 h-4 stroke-[2.2]" />
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <div className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 font-poppins">Official Contact</div>
+                                        <a
+                                            href={`mailto:${club.contactEmail || club.email || 'abit.club@abcampus.edu.np'}`}
+                                            className="text-xs sm:text-[12px] font-bold text-slate-800 leading-snug break-all hover:text-[#0c72b8] transition-colors block"
+                                        >
+                                            {club.contactEmail || club.email || 'abit.club@abcampus.edu.np'}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Focused Primary CTA Button */}
+                            <div className="pt-1">
+                                <a
+                                    href="#vision"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        scrollToSection('vision');
+                                    }}
+                                    className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-[#0c72b8] to-[#075990] text-white text-xs sm:text-sm font-black shadow-[4px_4px_12px_rgba(12,114,184,0.35)] hover:shadow-[6px_6px_18px_rgba(12,114,184,0.45)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 font-poppins uppercase tracking-wider cursor-pointer"
+                                >
+                                    <span>EXPLORE MORE</span>
+                                    <ArrowRight className="w-4 h-4" />
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </motion.section>
@@ -1161,242 +1422,170 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                     initial={{ opacity: 0, y: 24 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: '-40px' }}
-                    transition={{ duration: 0.5, ease: 'easeOut' }}
-                    className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 scroll-mt-36"
+                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                    className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 scroll-mt-36 items-stretch"
                 >
-                    <div className="bg-[#eef2f7] rounded-3xl p-6 sm:p-8 space-y-5 border border-white/80 shadow-[6px_6px_16px_#d1d9e6,-6px_-6px_16px_#ffffff] hover:shadow-[8px_8px_20px_#c8d2e2,-8px_-8px_20px_#ffffff] transition-all flex flex-col justify-between group">
-                        <div className="space-y-4">
-                            <div className="w-13 h-13 rounded-2xl bg-[#eef2f7] text-[#0c72b8] flex items-center justify-center shadow-[inset_2.5px_2.5px_5px_#d1d9e6,inset_-2.5px_-2.5px_5px_#ffffff] border border-slate-200/50 shrink-0 group-hover:scale-105 transition-transform">
-                                <Eye className="w-6 h-6" />
+                    {/* Vision Card */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: 0.1 }}
+                        whileHover={{ y: -6, transition: { duration: 0.25, ease: 'easeOut' } }}
+                        className="relative overflow-hidden bg-[#eef2f7] rounded-3xl p-7 sm:p-9 border border-white/90 shadow-[7px_7px_18px_#d1d9e6,-7px_-7px_18px_#ffffff] hover:shadow-[12px_12px_28px_#c8d2e2,-12px_-12px_28px_#ffffff] transition-shadow duration-300 flex flex-col justify-between group h-full"
+                    >
+                        {/* Animated ambient background glow */}
+                        <motion.div
+                            animate={{
+                                scale: [1, 1.25, 1],
+                                opacity: [0.15, 0.35, 0.15],
+                            }}
+                            transition={{
+                                duration: 6,
+                                repeat: Infinity,
+                                ease: 'easeInOut',
+                            }}
+                            className="absolute -top-12 -right-12 w-48 h-48 bg-gradient-to-br from-blue-400 to-cyan-300 rounded-full blur-3xl pointer-events-none"
+                        />
+
+                        <div className="relative space-y-6">
+                            {/* Card Header: Icon & Category Badge */}
+                            <div className="flex items-center justify-between gap-3">
+                                <motion.div
+                                    whileHover={{ scale: 1.1, rotate: 6 }}
+                                    transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+                                    className="relative w-13 h-13 rounded-2xl bg-[#eef2f7] text-[#0c72b8] flex items-center justify-center shadow-[inset_2.5px_2.5px_5px_#d1d9e6,inset_-2.5px_-2.5px_5px_#ffffff] border border-white/80 shrink-0 cursor-pointer"
+                                >
+                                    {/* Subtle sonar ring on icon */}
+                                    <span className="absolute inset-0 rounded-2xl border border-blue-400/40 animate-ping opacity-25" />
+                                    <Eye className="w-6 h-6 stroke-[2.2] relative z-10 transition-transform duration-300 group-hover:scale-110" />
+                                </motion.div>
+                                <motion.span
+                                    whileHover={{ scale: 1.05 }}
+                                    className="inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider text-[#0c72b8] bg-blue-500/10 px-3.5 py-1.5 rounded-full border border-blue-500/20 shadow-xs backdrop-blur-xs transition-colors group-hover:bg-blue-500/15"
+                                >
+                                    <span className="w-1.5 h-1.5 rounded-full bg-[#0c72b8] animate-pulse" />
+                                    INSTITUTIONAL STRATEGY
+                                </motion.span>
                             </div>
 
-                            <div>
-                                <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 font-poppins tracking-tight">
-                                    Our Vision <span className="text-slate-400 font-normal">|</span> <span className="text-[#0c72b8]">हाम्रो दृष्टि</span>
+                            {/* Title & Subtitle */}
+                            <div className="space-y-1">
+                                <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 font-poppins tracking-tight flex items-center gap-2 group-hover:text-[#0c72b8] transition-colors duration-300">
+                                    <span>Our Vision</span>
+                                    <motion.span
+                                        initial={{ opacity: 0, x: -6 }}
+                                        whileHover={{ opacity: 1, x: 0 }}
+                                        className="text-[#0c72b8] opacity-0 group-hover:opacity-100 transition-opacity"
+                                    >
+                                        <Sparkles className="w-4 h-4" />
+                                    </motion.span>
                                 </h2>
+                                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                                    Strategic Direction & Horizon
+                                </p>
                             </div>
 
-                            <p className="text-sm sm:text-base text-slate-700 leading-relaxed font-normal">
-                                {defaultVision}
-                            </p>
-                        </div>
-
-                        <div className="p-4 sm:p-5 rounded-2xl bg-[#eef2f7] text-slate-700 text-xs sm:text-sm leading-relaxed italic shadow-[inset_3px_3px_7px_#d1d9e6,inset_-3px_-3px_7px_#ffffff] border border-slate-200/50 mt-4">
-                            "राष्ट्रलाई प्रगति र समानताको दिशामा डोऱ्याउने विश्वव्यापी रूपमा सक्षम, सामाजिक रूपमा जिम्मेवार र शैक्षिक रूपमा उत्कृष्ट विद्यार्थी समुदाय निर्माण गर्ने।"
-                        </div>
-                    </div>
-
-                    <div className="bg-[#eef2f7] rounded-3xl p-6 sm:p-8 space-y-5 border border-white/80 shadow-[6px_6px_16px_#d1d9e6,-6px_-6px_16px_#ffffff] hover:shadow-[8px_8px_20px_#c8d2e2,-8px_-8px_20px_#ffffff] transition-all flex flex-col justify-between group">
-                        <div className="space-y-4">
-                            <div className="w-13 h-13 rounded-2xl bg-[#eef2f7] text-[#d90429] flex items-center justify-center shadow-[inset_2.5px_2.5px_5px_#d1d9e6,inset_-2.5px_-2.5px_5px_#ffffff] border border-slate-200/50 shrink-0 group-hover:scale-105 transition-transform">
-                                <Zap className="w-6 h-6 fill-current" />
-                            </div>
-
-                            <div>
-                                <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 font-poppins tracking-tight">
-                                    Our Mission <span className="text-slate-400 font-normal">|</span> <span className="text-[#d90429]">हाम्रो लक्ष्य</span>
-                                </h2>
-                            </div>
-
-                            <ul className="space-y-2 text-sm text-slate-700 leading-relaxed font-normal">
-                                {defaultMission.map((m, mi) => (
-                                    <li key={mi} className="flex items-start gap-2">
-                                        <span className="text-[#d90429] font-bold mt-0.5">•</span>
-                                        <span>{m}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-
-                        <div className="p-4 sm:p-5 rounded-2xl bg-[#eef2f7] text-slate-700 text-xs sm:text-sm leading-relaxed italic shadow-[inset_3px_3px_7px_#d1d9e6,inset_-3px_-3px_7px_#ffffff] border border-slate-200/50 mt-4">
-                            "विद्यार्थीका आवाजहरूका लागि गतिशील मञ्च प्रदान गर्ने, गुणस्तरीय शिक्षामा पहुँच सुनिश्चित गर्ने, नेतृत्व सीपहरू विकास गर्ने र अर्थपूर्ण सामुदायिक सेवामा संलग्न हुने।"
-                        </div>
-                    </div>
-                </motion.section>
-
-                {/* 4. REGISTRATION CERTIFICATE SECTION */}
-                <motion.section
-                    id="certificate"
-                    initial={{ opacity: 0, y: 16 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: '-40px' }}
-                    transition={{ duration: 0.4, ease: 'easeOut' }}
-                    className="space-y-4 scroll-mt-36"
-                >
-                    <div className="flex items-center justify-between gap-4">
-                        <div className="flex items-center gap-2.5">
-                            <div className="w-8 h-8 rounded-xl bg-[#eef2f7] text-[#0c72b8] flex items-center justify-center shadow-[inset_1.5px_1.5px_3px_#d1d9e6,inset_-1.5px_-1.5px_3px_#ffffff] border border-white/60">
-                                <Award className="w-4 h-4" />
-                            </div>
-                            <h3 className="text-lg sm:text-xl font-bold text-slate-900 font-poppins">
-                                {language === 'np' ? 'क्लब दर्ता प्रमाण-पत्र' : 'Club Registration Certificate'}
-                            </h3>
-                        </div>
-                        {isClubRegistered ? (
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#eef2f7] text-emerald-700 text-xs font-bold border border-white/80 shadow-[2px_2px_5px_#d1d9e6,-2px_-2px_5px_#ffffff]">
-                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                                <span>{language === 'np' ? 'दर्ता प्रमाणित' : 'Certified & Registered'}</span>
-                            </span>
-                        ) : (
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#eef2f7] text-slate-600 text-xs font-bold border border-white/80 shadow-[2px_2px_5px_#d1d9e6,-2px_-2px_5px_#ffffff]">
-                                <AlertCircle className="w-3.5 h-3.5 text-slate-500" />
-                                <span>{language === 'np' ? 'दर्ता नभएको' : 'Not Registered'}</span>
-                            </span>
-                        )}
-                    </div>
-
-                    {isClubRegistered ? (
-                        /* MINIMAL NEUMORPHIC REGISTERED VIEW */
-                        <div className="bg-[#eef2f7] rounded-3xl p-5 sm:p-7 border border-white/80 shadow-[7px_7px_18px_#d1d9e6,-7px_-7px_18px_#ffffff]">
-                            <div className="flex flex-col md:flex-row items-center md:items-start gap-6 lg:gap-8">
-                                {/* Portrait Certificate Photo Frame (Exact A4 210/297 document ratio) */}
-                                <div className="w-full max-w-[260px] sm:max-w-[290px] shrink-0">
-                                    <div className="p-3 bg-[#eef2f7] rounded-2xl border border-white/90 shadow-[5px_5px_12px_#d1d9e6,-5px_-5px_12px_#ffffff]">
-                                        <div
-                                            onClick={() => setIsCertLightboxOpen(true)}
-                                            className="relative aspect-[210/297] w-full rounded-xl overflow-hidden bg-white shadow-[inset_2px_2px_5px_#d1d9e6,inset_-2px_-2px_5px_#ffffff] border border-slate-200/60 cursor-pointer group"
-                                            title="Click to view full certificate"
-                                        >
-                                            <img
-                                                src={certData?.certificateImage || 'https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?w=1200&auto=format&fit=crop&q=80'}
-                                                alt={`${club.name} Certificate`}
-                                                referrerPolicy="no-referrer"
-                                                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
-                                            />
-
-                                            {/* Hover Zoom Overlay */}
-                                            <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center text-white gap-1.5 p-3 text-center backdrop-blur-[1px]">
-                                                <div className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center shadow-md">
-                                                    <ZoomIn className="w-5 h-5 text-white" />
-                                                </div>
-                                                <span className="text-[11px] font-bold tracking-wide">
-                                                    {language === 'np' ? 'प्रमाणपत्र हेर्नुहोस्' : 'Click to Expand'}
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        {/* Frame bottom hint */}
-                                        <div className="mt-2.5 pt-2 border-t border-slate-300/40 flex items-center justify-between text-[11px] px-1">
-                                            <span className="text-slate-500 font-medium font-mono text-[10px]">
-                                                {certData?.certificateNumber || '०३/०८२/०८३'}
-                                            </span>
-                                            <button
-                                                type="button"
-                                                onClick={() => setIsCertLightboxOpen(true)}
-                                                className="font-bold text-[#0c72b8] hover:text-blue-800 flex items-center gap-1 cursor-pointer"
-                                            >
-                                                <ZoomIn className="w-3 h-3" />
-                                                <span>Expand</span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Minimal Neumorphic Details & Metadata */}
-                                <div className="flex-1 w-full space-y-4 pt-1">
-                                    <div className="space-y-1">
-                                        <h4 className="text-base sm:text-lg font-bold text-slate-900 font-poppins">
-                                            {club.name}
-                                        </h4>
-                                        <p className="text-xs text-slate-600 leading-relaxed">
-                                            {certData?.remarks || (language === 'np'
-                                                ? `आदिकवि भानुभक्त क्याम्पसमा विद्यार्थी क्लब/संस्था निर्देशिका २०७५ बमोजिम दर्ता भएको आधिकारिक क्लब।`
-                                                : `Officially registered under the Aadikavi Bhanubhakta Campus Student Club & Association Guidelines 2075.`)}
-                                        </p>
-                                    </div>
-
-                                    {/* Minimal Neumorphic Inset Fields */}
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                                        {/* Reg No */}
-                                        <div className="p-3 bg-[#eef2f7] rounded-2xl border border-white/80 shadow-[inset_1.5px_1.5px_3px_#d1d9e6,inset_-1.5px_-1.5px_3px_#ffffff] flex items-center justify-between gap-2">
-                                            <div className="min-w-0">
-                                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
-                                                    {language === 'np' ? 'दर्ता नं.' : 'Reg. Number'}
-                                                </span>
-                                                <span className="font-mono font-bold text-xs text-slate-900 truncate block">
-                                                    {certData?.certificateNumber || '०३/०८२/०८३'}
-                                                </span>
-                                            </div>
-                                            <button
-                                                type="button"
-                                                onClick={() => {
-                                                    const regNo = certData?.certificateNumber || '०३/०८२/०८३';
-                                                    navigator.clipboard.writeText(regNo);
-                                                    setCopiedCertNo(true);
-                                                    setTimeout(() => setCopiedCertNo(false), 2000);
-                                                }}
-                                                className="p-1.5 rounded-lg bg-[#eef2f7] hover:bg-white text-slate-500 hover:text-[#0c72b8] shadow-[2px_2px_4px_#d1d9e6,-2px_-2px_4px_#ffffff] active:shadow-[inset_1px_1px_2px_#d1d9e6] transition-all cursor-pointer shrink-0"
-                                                title="Copy Registration Number"
-                                            >
-                                                {copiedCertNo ? (
-                                                    <Check className="w-3.5 h-3.5 text-emerald-600" />
-                                                ) : (
-                                                    <Copy className="w-3.5 h-3.5" />
-                                                )}
-                                            </button>
-                                        </div>
-
-                                        {/* Issued Date */}
-                                        <div className="p-3 bg-[#eef2f7] rounded-2xl border border-white/80 shadow-[inset_1.5px_1.5px_3px_#d1d9e6,inset_-1.5px_-1.5px_3px_#ffffff]">
-                                            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
-                                                {language === 'np' ? 'दर्ता मिति' : 'Registered Date'}
-                                            </span>
-                                            <span className="font-semibold text-xs text-slate-900 block truncate">
-                                                {language === 'np' ? (certData?.registeredDateNp || certData?.registeredDate) : (certData?.registeredDate || '२०८२/०८/१४')}
-                                            </span>
-                                        </div>
-
-                                        {/* Issuing Authority */}
-                                        <div className="sm:col-span-2 p-3 bg-[#eef2f7] rounded-2xl border border-white/80 shadow-[inset_1.5px_1.5px_3px_#d1d9e6,inset_-1.5px_-1.5px_3px_#ffffff]">
-                                            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
-                                                {language === 'np' ? 'मातृ विभाग / क्याम्पस' : 'Issuing Campus / Authority'}
-                                            </span>
-                                            <span className="font-semibold text-xs text-slate-800 block truncate">
-                                                {language === 'np'
-                                                    ? (certData?.issuingAuthorityNp || certData?.issuingAuthority || 'आदिकवि भानुभक्त क्याम्पस, व्यास-०१, विज्ञानचौर, तनहुँ')
-                                                    : (certData?.issuingAuthority || 'Aadikavi Bhanubhakta Campus, Vyas-01, Bigyanchaur, Tanahun')}
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    {/* Action Buttons */}
-                                    <div className="pt-2 flex items-center gap-3">
-                                        <button
-                                            type="button"
-                                            onClick={() => setIsCertLightboxOpen(true)}
-                                            className="px-4 py-2 bg-[#eef2f7] hover:bg-[#e4ebf5] text-[#0c72b8] text-xs font-bold rounded-xl border border-white/80 shadow-[3px_3px_7px_#d1d9e6,-3px_-3px_7px_#ffffff] active:shadow-[inset_2px_2px_4px_#d1d9e6,inset_-2px_-2px_4px_#ffffff] transition-all flex items-center gap-1.5 cursor-pointer"
-                                        >
-                                            <ZoomIn className="w-3.5 h-3.5" />
-                                            <span>{language === 'np' ? 'प्रमाण-पत्र पूर्ण हेर्नुहोस्' : 'View Full Document'}</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    ) : (
-                        /* MINIMAL NEUMORPHIC NOT REGISTERED VIEW */
-                        <div className="bg-[#eef2f7] rounded-3xl p-6 sm:p-8 border border-white/80 shadow-[7px_7px_18px_#d1d9e6,-7px_-7px_18px_#ffffff] flex flex-col sm:flex-row items-center sm:items-start gap-4 text-center sm:text-left">
-                            <div className="w-12 h-12 rounded-2xl bg-[#eef2f7] text-slate-400 flex items-center justify-center shrink-0 shadow-[inset_2px_2px_4px_#d1d9e6,inset_-2px_-2px_4px_#ffffff] border border-white/60">
-                                <FileX className="w-6 h-6 text-slate-400" />
-                            </div>
-                            <div className="space-y-1.5">
-                                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#eef2f7] text-slate-600 text-xs font-bold border border-white/80 shadow-[2px_2px_4px_#d1d9e6,-2px_-2px_4px_#ffffff]">
-                                    <span>Not Registered</span>
-                                    <span>•</span>
-                                    <span>दर्ता नभएको</span>
-                                </div>
-                                <h4 className="font-bold text-slate-800 text-sm sm:text-base">
-                                    {club.name}
-                                </h4>
-                                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed max-w-xl">
-                                    {certData?.remarks || 'This club is currently operating as an informal student initiative and is not yet officially registered with the campus administration.'}
+                            {/* Statement Body with animated left accent highlight */}
+                            <div className="relative pl-4 sm:pl-5 border-l-3 border-[#0c72b8] py-1 transition-all duration-300 group-hover:pl-6">
+                                <p className="text-sm sm:text-[15px] lg:text-base text-slate-700 leading-relaxed font-normal tracking-normal transition-colors group-hover:text-slate-900">
+                                    {visionStatement}
                                 </p>
                             </div>
                         </div>
-                    )}
+
+                        {/* Card Footer */}
+                        <div className="pt-6 mt-6 border-t border-slate-300/40 flex items-center justify-between text-xs text-slate-500 font-semibold">
+                            <span className="flex items-center gap-1.5 text-slate-600 group-hover:text-[#0c72b8] transition-colors">
+                                <Sparkles className="w-3.5 h-3.5 text-[#0c72b8] group-hover:rotate-12 transition-transform" />
+                                Future Excellence
+                            </span>
+                            <span className="font-mono text-[11px] text-slate-400 group-hover:text-slate-600 transition-colors">Target • 2030</span>
+                        </div>
+                    </motion.div>
+
+                    {/* Mission Card */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
+                        whileHover={{ y: -6, transition: { duration: 0.25, ease: 'easeOut' } }}
+                        className="relative overflow-hidden bg-[#eef2f7] rounded-3xl p-7 sm:p-9 border border-white/90 shadow-[7px_7px_18px_#d1d9e6,-7px_-7px_18px_#ffffff] hover:shadow-[12px_12px_28px_#c8d2e2,-12px_-12px_28px_#ffffff] transition-shadow duration-300 flex flex-col justify-between group h-full"
+                    >
+                        {/* Animated ambient background glow */}
+                        <motion.div
+                            animate={{
+                                scale: [1, 1.25, 1],
+                                opacity: [0.15, 0.35, 0.15],
+                            }}
+                            transition={{
+                                duration: 6,
+                                repeat: Infinity,
+                                ease: 'easeInOut',
+                                delay: 3,
+                            }}
+                            className="absolute -top-12 -right-12 w-48 h-48 bg-gradient-to-br from-rose-400 to-amber-300 rounded-full blur-3xl pointer-events-none"
+                        />
+
+                        <div className="relative space-y-6">
+                            {/* Card Header: Icon & Category Badge */}
+                            <div className="flex items-center justify-between gap-3">
+                                <motion.div
+                                    whileHover={{ scale: 1.1, rotate: -6 }}
+                                    transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+                                    className="relative w-13 h-13 rounded-2xl bg-[#eef2f7] text-[#800000] flex items-center justify-center shadow-[inset_2.5px_2.5px_5px_#d1d9e6,inset_-2.5px_-2.5px_5px_#ffffff] border border-white/80 shrink-0 cursor-pointer"
+                                >
+                                    {/* Subtle sonar ring on icon */}
+                                    <span className="absolute inset-0 rounded-2xl border border-rose-400/40 animate-ping opacity-25" />
+                                    <Target className="w-6 h-6 stroke-[2.2] relative z-10 transition-transform duration-300 group-hover:scale-110" />
+                                </motion.div>
+                                <motion.span
+                                    whileHover={{ scale: 1.05 }}
+                                    className="inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider text-[#800000] bg-rose-500/10 px-3.5 py-1.5 rounded-full border border-rose-500/20 shadow-xs backdrop-blur-xs transition-colors group-hover:bg-rose-500/15"
+                                >
+                                    <span className="w-1.5 h-1.5 rounded-full bg-[#800000] animate-pulse" />
+                                    ACTION CHARTER
+                                </motion.span>
+                            </div>
+
+                            {/* Title & Subtitle */}
+                            <div className="space-y-1">
+                                <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 font-poppins tracking-tight flex items-center gap-2 group-hover:text-[#800000] transition-colors duration-300">
+                                    <span>Our Mission</span>
+                                    <motion.span
+                                        initial={{ opacity: 0, x: -6 }}
+                                        whileHover={{ opacity: 1, x: 0 }}
+                                        className="text-[#800000] opacity-0 group-hover:opacity-100 transition-opacity"
+                                    >
+                                        <Sparkles className="w-4 h-4" />
+                                    </motion.span>
+                                </h2>
+                                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                                    Student Empowerment & Impact
+                                </p>
+                            </div>
+
+                            {/* Statement Body with animated left accent highlight */}
+                            <div className="relative pl-4 sm:pl-5 border-l-3 border-[#800000] py-1 transition-all duration-300 group-hover:pl-6">
+                                <p className="text-sm sm:text-[15px] lg:text-base text-slate-700 leading-relaxed font-normal tracking-normal transition-colors group-hover:text-slate-900">
+                                    {missionStatement}
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Card Footer */}
+                        <div className="pt-6 mt-6 border-t border-slate-300/40 flex items-center justify-between text-xs text-slate-500 font-semibold">
+                            <span className="flex items-center gap-1.5 text-slate-600 group-hover:text-[#800000] transition-colors">
+                                <ShieldCheck className="w-3.5 h-3.5 text-[#800000] group-hover:scale-110 transition-transform" />
+                                Continuous Impact
+                            </span>
+                            <span className="font-mono text-[11px] text-slate-400 group-hover:text-slate-600 transition-colors">Active Mandate</span>
+                        </div>
+                    </motion.div>
                 </motion.section>
 
-                {/* 5. UPCOMING EVENTS SECTION */}
+                {/* 4. UPCOMING EVENTS SECTION */}
                 <motion.section
                     id="events"
                     initial={{ opacity: 0, y: 24 }}
@@ -1435,47 +1624,61 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                     >
                                         <div>
                                             {/* Image Banner with Badges */}
-                                            <div className="relative w-full h-44 sm:h-48 rounded-2xl overflow-hidden bg-slate-200 mb-4 shadow-[inset_2px_2px_4px_#d1d9e6,inset_-2px_-2px_4px_#ffffff]">
+                                            <div className="relative w-full h-44 sm:h-48 rounded-2xl overflow-hidden bg-slate-200 mb-3.5 shadow-[inset_2px_2px_4px_#d1d9e6,inset_-2px_-2px_4px_#ffffff]">
                                                 <img
                                                     src={evt.image || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80'}
                                                     alt={evt.title}
                                                     referrerPolicy="no-referrer"
                                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                                 />
-                                                <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-xs text-[#0c72b8] text-[10px] font-extrabold px-3 py-1 rounded-full shadow-md border border-slate-100">
-                                                    {evt.category}
-                                                </div>
-                                                <div className="absolute top-3 right-3 bg-[#800000] text-white text-[10px] font-extrabold px-3 py-1 rounded-full shadow-md flex items-center gap-1">
-                                                    <Calendar className="w-3 h-3" />
-                                                    <span>{evt.date}</span>
-                                                </div>
-                                            </div>
-
-                                            {/* Time & Venue Indicators */}
-                                            <div className="flex flex-wrap items-center gap-y-1.5 gap-x-3 text-xs text-slate-600 mb-2.5">
-                                                <div className="flex items-center gap-1 font-medium">
-                                                    <Clock className="w-3.5 h-3.5 text-[#800000] shrink-0" />
-                                                    <span>{evt.time}</span>
-                                                </div>
-                                                <div className="flex items-center gap-1 font-medium truncate">
-                                                    <MapPin className="w-3.5 h-3.5 text-[#0c72b8] shrink-0" />
-                                                    <span className="truncate">{evt.venue}</span>
+                                                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent pointer-events-none" />
+                                                
+                                                {evt.category && (
+                                                    <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md text-white text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full border border-white/20 shadow-sm">
+                                                        {evt.category}
+                                                    </div>
+                                                )}
+                                                
+                                                <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-md text-slate-900 rounded-xl px-2.5 py-1 text-center min-w-[46px] shadow-md border border-white/80">
+                                                    <span className="block text-[9px] font-extrabold text-[#0c72b8] tracking-widest uppercase leading-none">
+                                                        {new Date(evt.date).toLocaleString('default', { month: 'short' }).toUpperCase()}
+                                                    </span>
+                                                    <span className="block text-sm font-extrabold text-slate-900 leading-tight mt-0.5">
+                                                        {new Date(evt.date).getDate() || evt.date}
+                                                    </span>
                                                 </div>
                                             </div>
 
                                             {/* Event Title */}
-                                            <h4 className="text-base font-bold text-slate-900 font-poppins leading-snug group-hover:text-[#0c72b8] transition-colors line-clamp-2 mb-2">
+                                            <h4 
+                                                onClick={() => setSelectedEventForModal(evt)}
+                                                className="text-base sm:text-lg font-bold text-slate-900 font-poppins leading-snug group-hover:text-[#0c72b8] transition-colors line-clamp-2 mb-1.5 cursor-pointer"
+                                            >
                                                 {evt.title}
                                             </h4>
 
                                             {/* Description */}
-                                            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed line-clamp-2 mb-4 font-normal">
-                                                {evt.description}
-                                            </p>
+                                            {evt.description && (
+                                                <p className="text-xs text-slate-500 leading-relaxed line-clamp-2 mb-3 font-normal">
+                                                    {evt.description}
+                                                </p>
+                                            )}
+
+                                            {/* Time & Venue Indicators */}
+                                            <div className="space-y-1.5 text-xs text-slate-600 font-medium pt-3 my-3 border-t border-slate-300/40">
+                                                <div className="flex items-center gap-2 text-slate-700">
+                                                    <Clock className="w-3.5 h-3.5 text-[#0c72b8] shrink-0" />
+                                                    <span className="truncate">{evt.time}</span>
+                                                </div>
+                                                <div className="flex items-center gap-2 text-slate-700">
+                                                    <MapPin className="w-3.5 h-3.5 text-[#0c72b8] shrink-0" />
+                                                    <span className="truncate">{evt.venue}</span>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         {/* Interactive Actions */}
-                                        <div className="pt-3 border-t border-slate-300/40">
+                                        <div className="pt-2">
                                             <button
                                                 type="button"
                                                 onClick={() => setSelectedEventForModal(evt)}
@@ -1492,62 +1695,503 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                     )}
                 </motion.section>
 
-                {/* 6. GOVERNANCE MANIFESTO SECTION */}
+                {/* 6. GOVERNANCE MANIFESTO & PROCESS SECTION */}
                 <motion.section
                     id="manifesto"
-                    initial={{ opacity: 0, y: 24 }}
+                    initial={{ opacity: 0, y: 28 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: '-40px' }}
-                    transition={{ duration: 0.5, ease: 'easeOut' }}
-                    className="bg-[#eef2f7] rounded-3xl p-6 sm:p-8 space-y-6 shadow-[7px_7px_18px_#d1d9e6,-7px_-7px_18px_#ffffff] border border-white/80 scroll-mt-36"
+                    transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                    className="space-y-6 scroll-mt-36 pt-2 pb-0"
                 >
-                    <div className="flex items-center gap-3.5 border-b border-slate-300/40 pb-5">
-                        <div className="w-12 h-12 rounded-xl bg-[#eef2f7] text-[#0c72b8] flex items-center justify-center shadow-[inset_2px_2px_4px_#d1d9e6,inset_-2px_-2px_4px_#ffffff] border border-slate-200/40 shrink-0">
-                            <ShieldCheck className="w-6 h-6" />
+                    {/* Header Row inspired by reference */}
+                    <div className="flex flex-col items-center text-center space-y-2 max-w-2xl mx-auto">
+                        <div className="inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-widest text-[#0c72b8] bg-blue-500/10 px-3.5 py-1.5 rounded-full border border-blue-500/20 shadow-xs">
+                            <Sparkles className="w-3.5 h-3.5 text-[#0c72b8]" />
+                            <span>GOVERNANCE CHARTER</span>
                         </div>
-                        <div>
-                            <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 font-poppins tracking-tight">
-                                {defaultManifesto.title}
-                            </h2>
-                            <p className="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">Official Student Governance Commitment</p>
+                        <h2 className="text-3xl sm:text-4xl font-black text-slate-900 font-poppins tracking-tight">
+                            Action Manifesto<span className="text-[#0c72b8]">.</span>
+                        </h2>
+                        <p className="text-sm text-slate-500 font-normal max-w-lg">
+                            {defaultManifesto.title}
+                        </p>
+                    </div>
+
+                    {/* Fluid Wave Process Flow for Desktop & Tablet */}
+                    <div className="hidden md:block relative w-full pt-4 pb-4 px-4">
+                        {/* Background SVG Fluid Sine Wave */}
+                        <div className="relative w-full h-[260px]">
+                            <svg
+                                viewBox="0 0 1000 260"
+                                fill="none"
+                                preserveAspectRatio="none"
+                                className="absolute inset-0 w-full h-full pointer-events-none overflow-visible"
+                            >
+                                <defs>
+                                    <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stopColor="#0c72b8" stopOpacity="0.4" />
+                                        <stop offset="30%" stopColor="#0c72b8" stopOpacity="0.9" />
+                                        <stop offset="70%" stopColor="#0c72b8" stopOpacity="0.9" />
+                                        <stop offset="100%" stopColor="#0c72b8" stopOpacity="0.4" />
+                                    </linearGradient>
+                                    <filter id="blueGlow" x="-20%" y="-20%" width="140%" height="140%">
+                                        <feGaussianBlur stdDeviation="4" result="blur" />
+                                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                    </filter>
+                                </defs>
+
+                                {/* Background ambient glow wave */}
+                                <motion.path
+                                    d="M 40 185 C 90 185, 130 205, 175 205 C 235 205, 330 55, 430 55 C 530 55, 595 195, 690 195 C 770 195, 830 90, 915 90 C 960 90, 985 105, 1000 105"
+                                    stroke="#0c72b8"
+                                    strokeWidth="8"
+                                    strokeOpacity="0.15"
+                                    strokeLinecap="round"
+                                    fill="none"
+                                />
+
+                                {/* Main Crisp Continuous Fluid Sine Wave */}
+                                <motion.path
+                                    d="M 40 185 C 90 185, 130 205, 175 205 C 235 205, 330 55, 430 55 C 530 55, 595 195, 690 195 C 770 195, 830 90, 915 90 C 960 90, 985 105, 1000 105"
+                                    stroke="url(#waveGradient)"
+                                    strokeWidth="3.5"
+                                    strokeLinecap="round"
+                                    fill="none"
+                                    initial={{ pathLength: 0 }}
+                                    whileInView={{ pathLength: 1 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 1.4, ease: "easeInOut" }}
+                                />
+                            </svg>
+
+                            {/* Waypoint 1: Valley Position (Bottom-Left) */}
+                            {(() => {
+                                const pt = defaultManifesto.points[0] || 'Open Access: Technical workshops remain 100% accessible to all students.';
+                                const colonIndex = pt.indexOf(':');
+                                const title = colonIndex !== -1 ? pt.slice(0, colonIndex).trim() : pt;
+                                const desc = colonIndex !== -1 ? pt.slice(colonIndex + 1).trim() : '';
+
+                                return (
+                                    <div className="group">
+                                        {/* Text + Giant Watermark Box (Positioned top-left of wave valley) */}
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 15 }}
+                                            whileInView={{ opacity: 1, y: 0 }}
+                                            viewport={{ once: true }}
+                                            transition={{ duration: 0.4, delay: 0.1 }}
+                                            className="absolute left-[3%] top-[5px] w-[240px] lg:w-[260px] z-10"
+                                        >
+                                            <div className="relative">
+                                                <div className="flex items-baseline justify-between">
+                                                    <h3 className="text-base lg:text-lg font-bold text-slate-900 group-hover:text-[#0c72b8] transition-colors font-poppins">
+                                                        {title}
+                                                    </h3>
+                                                    <span className="text-slate-300/40 group-hover:text-blue-400/40 text-5xl lg:text-6xl font-black font-poppins transition-colors select-none -mt-3">
+                                                        1
+                                                    </span>
+                                                </div>
+                                                <p className="text-xs sm:text-[13px] text-slate-500 font-normal leading-relaxed mt-1 line-clamp-3">
+                                                    {desc}
+                                                </p>
+                                            </div>
+                                        </motion.div>
+
+                                        {/* Hexagonal Node 1 */}
+                                        <motion.div
+                                            initial={{ scale: 0, opacity: 0 }}
+                                            whileInView={{ scale: 1, opacity: 1 }}
+                                            viewport={{ once: true }}
+                                            transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.2 }}
+                                            whileHover={{ scale: 1.15, transition: { duration: 0.2 } }}
+                                            className="absolute left-[17.5%] top-[205px] -translate-x-1/2 -translate-y-1/2 z-20 cursor-pointer"
+                                        >
+                                            <div className="relative flex items-center justify-center">
+                                                {/* Ambient blue pulse glow */}
+                                                <div className="absolute inset-0 bg-[#0c72b8]/20 rounded-full blur-lg group-hover:blur-xl group-hover:scale-150 transition-all duration-300" />
+                                                
+                                                {/* Hexagon shape SVG */}
+                                                <svg viewBox="0 0 100 100" className="w-14 h-14 fill-white filter drop-shadow-[0_8px_16px_rgba(12,114,184,0.25)] group-hover:drop-shadow-[0_12px_22px_rgba(12,114,184,0.45)] transition-all">
+                                                    <polygon points="50 4, 93 27, 93 73, 50 96, 7 73, 7 27" stroke="#ffffff" strokeWidth="4" strokeLinejoin="round" />
+                                                </svg>
+                                                <div className="absolute inset-0 flex items-center justify-center text-[#0c72b8]">
+                                                    <Flag className="w-5 h-5 stroke-[2.2] fill-[#0c72b8]/10" />
+                                                </div>
+                                            </div>
+                                        </motion.div>
+                                    </div>
+                                );
+                            })()}
+
+                            {/* Waypoint 2: Crest Position (Top-Center) */}
+                            {(() => {
+                                const pt = defaultManifesto.points[1] || 'Practical Mastery: Completing hands-on projects and bootcamps.';
+                                const colonIndex = pt.indexOf(':');
+                                const title = colonIndex !== -1 ? pt.slice(0, colonIndex).trim() : pt;
+                                const desc = colonIndex !== -1 ? pt.slice(colonIndex + 1).trim() : '';
+
+                                return (
+                                    <div className="group">
+                                        {/* Hexagonal Node 2 */}
+                                        <motion.div
+                                            initial={{ scale: 0, opacity: 0 }}
+                                            whileInView={{ scale: 1, opacity: 1 }}
+                                            viewport={{ once: true }}
+                                            transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.35 }}
+                                            whileHover={{ scale: 1.15, transition: { duration: 0.2 } }}
+                                            className="absolute left-[43%] top-[55px] -translate-x-1/2 -translate-y-1/2 z-20 cursor-pointer"
+                                        >
+                                            <div className="relative flex items-center justify-center">
+                                                <div className="absolute inset-0 bg-[#0c72b8]/20 rounded-full blur-lg group-hover:blur-xl group-hover:scale-150 transition-all duration-300" />
+                                                <svg viewBox="0 0 100 100" className="w-14 h-14 fill-white filter drop-shadow-[0_8px_16px_rgba(12,114,184,0.25)] group-hover:drop-shadow-[0_12px_22px_rgba(12,114,184,0.45)] transition-all">
+                                                    <polygon points="50 4, 93 27, 93 73, 50 96, 7 73, 7 27" stroke="#ffffff" strokeWidth="4" strokeLinejoin="round" />
+                                                </svg>
+                                                <div className="absolute inset-0 flex items-center justify-center text-[#0c72b8]">
+                                                    <BarChart3 className="w-5 h-5 stroke-[2.2]" />
+                                                </div>
+                                            </div>
+                                        </motion.div>
+
+                                        {/* Text + Giant Watermark Box (Positioned below peak node) */}
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 15 }}
+                                            whileInView={{ opacity: 1, y: 0 }}
+                                            viewport={{ once: true }}
+                                            transition={{ duration: 0.4, delay: 0.25 }}
+                                            className="absolute left-[31%] top-[145px] w-[240px] lg:w-[260px] z-10"
+                                        >
+                                            <div className="relative">
+                                                <div className="flex items-baseline justify-between">
+                                                    <h3 className="text-base lg:text-lg font-bold text-slate-900 group-hover:text-[#0c72b8] transition-colors font-poppins">
+                                                        {title}
+                                                    </h3>
+                                                    <span className="text-slate-300/40 group-hover:text-blue-400/40 text-5xl lg:text-6xl font-black font-poppins transition-colors select-none -mt-3">
+                                                        2
+                                                    </span>
+                                                </div>
+                                                <p className="text-xs sm:text-[13px] text-slate-500 font-normal leading-relaxed mt-1 line-clamp-3">
+                                                    {desc}
+                                                </p>
+                                            </div>
+                                        </motion.div>
+                                    </div>
+                                );
+                            })()}
+
+                            {/* Waypoint 3: Valley / Mid-rise Position */}
+                            {(() => {
+                                const pt = defaultManifesto.points[2] || 'Ethics & Security: Promoting cybersecurity awareness and privacy standards.';
+                                const colonIndex = pt.indexOf(':');
+                                const title = colonIndex !== -1 ? pt.slice(0, colonIndex).trim() : pt;
+                                const desc = colonIndex !== -1 ? pt.slice(colonIndex + 1).trim() : '';
+
+                                return (
+                                    <div className="group">
+                                        {/* Hexagonal Node 3 */}
+                                        <motion.div
+                                            initial={{ scale: 0, opacity: 0 }}
+                                            whileInView={{ scale: 1, opacity: 1 }}
+                                            viewport={{ once: true }}
+                                            transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.5 }}
+                                            whileHover={{ scale: 1.15, transition: { duration: 0.2 } }}
+                                            className="absolute left-[69%] top-[195px] -translate-x-1/2 -translate-y-1/2 z-20 cursor-pointer"
+                                        >
+                                            <div className="relative flex items-center justify-center">
+                                                <div className="absolute inset-0 bg-[#0c72b8]/20 rounded-full blur-lg group-hover:blur-xl group-hover:scale-150 transition-all duration-300" />
+                                                <svg viewBox="0 0 100 100" className="w-14 h-14 fill-white filter drop-shadow-[0_8px_16px_rgba(12,114,184,0.25)] group-hover:drop-shadow-[0_12px_22px_rgba(12,114,184,0.45)] transition-all">
+                                                    <polygon points="50 4, 93 27, 93 73, 50 96, 7 73, 7 27" stroke="#ffffff" strokeWidth="4" strokeLinejoin="round" />
+                                                </svg>
+                                                <div className="absolute inset-0 flex items-center justify-center text-[#0c72b8]">
+                                                    <Box className="w-5 h-5 stroke-[2.2]" />
+                                                </div>
+                                            </div>
+                                        </motion.div>
+
+                                        {/* Text + Giant Watermark Box */}
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 15 }}
+                                            whileInView={{ opacity: 1, y: 0 }}
+                                            viewport={{ once: true }}
+                                            transition={{ duration: 0.4, delay: 0.4 }}
+                                            className="absolute left-[57%] top-[5px] w-[240px] lg:w-[260px] z-10"
+                                        >
+                                            <div className="relative">
+                                                <div className="flex items-baseline justify-between">
+                                                    <h3 className="text-base lg:text-lg font-bold text-slate-900 group-hover:text-[#0c72b8] transition-colors font-poppins">
+                                                        {title}
+                                                    </h3>
+                                                    <span className="text-slate-300/40 group-hover:text-blue-400/40 text-5xl lg:text-6xl font-black font-poppins transition-colors select-none -mt-3">
+                                                        3
+                                                    </span>
+                                                </div>
+                                                <p className="text-xs sm:text-[13px] text-slate-500 font-normal leading-relaxed mt-1 line-clamp-3">
+                                                    {desc}
+                                                </p>
+                                            </div>
+                                        </motion.div>
+                                    </div>
+                                );
+                            })()}
+
+                            {/* Waypoint 4 (or more): End Crest Position */}
+                            {(() => {
+                                const pt = defaultManifesto.points[3] || defaultManifesto.points[0];
+                                const colonIndex = pt.indexOf(':');
+                                const title = colonIndex !== -1 ? pt.slice(0, colonIndex).trim() : pt;
+                                const desc = colonIndex !== -1 ? pt.slice(colonIndex + 1).trim() : '';
+
+                                return (
+                                    <div className="group">
+                                        {/* Hexagonal Node 4 */}
+                                        <motion.div
+                                            initial={{ scale: 0, opacity: 0 }}
+                                            whileInView={{ scale: 1, opacity: 1 }}
+                                            viewport={{ once: true }}
+                                            transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.65 }}
+                                            whileHover={{ scale: 1.15, transition: { duration: 0.2 } }}
+                                            className="absolute left-[91.5%] top-[90px] -translate-x-1/2 -translate-y-1/2 z-20 cursor-pointer"
+                                        >
+                                            <div className="relative flex items-center justify-center">
+                                                <div className="absolute inset-0 bg-[#0c72b8]/20 rounded-full blur-lg group-hover:blur-xl group-hover:scale-150 transition-all duration-300" />
+                                                <svg viewBox="0 0 100 100" className="w-14 h-14 fill-white filter drop-shadow-[0_8px_16px_rgba(12,114,184,0.25)] group-hover:drop-shadow-[0_12px_22px_rgba(12,114,184,0.45)] transition-all">
+                                                    <polygon points="50 4, 93 27, 93 73, 50 96, 7 73, 7 27" stroke="#ffffff" strokeWidth="4" strokeLinejoin="round" />
+                                                </svg>
+                                                <div className="absolute inset-0 flex items-center justify-center text-[#0c72b8]">
+                                                    <ShieldCheck className="w-5 h-5 stroke-[2.2]" />
+                                                </div>
+                                            </div>
+                                        </motion.div>
+
+                                        {/* Text + Giant Watermark Box */}
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 15 }}
+                                            whileInView={{ opacity: 1, y: 0 }}
+                                            viewport={{ once: true }}
+                                            transition={{ duration: 0.4, delay: 0.55 }}
+                                            className="absolute right-[2%] top-[145px] w-[240px] lg:w-[260px] z-10"
+                                        >
+                                            <div className="relative">
+                                                <div className="flex items-baseline justify-between">
+                                                    <h3 className="text-base lg:text-lg font-bold text-slate-900 group-hover:text-[#0c72b8] transition-colors font-poppins">
+                                                        {title}
+                                                    </h3>
+                                                    <span className="text-slate-300/40 group-hover:text-blue-400/40 text-5xl lg:text-6xl font-black font-poppins transition-colors select-none -mt-3">
+                                                        4
+                                                    </span>
+                                                </div>
+                                                <p className="text-xs sm:text-[13px] text-slate-500 font-normal leading-relaxed mt-1 line-clamp-3">
+                                                    {desc}
+                                                </p>
+                                            </div>
+                                        </motion.div>
+                                    </div>
+                                );
+                            })()}
                         </div>
                     </div>
 
-                    <div className="space-y-3.5">
-                        {defaultManifesto.points.map((pt, idx) => (
-                            <div key={idx} className="p-4 sm:p-4.5 bg-[#eef2f7] rounded-2xl border border-white/80 shadow-[3px_3px_7px_#d1d9e6,-3px_-3px_7px_#ffffff] flex items-start gap-3.5">
-                                <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-normal">{pt}</p>
-                            </div>
-                        ))}
+                    {/* Mobile Fluid Vertical Process Flow */}
+                    <div className="block md:hidden relative pl-6 space-y-8 before:absolute before:left-8 before:top-4 before:bottom-4 before:w-[2px] before:bg-gradient-to-b before:from-[#0c72b8]/80 before:via-[#0c72b8] before:to-[#0c72b8]/40">
+                        {defaultManifesto.points.map((pt, idx) => {
+                            const colonIndex = pt.indexOf(':');
+                            const title = colonIndex !== -1 ? pt.slice(0, colonIndex).trim() : pt;
+                            const desc = colonIndex !== -1 ? pt.slice(colonIndex + 1).trim() : '';
+                            const icons = [Flag, BarChart3, Box, ShieldCheck, Sparkles];
+                            const StepIcon = icons[idx % icons.length];
+
+                            return (
+                                <motion.div
+                                    key={idx}
+                                    initial={{ opacity: 0, x: -16 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.4, delay: idx * 0.1 }}
+                                    className="relative flex items-start gap-4 group"
+                                >
+                                    {/* Hexagonal Node */}
+                                    <div className="relative -ml-6 flex items-center justify-center shrink-0">
+                                        <div className="absolute inset-0 bg-[#0c72b8]/20 rounded-full blur-md" />
+                                        <svg viewBox="0 0 100 100" className="w-12 h-12 fill-white filter drop-shadow-[0_4px_10px_rgba(12,114,184,0.25)]">
+                                            <polygon points="50 4, 93 27, 93 73, 50 96, 7 73, 7 27" stroke="#ffffff" strokeWidth="4" strokeLinejoin="round" />
+                                        </svg>
+                                        <div className="absolute inset-0 flex items-center justify-center text-[#0c72b8]">
+                                            <StepIcon className="w-4 h-4 stroke-[2.2]" />
+                                        </div>
+                                    </div>
+
+                                    {/* Text Card */}
+                                    <div className="flex-1 bg-white/80 p-4 rounded-2xl border border-white shadow-[2px_2px_8px_#d1d9e6,-2px_-2px_8px_#ffffff]">
+                                        <div className="flex items-baseline justify-between">
+                                            <h3 className="text-sm font-bold text-slate-900 group-hover:text-[#0c72b8] transition-colors font-poppins">
+                                                {title}
+                                            </h3>
+                                            <span className="text-slate-300 text-3xl font-black font-poppins select-none -mt-1">
+                                                {idx + 1}
+                                            </span>
+                                        </div>
+                                        <p className="text-xs text-slate-500 font-normal leading-relaxed mt-1">
+                                            {desc}
+                                        </p>
+                                    </div>
+                                </motion.div>
+                            );
+                        })}
                     </div>
                 </motion.section>
 
-                {/* 7. HISTORY & HERITAGE SECTION */}
+                {/* 7. HISTORY & HERITAGE SECTION (Editorial Neumorphic Journey) */}
                 <motion.section
                     id="history"
-                    initial={{ opacity: 0, y: 24 }}
+                    initial={{ opacity: 0, y: 28 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: '-40px' }}
-                    transition={{ duration: 0.5, ease: 'easeOut' }}
-                    className="bg-[#eef2f7] rounded-3xl p-6 sm:p-8 space-y-6 shadow-[7px_7px_18px_#d1d9e6,-7px_-7px_18px_#ffffff] border border-white/80 scroll-mt-36"
+                    transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                    className="relative space-y-8 scroll-mt-36 pt-2 pb-6"
                 >
-                    <div className="flex items-center gap-3.5 border-b border-slate-300/40 pb-5">
-                        <div className="w-12 h-12 rounded-xl bg-[#eef2f7] text-[#0c72b8] flex items-center justify-center shadow-[inset_2px_2px_4px_#d1d9e6,inset_-2px_-2px_4px_#ffffff] border border-slate-200/40 shrink-0">
-                            <History className="w-6 h-6" />
+                    {/* Header Row matching site aesthetic & Poppins typography */}
+                    <div className="relative flex flex-col items-center text-center space-y-3 max-w-xl mx-auto">
+                        <div className="inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-widest text-[#0c72b8] bg-blue-500/10 px-3.5 py-1.5 rounded-full border border-blue-500/20 shadow-xs">
+                            <Clock className="w-3.5 h-3.5 text-[#0c72b8]" />
+                            <span>ESTABLISHED {club.establishedYear || '2018'} • HERITAGE</span>
                         </div>
-                        <div>
-                            <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 font-poppins tracking-tight">
-                                Historical Background & Evolution
-                            </h2>
-                            <p className="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">Est. {club.establishedYear} • Aadikavi Bhanubhakta Campus</p>
-                        </div>
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight font-poppins">
+                            Our Journey <span className="text-[#0c72b8]">with {clubAcronym}</span>
+                        </h2>
+                        <p className="text-sm sm:text-base text-slate-600 font-normal max-w-lg leading-relaxed">
+                            Tracing the foundational milestones, leadership breakthroughs, and defining achievements of {club.name}.
+                        </p>
                     </div>
 
-                    <div className="p-6 sm:p-7 rounded-2xl bg-[#eef2f7] shadow-[inset_3px_3px_7px_#d1d9e6,inset_-3px_-3px_7px_#ffffff] border border-slate-200/50">
-                        <p className="text-sm sm:text-base text-slate-700 leading-relaxed font-normal">
-                            {defaultHistory}
-                        </p>
+                    {/* Timeline Container with Fluid Spine & Neumorphic Cards */}
+                    <div className="relative max-w-4xl mx-auto pt-6 pb-10">
+                        {/* Dynamic Fluid Animated Spine Line */}
+                        <div className="absolute left-6 md:left-[36%] top-4 bottom-4 w-[2px] pointer-events-none">
+                            {/* Base track */}
+                            <div className="w-full h-full bg-slate-300/60" />
+                            {/* Animated Glowing Gradient Fill on Scroll */}
+                            <motion.div
+                                initial={{ height: 0 }}
+                                whileInView={{ height: '100%' }}
+                                viewport={{ once: true, margin: '-20px' }}
+                                transition={{ duration: 1.6, ease: [0.25, 1, 0.5, 1] }}
+                                className="absolute top-0 left-0 w-full bg-gradient-to-b from-[#0c72b8] via-[#0c72b8] to-[#0c72b8]/40 shadow-[0_0_8px_rgba(12,114,184,0.5)]"
+                            />
+                        </div>
+
+                        {/* Milestone Items */}
+                        <div className="space-y-16 sm:space-y-24">
+                            {(() => {
+                                const estYear = parseInt(String(club.establishedYear || '2018'), 10) || 2018;
+                                const defaultMilestones = [
+                                    {
+                                        category: 'WHEN IT ALL BEGAN',
+                                        year: `${estYear}`,
+                                        title: 'Inauguration & Founding Charter',
+                                        desc: `Pioneered by foundational student leaders under campus faculty guidance, ${club.name} was formally chartered to provide structured extracurricular growth, leadership opportunities, and academic excellence.`,
+                                        image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&auto=format&fit=crop&q=80'
+                                    },
+                                    {
+                                        category: 'EXPLORATION, RESEARCHING & WORKSHOPS',
+                                        year: `${estYear}–${estYear + 2}`,
+                                        title: 'Workshops, Labs & Institutional Expansion',
+                                        desc: `Organized regular capacity-building bootcamps, student mentorship networks, and established standard operational procedures to institutionalize student leadership across campus departments.`,
+                                        image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&auto=format&fit=crop&q=80'
+                                    },
+                                    {
+                                        category: 'FLAGSHIP INITIATIVES & ACCREDITATION',
+                                        year: `${estYear + 3}`,
+                                        title: 'Campus-wide Accreditation & Flagship Programs',
+                                        desc: `Successfully launched annual flagship conventions, inter-campus contests, and published student research portfolios, earning formal accreditation from campus governance.`,
+                                        image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&auto=format&fit=crop&q=80'
+                                    },
+                                    {
+                                        category: 'COMMUNITY & FUTURE HORIZON',
+                                        year: `${estYear + 4} to Now`,
+                                        title: 'Autonomous Chapter & Modern Excellence',
+                                        desc: `Today, ${club.name} serves ${club.memberCount || '150+'}+ active members with digitized operations, regional partnerships, and community empowerment initiatives across Tanahun district.`,
+                                        image: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&auto=format&fit=crop&q=80'
+                                    }
+                                ];
+
+                                const milestonesData = (club.historyMilestones && club.historyMilestones.length > 0)
+                                    ? club.historyMilestones
+                                    : defaultMilestones;
+                             return milestonesData.map((item, idx)  => (
+                                    <motion.div
+                                        key={idx}
+                                        initial={{ opacity: 0, y: 40 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        viewport={{ once: true, margin: '-60px' }}
+                                        transition={{ duration: 0.6, delay: idx * 0.12, ease: [0.22, 1, 0.36, 1] }}
+                                        className="relative flex flex-col md:flex-row items-start md:items-center gap-6 sm:gap-10 lg:gap-14 group"
+                                    >
+                                        {/* Left Side: Editorial Image Card with Floating Navigation Pips */}
+                                        <div className="w-full md:w-[36%] shrink-0 pl-14 md:pl-0">
+                                            <motion.div
+                                                whileHover={{ y: -6, scale: 1.02 }}
+                                                transition={{ duration: 0.3, ease: 'easeOut' }}
+                                                className="relative w-full max-w-[280px] mx-auto md:mr-0 rounded-3xl overflow-hidden shadow-[6px_6px_16px_#d1d9e6,-6px_-6px_16px_#ffffff] border-2 border-white bg-slate-200 aspect-[4/5] group/card cursor-pointer"
+                                            >
+                                                <img
+                                                    src={item.image || 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&auto=format&fit=crop&q=80'}
+                                                    alt={item.title}
+                                                    referrerPolicy="no-referrer"
+                                                    className="w-full h-full object-cover grayscale-[10%] group-hover/card:grayscale-0 group-hover/card:scale-105 transition-all duration-700 ease-out"
+                                                />
+                                                {/* Warm photo vintage overlay */}
+                                                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-black/10 pointer-events-none" />
+
+                                                {/* Subtle Left & Right Circle Indicator Pips matching reference */}
+                                                <div className="absolute left-2.5 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-xs text-slate-700 flex items-center justify-center shadow-md opacity-80 group-hover/card:opacity-100 group-hover/card:bg-[#0c72b8] group-hover/card:text-white transition-all text-xs select-none">
+                                                    ←
+                                                </div>
+                                                <div className="absolute right-2.5 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-xs text-slate-700 flex items-center justify-center shadow-md opacity-80 group-hover/card:opacity-100 group-hover/card:bg-[#0c72b8] group-hover/card:text-white transition-all text-xs select-none">
+                                                    →
+                                                </div>
+                                            </motion.div>
+                                        </div>
+
+                                        {/* Center Spine Dot on Desktop */}
+                                        <div className="hidden md:flex absolute left-[36%] top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+                                            <motion.div
+                                                whileHover={{ scale: 1.4 }}
+                                                className="relative w-4 h-4 rounded-full bg-white border-3 border-[#0c72b8] shadow-[0_0_10px_rgba(12,114,184,0.4)] group-hover:bg-[#0c72b8] transition-colors cursor-pointer"
+                                            >
+                                                <span className="absolute inset-0 rounded-full bg-[#0c72b8]/30 animate-ping opacity-75" />
+                                            </motion.div>
+                                        </div>
+
+                                        {/* Mobile Spine Dot */}
+                                        <div className="md:hidden absolute left-[24px] top-6 -translate-x-1/2 z-10">
+                                            <div className="w-3.5 h-3.5 rounded-full bg-white border-2.5 border-[#0c72b8] shadow-sm" />
+                                        </div>
+
+                                        {/* Right Side: Editorial Year & Narrative Content in Poppins styling */}
+                                        <div className="flex-1 pl-14 md:pl-6 space-y-2.5">
+                                            {/* Category Subheading in Uppercase Bold */}
+                                            <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#0c72b8] font-poppins block">
+                                                {item.category}
+                                            </span>
+
+                                            {/* Prominent Poppins Year with Clean Aesthetic */}
+                                            <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 font-poppins tracking-tight group-hover:text-[#0c72b8] transition-colors leading-tight">
+                                                {item.year}
+                                            </h3>
+
+                                            {/* Milestone Title */}
+                                            <h4 className="text-base sm:text-lg font-bold text-slate-800 font-poppins pt-0.5 leading-snug">
+                                                {item.title}
+                                            </h4>
+
+                                            {/* Narrative Description Paragraph */}
+                                            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal pt-1 max-w-xl">
+                                                {item.desc}
+                                            </p>
+                                        </div>
+                                    </motion.div>
+                                ));
+                            })()}
+                        </div>
                     </div>
                 </motion.section>
 
@@ -1837,7 +2481,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                     ) : (
                         <div className="space-y-6">
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-                                {displayedLeadership.map((member) => {
+                                {displayedLeadership.map((member, idx) => {
                                     const roleLower = (member.role || '').toLowerCase();
                                     const isPresident = roleLower.includes('president') && !roleLower.includes('vice');
                                     const isVicePresident = roleLower.includes('vice') && roleLower.includes('president');
@@ -1862,9 +2506,14 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                         .toUpperCase();
 
                                     return (
-                                        <div
+                                        <motion.div
                                             key={member.id}
-                                            className="bg-[#eef2f7] rounded-3xl p-5 sm:p-6 flex flex-col justify-between shadow-[6px_6px_14px_#d1d9e6,-6px_-6px_14px_#ffffff] hover:shadow-[8px_8px_18px_#c8d2e2,-8px_-8px_18px_#ffffff] border border-white/80 transition-all hover:-translate-y-1"
+                                            initial={{ opacity: 0, y: 16 }}
+                                            whileInView={{ opacity: 1, y: 0 }}
+                                            viewport={{ once: true }}
+                                            transition={{ duration: 0.35, delay: (idx % 6) * 0.06 }}
+                                            whileHover={{ y: -3, transition: { duration: 0.15 } }}
+                                            className="bg-[#eef2f7] rounded-3xl p-5 sm:p-6 flex flex-col justify-between shadow-[6px_6px_14px_#d1d9e6,-6px_-6px_14px_#ffffff] hover:shadow-[8px_8px_18px_#c8d2e2,-8px_-8px_18px_#ffffff] border border-white/80 transition-all"
                                         >
                                             <div>
                                                 <div className="flex items-center gap-4 mb-4">
@@ -1895,7 +2544,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                                                 {member.role || 'Executive Member'}
                                                             </span>
                                                             {isPresident && (
-                                                                <span className="text-[10px] bg-amber-500 text-white font-black px-1.5 py-0.2 rounded-full inline-flex items-center gap-0.5">
+                                                                <span className="text-[10px] bg-amber-500 text-white font-black px-1.5 py-0.2 rounded-full inline-flex items-center gap-0.5 shadow-2xs">
                                                                     ★ Lead
                                                                 </span>
                                                             )}
@@ -1936,7 +2585,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                                     </div>
                                                 )}
                                             </div>
-                                        </div>
+                                        </motion.div>
                                     );
                                 })}
                             </div>
@@ -1965,65 +2614,248 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                     )}
                 </motion.section>
 
-                {/* 9. PHOTO GALLERY SECTION */}
+                {/* 9. PHOTO GALLERY & COLLECTION ARCHIVE */}
                 <motion.section
                     id="gallery"
                     initial={{ opacity: 0, y: 24 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: '-40px' }}
                     transition={{ duration: 0.5, ease: 'easeOut' }}
-                    className="space-y-6 scroll-mt-36"
+                    className="space-y-8 scroll-mt-36 pt-4"
                 >
-                    <div>
-                        <h2 className="text-2xl font-bold text-slate-900 font-poppins">
-                            Photo Gallery & Activity Moments
-                        </h2>
-                        <p className="text-xs text-slate-500 mt-1">Highlights from workshops, events, and campus drives</p>
+                    {/* Pinterest Style Header */}
+                    <div className="flex flex-col sm:flex-row sm:items-end justify-between pb-3 border-b border-slate-300/40 gap-4">
+                        <div>
+                            <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider text-[#0c72b8] mb-1">
+                                <Sparkles className="w-3.5 h-3.5" />
+                                <span>VISUAL ARCHIVE & PINS</span>
+                            </div>
+                            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 font-poppins tracking-tight">
+                                Moments & Pins
+                            </h3>
+                        </div>
+                        {galleryItems.length > 0 && (
+                            <button
+                                type="button"
+                                onClick={() => setSelectedGalleryIndex(0)}
+                                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#eef2f7] text-xs font-bold text-slate-800 hover:text-[#0c72b8] shadow-[3px_3px_8px_#d1d9e6,-3px_-3px_8px_#ffffff] active:shadow-[inset_2px_2px_5px_#d1d9e6,inset_-2px_-2px_5px_#ffffff] border border-white/80 transition-all cursor-pointer self-start sm:self-auto"
+                            >
+                                <span>Open Fullscreen ({galleryItems.length} photos)</span>
+                            </button>
+                        )}
                     </div>
 
-                    {galleryList.length === 0 ? (
-                        <div className="neu-card p-12 text-center border-dashed border-2 border-slate-300">
+                    {galleryItems.length === 0 ? (
+                        <div className="bg-[#eef2f7] rounded-3xl p-12 text-center shadow-[inset_3px_3px_7px_#d1d9e6,inset_-3px_-3px_7px_#ffffff] border border-slate-200/50">
                             <ImageIcon className="w-10 h-10 text-slate-400 mx-auto mb-2" />
-                            <p className="text-sm text-slate-500 font-medium">No activity photo gallery available yet for this committee.</p>
+                            <p className="text-sm text-slate-500 font-medium">No activity photo collection available yet for this committee.</p>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 sm:gap-6">
-                            {galleryList.map((imgUrl, idx) => (
-                                <div
-                                    key={idx}
-                                    onClick={() => setSelectedGalleryImg(imgUrl)}
-                                    className="neu-card overflow-hidden h-56 cursor-pointer group relative p-1.5"
+                        /* Pinterest Masonry Columns Grid */
+                        <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 sm:gap-5 space-y-4 sm:space-y-5">
+                            {galleryItems.map((item, idx) => (
+                                <motion.div
+                                    key={item.id || idx}
+                                    initial={{ opacity: 0, y: 16 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.35, delay: (idx % 4) * 0.05 }}
+                                    className="break-inside-avoid group relative flex flex-col cursor-pointer mb-4 sm:mb-5"
+                                    onClick={() => setSelectedGalleryIndex(idx)}
                                 >
-                                    <div className="w-full h-full rounded-xl overflow-hidden relative">
+                                    {/* Pinterest Pin Card Container */}
+                                    <div className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-100 shadow-[3px_3px_10px_#d1d9e6,-3px_-3px_10px_#ffffff] border border-white/80 group-hover:shadow-[5px_5px_16px_#c8d2e2,-5px_-5px_16px_#ffffff] transition-all duration-300">
+                                        {/* Image */}
                                         <img
-                                            src={imgUrl}
-                                            alt={`Activity photo ${idx + 1}`}
+                                            src={item.image}
+                                            alt={item.title}
+                                            loading="lazy"
                                             referrerPolicy="no-referrer"
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                            className="w-full h-auto object-cover block group-hover:scale-[1.02] transition-transform duration-500 will-change-transform"
                                         />
-                                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white font-bold text-xs gap-1.5 backdrop-blur-2xs">
-                                            <Eye className="w-4 h-4" /> View Full Image
+
+                                        {/* Pinterest Hover Overlay */}
+                                        <div className="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none p-3 sm:p-4 flex flex-col justify-between">
+                                            {/* Top Bar: Category pill / Save or View red pill */}
+                                            <div className="flex items-center justify-between w-full pointer-events-auto">
+                                                {item.category ? (
+                                                    <span className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider border border-white/20">
+                                                        {item.category}
+                                                    </span>
+                                                ) : (
+                                                    <span />
+                                                )}
+                                                <button
+                                                    type="button"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setSelectedGalleryIndex(idx);
+                                                    }}
+                                                    className="px-4 py-1.5 rounded-full bg-[#e60023] hover:bg-[#ad081b] text-white text-xs font-bold shadow-md transition-all cursor-pointer transform group-hover:scale-100 scale-95"
+                                                    title="View Pin"
+                                                >
+                                                    View
+                                                </button>
+                                            </div>
+
+                                            {/* Bottom Action Bar: Share & Expand Controls */}
+                                            <div className="flex items-center justify-between w-full pointer-events-auto">
+                                                <div className="flex items-center gap-1.5">
+                                                    <button
+                                                        type="button"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            if (navigator.share) {
+                                                                navigator.share({ title: item.title, url: window.location.href });
+                                                            } else {
+                                                                navigator.clipboard.writeText(item.image);
+                                                                alert('Photo link copied!');
+                                                            }
+                                                        }}
+                                                        className="w-8 h-8 rounded-full bg-white/90 hover:bg-white text-slate-800 flex items-center justify-center shadow-md backdrop-blur-md transition-transform hover:scale-110 cursor-pointer"
+                                                        title="Share photo"
+                                                    >
+                                                        <Share2 className="w-3.5 h-3.5" />
+                                                    </button>
+                                                    <a
+                                                        href={item.image}
+                                                        download
+                                                        target="_blank"
+                                                        rel="noreferrer"
+                                                        onClick={(e) => e.stopPropagation()}
+                                                        className="w-8 h-8 rounded-full bg-white/90 hover:bg-white text-slate-800 flex items-center justify-center shadow-md backdrop-blur-md transition-transform hover:scale-110 cursor-pointer"
+                                                        title="Open in new tab"
+                                                    >
+                                                        <ExternalLink className="w-3.5 h-3.5" />
+                                                    </a>
+                                                </div>
+
+                                                <span className="w-8 h-8 rounded-full bg-white/90 text-slate-800 flex items-center justify-center shadow-md backdrop-blur-md">
+                                                    <ZoomIn className="w-3.5 h-3.5 text-[#0c72b8]" />
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+
+                                    {/* Pinterest Style Bottom Title & 3-dots Menu */}
+                                    <div className="pt-2 px-1 flex items-start justify-between gap-2">
+                                        <div className="min-w-0">
+                                            <h4 className="text-xs sm:text-sm font-bold text-slate-800 font-poppins line-clamp-2 leading-tight group-hover:text-[#0c72b8] transition-colors">
+                                                {item.title}
+                                            </h4>
+                                            {item.description && (
+                                                <p className="text-[11px] text-slate-500 line-clamp-1 mt-0.5 font-normal">
+                                                    {item.description}
+                                                </p>
+                                            )}
+                                        </div>
+                                        <div className="shrink-0 text-slate-400 hover:text-slate-600 p-0.5 rounded-full hover:bg-slate-200/60 transition-colors">
+                                            <MoreHorizontal className="w-4 h-4" />
+                                        </div>
+                                    </div>
+                                </motion.div>
                             ))}
                         </div>
                     )}
 
-                    {/* Lightbox Modal */}
-                    {selectedGalleryImg && (
+                    {/* Lightbox Modal with Index Navigation & Keyboard Controls */}
+                    {selectedGalleryIndex !== null && galleryItems[selectedGalleryIndex] && (
                         <div
-                            onClick={() => setSelectedGalleryImg(null)}
-                            className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 cursor-pointer backdrop-blur-xs animate-in fade-in"
+                            onClick={() => setSelectedGalleryIndex(null)}
+                            className="fixed inset-0 z-50 bg-black/90 flex flex-col items-center justify-center p-4 sm:p-6 backdrop-blur-md animate-in fade-in"
                         >
-                            <div className="max-w-4xl w-full max-h-[85vh] rounded-2xl overflow-hidden shadow-2xl relative bg-slate-900">
-                                <img src={selectedGalleryImg} alt="Enlarged gallery view" className="w-full h-full object-contain" />
+                            {/* Top Control Bar */}
+                            <div
+                                onClick={(e) => e.stopPropagation()}
+                                className="w-full max-w-5xl flex items-center justify-between text-white pb-3"
+                            >
+                                <div className="flex items-center gap-2">
+                                    <span className="text-xs font-semibold px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15">
+                                        Photo {selectedGalleryIndex + 1} of {galleryItems.length}
+                                    </span>
+                                    <span className="text-xs text-white/60 hidden sm:inline">
+                                        (Use ← → Arrow keys or buttons to navigate, Esc to close)
+                                    </span>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    onClick={() => setSelectedGalleryIndex(null)}
+                                    className="p-2.5 rounded-full bg-white/15 hover:bg-white/25 text-white transition-all cursor-pointer border border-white/20"
+                                    title="Close Lightbox (Esc)"
+                                >
+                                    <X className="w-5 h-5" />
+                                </button>
+                            </div>
+
+                            {/* Main Frame with Prev & Next */}
+                            <div
+                                onClick={(e) => e.stopPropagation()}
+                                className="relative max-w-5xl w-full max-h-[80vh] flex items-center justify-center"
+                            >
+                                {/* Left Prev Button */}
+                                {galleryItems.length > 1 && (
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            setSelectedGalleryIndex((prev) =>
+                                                prev !== null && prev > 0 ? prev - 1 : galleryItems.length - 1
+                                            )
+                                        }
+                                        className="absolute -left-3 sm:-left-6 z-10 p-3 rounded-full bg-black/60 hover:bg-black/80 text-white backdrop-blur-md border border-white/20 shadow-xl transition-transform hover:scale-110 cursor-pointer"
+                                        title="Previous Photo (Left Arrow)"
+                                    >
+                                        <ChevronLeft className="w-6 h-6" />
+                                    </button>
+                                )}
+
+                                <div className="flex flex-col items-center max-h-[80vh] max-w-full">
+                                    <div className="rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl bg-black border border-white/20 max-h-[70vh] flex items-center justify-center">
+                                        <img
+                                            src={galleryItems[selectedGalleryIndex].image}
+                                            alt={galleryItems[selectedGalleryIndex].title}
+                                            referrerPolicy="no-referrer"
+                                            className="w-full max-h-[68vh] object-contain select-none"
+                                        />
+                                    </div>
+                                    <div className="w-full max-w-2xl text-center mt-3 px-4">
+                                        <h3 className="text-white text-base sm:text-lg font-bold font-poppins">
+                                            {galleryItems[selectedGalleryIndex].title}
+                                        </h3>
+                                        {galleryItems[selectedGalleryIndex].description && (
+                                            <p className="text-white/70 text-xs sm:text-sm mt-1">
+                                                {galleryItems[selectedGalleryIndex].description}
+                                            </p>
+                                        )}
+                                        {galleryItems[selectedGalleryIndex].date && (
+                                            <span className="inline-block text-white/50 text-xs mt-1">
+                                                {galleryItems[selectedGalleryIndex].date}
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* Right Next Button */}
+                                {galleryItems.length > 1 && (
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            setSelectedGalleryIndex((prev) =>
+                                                prev !== null && prev < galleryItems.length - 1 ? prev + 1 : 0
+                                            )
+                                        }
+                                        className="absolute -right-3 sm:-right-6 z-10 p-3 rounded-full bg-black/60 hover:bg-black/80 text-white backdrop-blur-md border border-white/20 shadow-xl transition-transform hover:scale-110 cursor-pointer"
+                                        title="Next Photo (Right Arrow)"
+                                    >
+                                        <ChevronRight className="w-6 h-6" />
+                                    </button>
+                                )}
                             </div>
                         </div>
                     )}
                 </motion.section>
 
-                {/* 9. MESSAGES FROM LEADERSHIP & COMPOSE DISPATCH SECTION (END OF PAGE) */}
+                {/* 10. MESSAGES FROM LEADERSHIP & COMPOSE DISPATCH SECTION (END OF PAGE) */}
                 <motion.section
                     id="message"
                     initial={{ opacity: 0, y: 24 }}
@@ -2032,15 +2864,20 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                     transition={{ duration: 0.5, ease: 'easeOut' }}
                     className="space-y-8 scroll-mt-36 pt-4"
                 >
-                    <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
-                        <div>
-                            <div className="flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-[#0c72b8] mb-1">
-                                <Quote className="w-3.5 h-3.5 text-[#0c72b8]" />
-                                <span>LEADERSHIP VOICE & STUDENT DISPATCH</span>
+                    <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-slate-300/40 pb-5">
+                        <div className="flex items-center gap-3.5">
+                            <div className="w-12 h-12 rounded-2xl bg-[#eef2f7] text-[#0c72b8] flex items-center justify-center shadow-[inset_2px_2px_4px_#d1d9e6,inset_-2px_-2px_4px_#ffffff] border border-white/80 shrink-0">
+                                <Quote className="w-6 h-6" />
                             </div>
-                            <h2 className="text-2xl font-extrabold text-slate-900 font-poppins tracking-tight">
-                                Messages & Direct Contact Hub
-                            </h2>
+                            <div>
+                                <div className="flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider text-[#0c72b8] mb-0.5">
+                                    <Sparkles className="w-3 h-3" />
+                                    <span>LEADERSHIP VOICE & STUDENT DISPATCH</span>
+                                </div>
+                                <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 font-poppins tracking-tight">
+                                    Messages & Direct Contact Hub
+                                </h2>
+                            </div>
                         </div>
                         <p className="text-xs text-slate-500 font-medium">
                             Official addresses and direct message channel for {club.name}
@@ -2050,7 +2887,13 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                     {/* Leadership Statements Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-stretch">
                         {/* President Message Card */}
-                        <div className="bg-[#eef2f7] rounded-3xl p-5 sm:p-6 lg:p-7 shadow-[6px_6px_16px_#d1d9e6,-6px_-6px_16px_#ffffff] hover:shadow-[8px_8px_20px_#c8d2e2,-8px_-8px_20px_#ffffff] border border-white/80 transition-all flex flex-col justify-between group overflow-hidden">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.4 }}
+                            className="bg-[#eef2f7] rounded-3xl p-5 sm:p-6 lg:p-7 shadow-[6px_6px_16px_#d1d9e6,-6px_-6px_16px_#ffffff] hover:shadow-[8px_8px_20px_#c8d2e2,-8px_-8px_20px_#ffffff] border border-white/80 transition-all flex flex-col justify-between group overflow-hidden"
+                        >
                             <div className="space-y-4 flex-1 flex flex-col">
                                 <div className="flex items-start gap-3.5 sm:gap-4 pb-4 border-b border-slate-300/50">
                                     <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#eef2f7] p-1 flex items-center justify-center shadow-[4px_4px_10px_#d1d9e6,-4px_-4px_10px_#ffffff] border border-white/90 shrink-0 group-hover:scale-105 transition-transform">
@@ -2106,10 +2949,16 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                     </a>
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
 
                         {/* Faculty Advisor Message Card */}
-                        <div className="bg-[#eef2f7] rounded-3xl p-5 sm:p-6 lg:p-7 shadow-[6px_6px_16px_#d1d9e6,-6px_-6px_16px_#ffffff] hover:shadow-[8px_8px_20px_#c8d2e2,-8px_-8px_20px_#ffffff] border border-white/80 transition-all flex flex-col justify-between group overflow-hidden">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.4, delay: 0.1 }}
+                            className="bg-[#eef2f7] rounded-3xl p-5 sm:p-6 lg:p-7 shadow-[6px_6px_16px_#d1d9e6,-6px_-6px_16px_#ffffff] hover:shadow-[8px_8px_20px_#c8d2e2,-8px_-8px_20px_#ffffff] border border-white/80 transition-all flex flex-col justify-between group overflow-hidden"
+                        >
                             <div className="space-y-4 flex-1 flex flex-col">
                                 <div className="flex items-start gap-3.5 sm:gap-4 pb-4 border-b border-slate-300/50">
                                     <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#eef2f7] p-1 flex items-center justify-center shadow-[4px_4px_10px_#d1d9e6,-4px_-4px_10px_#ffffff] border border-white/90 shrink-0 group-hover:scale-105 transition-transform">
@@ -2152,7 +3001,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                     <span className="text-[11px] text-slate-500 font-medium">Aadikavi Bhanubhakta Campus</span>
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
                     </div>
 
                     {/* Interactive Student Compose Message / Suggestion Box */}
@@ -2162,6 +3011,215 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                             language={language}
                         />
                     </div>
+                </motion.section>
+
+                {/* 10. REGISTRATION CERTIFICATE SECTION */}
+                <motion.section
+                    id="certificate"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-40px' }}
+                    transition={{ duration: 0.45, ease: 'easeOut' }}
+                    className="space-y-4 scroll-mt-36"
+                >
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1">
+                        <div className="flex items-center gap-2.5">
+                            <div className="w-9 h-9 rounded-xl bg-[#eef2f7] text-[#0c72b8] flex items-center justify-center shadow-[inset_1.5px_1.5px_3px_#d1d9e6,inset_-1.5px_-1.5px_3px_#ffffff] border border-white/60 shrink-0">
+                                <Award className="w-4.5 h-4.5" />
+                            </div>
+                            <div>
+                                <h3 className="text-lg sm:text-xl font-bold text-slate-900 font-poppins">
+                                    {language === 'np' ? 'क्लब दर्ता प्रमाण-पत्र' : 'Club Registration Certificate'}
+                                </h3>
+                                <p className="text-xs text-slate-500 font-medium hidden sm:block">
+                                    Official accreditation record issued by campus administration
+                                </p>
+                            </div>
+                        </div>
+
+                        {isClubRegistered ? (
+                            <span className="self-start sm:self-auto inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-300 shadow-[2px_2px_6px_#d1d9e6,-2px_-2px_6px_#ffffff]">
+                                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                                <span>{language === 'np' ? 'दर्ता प्रमाणित' : 'Certified & Registered'}</span>
+                            </span>
+                        ) : (
+                            <span className="self-start sm:self-auto inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#eef2f7] text-slate-600 text-xs font-bold border border-white/80 shadow-[2px_2px_5px_#d1d9e6,-2px_-2px_5px_#ffffff]">
+                                <AlertCircle className="w-3.5 h-3.5 text-slate-500" />
+                                <span>{language === 'np' ? 'दर्ता नभएको' : 'Not Registered'}</span>
+                            </span>
+                        )}
+                    </div>
+
+                    {isClubRegistered ? (
+                        /* PREMIUM NEUMORPHIC REGISTERED VIEW */
+                        <div className="bg-[#eef2f7] rounded-3xl p-5 sm:p-7 border border-white/80 shadow-[7px_7px_18px_#d1d9e6,-7px_-7px_18px_#ffffff]">
+                            <div className="flex flex-col md:flex-row items-center md:items-start gap-6 lg:gap-8">
+                                {/* Portrait Certificate Photo Frame (Exact A4 210/297 document ratio) */}
+                                <div className="w-full max-w-[260px] sm:max-w-[290px] shrink-0">
+                                    <div className="p-3.5 bg-white/70 rounded-2xl border border-white/90 shadow-[5px_5px_14px_#d1d9e6,-5px_-5px_14px_#ffffff]">
+                                        <div
+                                            onClick={() => setIsCertLightboxOpen(true)}
+                                            className="relative aspect-[210/297] w-full rounded-xl overflow-hidden bg-white shadow-[inset_2px_2px_5px_#d1d9e6,inset_-2px_-2px_5px_#ffffff] border border-slate-200/60 cursor-pointer group"
+                                            title="Click to view full certificate"
+                                        >
+                                            <img
+                                                src={certData?.certificateImage || 'https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?w=1200&auto=format&fit=crop&q=80'}
+                                                alt={`${club.name} Certificate`}
+                                                referrerPolicy="no-referrer"
+                                                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
+                                            />
+
+                                            {/* Official Ribbon Seal */}
+                                            <div className="absolute top-2 left-2 bg-[#0c72b8] text-white text-[9px] font-bold px-2 py-0.5 rounded shadow-sm flex items-center gap-1">
+                                                <ShieldCheck className="w-3 h-3" />
+                                                <span>Official Seal</span>
+                                            </div>
+
+                                            {/* Hover Zoom Overlay */}
+                                            <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center text-white gap-1.5 p-3 text-center backdrop-blur-[1px]">
+                                                <div className="w-10 h-10 rounded-full bg-white/25 backdrop-blur-md flex items-center justify-center shadow-md">
+                                                    <ZoomIn className="w-5 h-5 text-white" />
+                                                </div>
+                                                <span className="text-[11px] font-bold tracking-wide">
+                                                    {language === 'np' ? 'प्रमाणपत्र हेर्नुहोस्' : 'Click to Expand Document'}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        {/* Frame bottom metadata */}
+                                        <div className="mt-3 pt-2.5 border-t border-slate-200/80 flex items-center justify-between text-[11px] px-1">
+                                            <span className="text-slate-500 font-medium font-mono text-[10px]">
+                                                {certData?.certificateNumber || '०३/०८२/०८३'}
+                                            </span>
+                                            <button
+                                                type="button"
+                                                onClick={() => setIsCertLightboxOpen(true)}
+                                                className="font-bold text-[#0c72b8] hover:text-blue-800 flex items-center gap-1 cursor-pointer transition-colors"
+                                            >
+                                                <ZoomIn className="w-3.5 h-3.5" />
+                                                <span>Preview</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Minimal Neumorphic Details & Metadata Grid */}
+                                <div className="flex-1 w-full space-y-4 pt-1">
+                                    <div className="space-y-1.5">
+                                        <div className="flex flex-wrap items-center gap-2">
+                                            <h4 className="text-lg sm:text-xl font-bold text-slate-900 font-poppins">
+                                                {club.name}
+                                            </h4>
+                                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold text-emerald-800 bg-emerald-100 border border-emerald-300">
+                                                Active Standing
+                                            </span>
+                                        </div>
+                                        <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                                            {certData?.remarks || (language === 'np'
+                                                ? `आदिकवि भानुभक्त क्याम्पसमा विद्यार्थी क्लब/संस्था निर्देशिका २०७५ बमोजिम दर्ता भएको आधिकारिक क्लब।`
+                                                : `Officially registered under the Aadikavi Bhanubhakta Campus Student Club & Association Guidelines 2075.`)}
+                                        </p>
+                                    </div>
+
+                                    {/* Structured Info Cards Grid */}
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                                        {/* Reg No */}
+                                        <div className="p-3.5 bg-white/80 rounded-2xl border border-white/90 shadow-[2px_2px_5px_#d1d9e6,-2px_-2px_5px_#ffffff] flex items-center justify-between gap-2">
+                                            <div className="min-w-0">
+                                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">
+                                                    {language === 'np' ? 'दर्ता नं. (Reg. Number)' : 'Registration Code'}
+                                                </span>
+                                                <span className="font-mono font-bold text-xs sm:text-sm text-slate-900 truncate block">
+                                                    {certData?.certificateNumber || '०३/०८२/०८३'}
+                                                </span>
+                                            </div>
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    const regNo = certData?.certificateNumber || '०३/०८२/०८३';
+                                                    navigator.clipboard.writeText(regNo);
+                                                    setCopiedCertNo(true);
+                                                    setTimeout(() => setCopiedCertNo(false), 2000);
+                                                }}
+                                                className="p-2 rounded-xl bg-[#eef2f7] hover:bg-white text-slate-600 hover:text-[#0c72b8] shadow-[2px_2px_4px_#d1d9e6,-2px_-2px_4px_#ffffff] active:shadow-[inset_1px_1px_2px_#d1d9e6] transition-all cursor-pointer shrink-0"
+                                                title="Copy Registration Number"
+                                            >
+                                                {copiedCertNo ? (
+                                                    <Check className="w-3.5 h-3.5 text-emerald-600" />
+                                                ) : (
+                                                    <Copy className="w-3.5 h-3.5" />
+                                                )}
+                                            </button>
+                                        </div>
+
+                                        {/* Issued Date */}
+                                        <div className="p-3.5 bg-white/80 rounded-2xl border border-white/90 shadow-[2px_2px_5px_#d1d9e6,-2px_-2px_5px_#ffffff]">
+                                            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">
+                                                {language === 'np' ? 'दर्ता मिति (Registered Date)' : 'Registered Date'}
+                                            </span>
+                                            <div className="flex items-center gap-1.5">
+                                                <Calendar className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                                                <span className="font-bold text-xs sm:text-sm text-slate-900 block truncate">
+                                                    {language === 'np' ? (certData?.registeredDateNp || certData?.registeredDate) : (certData?.registeredDate || '२०८२/०८/१४')}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        {/* Issuing Authority */}
+                                        <div className="sm:col-span-2 p-3.5 bg-white/80 rounded-2xl border border-white/90 shadow-[2px_2px_5px_#d1d9e6,-2px_-2px_5px_#ffffff]">
+                                            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">
+                                                {language === 'np' ? 'मातृ विभाग / क्याम्पस निर्देशनालय' : 'Issuing Directorate & Campus Authority'}
+                                            </span>
+                                            <div className="flex items-center gap-2">
+                                                <Building2 className="w-4 h-4 text-amber-600 shrink-0" />
+                                                <span className="font-semibold text-xs sm:text-sm text-slate-800 block truncate">
+                                                    {language === 'np'
+                                                        ? (certData?.issuingAuthorityNp || certData?.issuingAuthority || 'आदिकवि भानुभक्त क्याम्पस, व्यास-०१, विज्ञानचौर, तनहुँ')
+                                                        : (certData?.issuingAuthority || 'Aadikavi Bhanubhakta Campus, Vyas-01, Bigyanchaur, Tanahun')}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Action Toolbar */}
+                                    <div className="pt-2 flex flex-wrap items-center gap-3">
+                                        <button
+                                            type="button"
+                                            onClick={() => setIsCertLightboxOpen(true)}
+                                            className="px-5 py-2.5 neu-button-primary text-white text-xs font-bold rounded-xl shadow-[3px_3px_7px_#d1d9e6,-3px_-3px_7px_#ffffff] transition-all flex items-center gap-2 cursor-pointer"
+                                        >
+                                            <ZoomIn className="w-4 h-4" />
+                                            <span>{language === 'np' ? 'प्रमाण-पत्र पूर्ण हेर्नुहोस्' : 'View Full Document'}</span>
+                                        </button>
+                                        
+                                        <span className="text-[11px] text-slate-500 font-medium flex items-center gap-1.5">
+                                            <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                                            <span>TU Tribhuvan University Affiliated Record</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ) : (
+                        /* MINIMAL NEUMORPHIC NOT REGISTERED VIEW */
+                        <div className="bg-[#eef2f7] rounded-3xl p-6 sm:p-8 border border-white/80 shadow-[7px_7px_18px_#d1d9e6,-7px_-7px_18px_#ffffff] flex flex-col sm:flex-row items-center sm:items-start gap-4 text-center sm:text-left">
+                            <div className="w-12 h-12 rounded-2xl bg-[#eef2f7] text-slate-400 flex items-center justify-center shrink-0 shadow-[inset_2px_2px_4px_#d1d9e6,inset_-2px_-2px_4px_#ffffff] border border-white/60">
+                                <FileX className="w-6 h-6 text-slate-400" />
+                            </div>
+                            <div className="space-y-1.5">
+                                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#eef2f7] text-slate-600 text-xs font-bold border border-white/80 shadow-[2px_2px_4px_#d1d9e6,-2px_-2px_4px_#ffffff]">
+                                    <span>Not Registered</span>
+                                </div>
+                                <h4 className="font-bold text-slate-800 text-sm sm:text-base">
+                                    {club.name}
+                                </h4>
+                                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed max-w-xl font-normal">
+                                    {certData?.remarks || 'This club is currently operating as an informal student initiative and is not yet officially registered with the campus administration.'}
+                                </p>
+                            </div>
+                        </div>
+                    )}
                 </motion.section>
 
             </main>
@@ -2420,6 +3478,88 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                 <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-normal">
                                     {selectedEventForModal.description}
                                 </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal: Full-size Achievement Detail Lightbox */}
+            {activeAchievementPreview && (
+                <div
+                    onClick={() => setActiveAchievementPreview(null)}
+                    className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 cursor-pointer backdrop-blur-sm animate-in fade-in"
+                >
+                    <div
+                        onClick={(e) => e.stopPropagation()}
+                        className="max-w-xl w-full rounded-3xl overflow-hidden shadow-2xl bg-[#eef2f7] border border-white/90 cursor-default animate-in zoom-in-95 duration-200"
+                    >
+                        <div className="relative h-60 sm:h-72 w-full overflow-hidden bg-slate-800">
+                            <img
+                                src={activeAchievementPreview.image}
+                                alt={activeAchievementPreview.title}
+                                referrerPolicy="no-referrer"
+                                className="w-full h-full object-cover"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+
+                            <button
+                                onClick={() => setActiveAchievementPreview(null)}
+                                className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/50 text-white hover:bg-black/70 flex items-center justify-center backdrop-blur-sm transition-colors cursor-pointer"
+                            >
+                                <X className="w-4 h-4" />
+                            </button>
+
+                            <div className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-between gap-2">
+                                <div className="flex items-center gap-2">
+                                    {activeAchievementPreview.date && (
+                                        <span className="px-3 py-1 rounded-full text-xs font-extrabold text-slate-900 bg-white/95 backdrop-blur-md shadow-sm flex items-center gap-1.5">
+                                            <Calendar className="w-3.5 h-3.5 text-[#0c72b8]" />
+                                            <span>{activeAchievementPreview.date}</span>
+                                        </span>
+                                    )}
+                                    {activeAchievementPreview.category && (
+                                        <span className="px-3 py-1 rounded-full text-xs font-bold text-[#0c72b8] bg-white/95 backdrop-blur-md shadow-sm">
+                                            {activeAchievementPreview.category}
+                                        </span>
+                                    )}
+                                </div>
+
+                                {activeAchievementPreview.badge && (
+                                    <span className="px-3 py-1 rounded-full text-xs font-bold text-amber-900 bg-amber-200/90 backdrop-blur-md shadow-sm flex items-center gap-1.5">
+                                        <Trophy className="w-3.5 h-3.5 text-amber-700" />
+                                        <span>{activeAchievementPreview.badge}</span>
+                                    </span>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="p-6 sm:p-7 space-y-4 bg-[#eef2f7]">
+                            <div>
+                                <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 font-poppins leading-snug">
+                                    {activeAchievementPreview.title}
+                                </h3>
+                                <p className="text-xs text-slate-500 font-medium mt-1">
+                                    {club.name} • Aadikavi Bhanubhakta Campus
+                                </p>
+                            </div>
+
+                            {activeAchievementPreview.description && (
+                                <div className="p-4 bg-white/80 rounded-2xl border border-white/80 shadow-[inset_1.5px_1.5px_3px_#d1d9e6,inset_-1.5px_-1.5px_3px_#ffffff]">
+                                    <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-normal">
+                                        {activeAchievementPreview.description}
+                                    </p>
+                                </div>
+                            )}
+
+                            <div className="pt-2 flex justify-end">
+                                <button
+                                    type="button"
+                                    onClick={() => setActiveAchievementPreview(null)}
+                                    className="px-5 py-2 bg-[#eef2f7] hover:bg-white text-[#0c72b8] font-bold text-xs sm:text-sm rounded-xl border border-white/80 shadow-[2px_2px_5px_#d1d9e6,-2px_-2px_5px_#ffffff] active:shadow-[inset_1px_1px_2px_#d1d9e6] transition-all cursor-pointer"
+                                >
+                                    Close Window
+                                </button>
                             </div>
                         </div>
                     </div>

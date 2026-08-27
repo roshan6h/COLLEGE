@@ -59,6 +59,15 @@ export interface AchievementItem {
     badge?: string;
 }
 
+export interface ClubGalleryItem {
+    id?: string;
+    image: string;
+    title?: string;
+    date?: string;
+    category?: string;
+    description?: string;
+}
+
 export interface ClubCertificate {
     isRegistered: boolean;
     certificateNumber?: string;
@@ -91,7 +100,11 @@ export interface Club {
     leadership?: LeadershipMember[];
     achievements?: (string | AchievementItem)[];
     achievementItems?: AchievementItem[];
+    aboutImages?: string[];
+    aboutUsImages?: string[];
     galleryImages?: string[];
+    galleryItems?: (string | ClubGalleryItem)[];
+    gallery?: (string | ClubGalleryItem)[];
     contactEmail?: string;
     featured?: boolean;
     vision?: string;
@@ -114,6 +127,13 @@ export interface Club {
         points?: string[];
     };
     history?: string;
+    historyMilestones?: Array<{
+        category: string;
+        year: string;
+        title: string;
+        desc: string;
+        image?: string;
+    }>;
     [key: string]: any;
 }
 
@@ -133,6 +153,11 @@ export const abitClubData: Club = {
     meetingSchedule: 'Every Friday at 3:30 PM',
     roomLocation: 'IT Building, Lab 204',
     contactEmail: 'abit.club@abcampus.edu.np',
+    aboutImages: [
+        'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1000&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&auto=format&fit=crop&q=80'
+    ],
     featured: true,
     vision: 'To make Aadikavi Bhanubhakta Campus the leading force in technology across Tanahun District by helping students learn practical skills and inspiring the wider community through innovation.',
     certificate: {
@@ -157,7 +182,7 @@ export const abitClubData: Club = {
         senderName: 'Biwash Ranabhat',
         senderRole: 'President, ABIT Club',
         message: 'ABIT Club is a place where ideas become opportunities and students become confident creators. Together, let us learn from one another, build meaningful solutions and lead with purpose.',
-        avatarUrl: '/public/abit/bibash.webp'
+        avatarUrl: '/abit/bibash.webp'
     },
     advisorMessage: {
         senderName: 'Er. Ghan Bahadur Thapa',
@@ -175,6 +200,15 @@ export const abitClubData: Club = {
         ]
     },
     history: 'ABIT Club was founded in 2018 by IT faculty members and enthusiastic BIM students. From a small study circle, it has grown into an active committee with over 120 members, managing campus digital initiatives and hosting Tanahun Tech Fest.',
+    historyMilestones: [
+        {
+            category: 'WHEN IT ALL BEGAN',
+            year: '2018',
+            title: 'Founding Charter & Inception',
+            desc: 'Husbanded by campus IT faculty and enthusiastic BICTE & BIM students, ABIT Club was established to bridge academic learning with hands-on coding and technological innovation.',
+            image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&auto=format&fit=crop&q=80'
+        }
+    ],
     leadership: [
         {
             id: 'l1',
@@ -294,11 +328,7 @@ export const abitClubData: Club = {
             avatarUrl: '/abit/maha.webp'
         },
     ],
-    achievements: [
-        'Organized Inter-College Hackathon "Tanahun Tech Fest 2025"',
-        'Trained 250+ students in Full-Stack Web Development & React',
-        'Developed campus digital notice board & student feedback portal'
-    ],
+    achievements: [],
     achievementItems: [
         {
             id: 'ach-1',
@@ -307,7 +337,7 @@ export const abitClubData: Club = {
             date: 'September 2023',
             category: 'Best Club',
             badge: 'Major Milestone',
-            image: '/abit/ach/023.webp'
+            image: '/abit/023.webp'
         },
         {
             id: 'ach-2',
@@ -316,7 +346,104 @@ export const abitClubData: Club = {
             date: 'September 2024',
             category: 'Best Club',
             badge: 'Major Milestone',
-            image: '/abit/ach/024.webp'
+            image: '/abit/024.webp'
+        }
+    ],
+
+    galleryItems: [
+        
+        {
+            id: 'gal-abit-1',
+            title: '',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/abit/g1.webp'
+        },
+        {
+            id: 'gal-abit-2',
+            title: '',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/abit/g2.webp'
+        },
+        {
+            id: 'gal-abit-3',
+            title: '',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/abit/g3.webp'
+        },
+        {
+            id: 'gal-abit-4',
+            title: '',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image:'/abit/g4.webp'
+        },
+        {
+            id: 'gal-abit-5',
+            title: '',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/abit/g5.webp'
+        },
+        {
+            id: 'gal-abit-6',
+            title: '',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/abit/g6.webp'
+        },
+    
+        {
+            id: 'gal-abit-7',
+            title: '',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/abit/g7.webp'
+        },
+
+        {
+            id: 'gal-abit-8',
+            title: '',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/abit/g8.webp'
+        }
+        ,
+        {
+            id: 'gal-abit-9',
+            title: '',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/abit/g9.webp'
+        }
+        ,
+        {
+            id: 'gal-abit-10',
+            title: '',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/abit/g10.webp'
+        }
+        ,
+        {
+            id: 'gal-abit-11',
+            title: '',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/abit/g11.webp'
         }
     ]
 };
@@ -394,40 +521,8 @@ export const alumniWelfareData: Club = {
             avatarUrl: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=300&h=300&fit=crop&crop=face'
         }
     ],
-    achievements: [
-        'Secured QAA Re-accreditation Support and Campus Library digital expansion',
-        'Established 24/7 Campus Emergency Medical Relief Fund',
-        'Constructed student recreation gazebo and upgraded sports facilities',
-        'Organized annual Campus Week with 3,000+ attendees'
-    ], achievementItems: [
-        {
-            id: 'ach-1',
-            title: 'Organized Inter-College Hackathon "Tanahun Tech Fest 2025"',
-            description: 'Brought together over 180+ developers, designers, and innovators across 12 colleges in Gandaki Province for 36 hours of competitive coding.',
-            date: 'Jan 2025',
-            category: 'Hackathon & Innovation',
-            badge: 'Major Milestone',
-            image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&auto=format&fit=crop&q=80'
-        },
-        {
-            id: 'ach-2',
-            title: 'Trained 250+ Students in Full-Stack Web Development & React',
-            description: 'Delivered an intensive 6-week hands-on bootcamp covering modern JavaScript, TypeScript, React 18, and API architecture with 94% course completion rate.',
-            date: 'Nov 2024',
-            category: 'Technical Training',
-            badge: 'Capacity Building',
-            image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&auto=format&fit=crop&q=80'
-        },
-        {
-            id: 'ach-3',
-            title: 'Developed Campus Digital Notice Board & Student Feedback Portal',
-            description: 'Engineered an in-house digital signage software and mobile-responsive portal replacing physical paper notices across all campus departments.',
-            date: 'Aug 2024',
-            category: 'Campus Digitalization',
-            badge: 'Institutional Impact',
-            image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&auto=format&fit=crop&q=80'
-        }
-    ],
+    achievements: [],
+    achievementItems: [],
     galleryImages: [
         'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&auto=format&fit=crop&q=80'
     ]
@@ -652,12 +747,8 @@ export const bbaClubData: Club = {
             email: ""
         }
     ],
-    achievements: [
-        'Hosted National Management Fest "BizVenture 2025"',
-        'Secured Top 3 position in Nepal Student Stock Market Challenge',
-        'Facilitated 15+ student internships in regional banks and MNCs',
-        'Published annual business research digest "Management Vista"'
-    ],
+    achievements: [],
+    achievementItems: [],
     galleryImages: [
         'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&auto=format&fit=crop&q=80',
         'https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=800&auto=format&fit=crop&q=80'
@@ -718,7 +809,7 @@ export const abccricket: Club = {
             name: 'Shiva Mishra',
             role: 'Club Advisor',
             department: 'MA Nepali 2nd Year',
-            email: 'shiva.mishra@student.abcampus.edu.np',
+            email: '',
             phone: '+977 ',
             avatarUrl: '/cricket/shiva.webp'
         },
@@ -727,7 +818,7 @@ export const abccricket: Club = {
             name: 'Dikpal Adhikari',
             role: 'Club Advisor',
             department: 'MA Nepali 2nd Year',
-            email: 'dikpal.adhikari@student.abcampus.edu.np',
+            email: '',
             phone: '+977 9846954665',
             avatarUrl: '/cricket/dikpal.webp'
         },
@@ -736,7 +827,7 @@ export const abccricket: Club = {
             name: 'Pramish Neupane',
             role: 'President',
             department: 'MA Nepali 2nd Year',
-            email: 'npramish1@gmail.com',
+            email: '',
             phone: '+977 9767279339',
             avatarUrl: '/cricket/pramish.webp'
         },
@@ -745,16 +836,16 @@ export const abccricket: Club = {
             name: 'Ram Shrestha',
             role: 'Vice President',
             department: 'BBS 2nd Year',
-            email: 'ram.shrestha@student.abcampus.edu.np',
+            email: '',
             phone: '+977 9704703317',
-            avatarUrl: '/cricket/ram.webp'
+            avatarUrl: '/cricket/laxg.webp'
         },
         {
             id: 'lit6',
             name: 'Bipin Adhikari',
             role: 'Secretary',
-            department: 'BICTE 4th Semester',
-            email: 'bipin.adhikari@student.abcampus.edu.np',
+            department: '',
+            email: '',
             phone: '+977 9762861361',
             avatarUrl: '/cricket/bipin.webp',
         },
@@ -763,7 +854,7 @@ export const abccricket: Club = {
             name: 'Bipu Katila',
             role: 'Joint Secretary',
             department: 'BICTE 4th Semester',
-            email: 'ramchandra@abcampus.edu.np',
+            email: '',
             phone: '+977 9704506956',
             avatarUrl: '/cricket/bipug.webp'
         },
@@ -772,7 +863,7 @@ export const abccricket: Club = {
             name: 'Bisham Thakuri',
             role: 'Treasurer',
             department: 'BICTE 4th Semester',
-            email: 'bisham.thakuri@student.abcampus.edu.np',
+            email: '',
             phone: '+977 9806783037',
             avatarUrl: '/cricket/bisham.webp'
         },
@@ -781,7 +872,7 @@ export const abccricket: Club = {
             name: 'Sabin Shrestha',
             role: 'Joint Treasurer',
             department: 'BICTE 4th Semester',
-            email: 'manoj.pokharel@student.abcampus.edu.np',
+            email: '',
             phone: '+977 9812345678',
             avatarUrl: '/cricket/sabing.webp'
         },
@@ -790,7 +881,7 @@ export const abccricket: Club = {
             name: 'Ashim Chhertri',
             role: 'Member',
             department: 'BICTE 4th Semester',
-            email: 'ramchandra@abcampus.edu.np',
+            email: '',
             phone: '+977 9712062701',
             avatarUrl: '/cricket/ashim.webp',
         },
@@ -799,7 +890,7 @@ export const abccricket: Club = {
             name: 'Ankit Tiwari',
             role: 'Member',
             department: 'BBS 2nd Year',
-            email: 'ankit.tiwari@student.abcampus.edu.np',
+            email: '',
             phone: '+977 9704703317',
             avatarUrl: '/cricket/ankit.webp'
         },
@@ -808,7 +899,7 @@ export const abccricket: Club = {
             name: 'Mandip Bishural',
             role: 'Member',
             department: 'BBS 2nd Year',
-            email: 'mandip.bishural@student.abcampus.edu.np',
+            email: '',
             phone: '+977 ',
             avatarUrl: '/cricket/mandip.webp'
         },
@@ -817,7 +908,7 @@ export const abccricket: Club = {
             name: 'Sandip Thapa',
             role: 'Member',
             department: 'BBS 2nd Year',
-            email: 'sandip.thapa@student.abcampus.edu.np',
+            email: '',
             phone: '+977',
             avatarUrl: '/cricket/sandip.webp'
         },
@@ -826,7 +917,7 @@ export const abccricket: Club = {
             name: 'Sagar Raj Kumar',
             role: 'Member',
             department: 'BBS 2nd Year',
-            email: 'sagar.raj@student.abcampus.edu.np',
+            email: '',
             phone: '+977 9820616913',
             avatarUrl: '/cricket/sagar.webp'
         },
@@ -835,7 +926,7 @@ export const abccricket: Club = {
             name: 'Chandan Pariyar',
             role: 'Member',
             department: 'BBS 2nd Year',
-            email: 'chandan.pariyar@student.abcampus.edu.np',
+            email: '',
             phone: '+977',
             avatarUrl: '/cricket/chandan.webp'
         },
@@ -844,17 +935,21 @@ export const abccricket: Club = {
             name: 'Sandesh Panthi',
             role: 'Member',
             department: 'BBS 2nd Year',
-            email: 'sandesh.panthi@student.abcampus.edu.np',
+            email: '',
             phone: '+977',
             avatarUrl: '/cricket/sandesh.webp'
         }
 
     ],
-    achievements: [
-        'Not Available',
-    ],
+    achievements: [],
+    achievementItems: [],
     galleryImages: [
-        'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=800&auto=format&fit=crop&q=80'
+        '../cricket/c2.webp',
+         '../cricket/c3.webp',
+          '../cricket/c4.webp',
+           '../cricket/c5.webp',
+            '../cricket/c6.webp',
+             '../cricket/c7.webp',
     ]
 };
 
@@ -934,11 +1029,8 @@ export const managementclub: Club = {
             avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&h=300&fit=crop&crop=face'
         }
     ],
-    achievements: [
-        'Conducted Tax Return Filing Workshop for 300+ local SMEs',
-        'Organized Bank Training Orientation with Rastriya Banijya Bank',
-        'Best Academic Circle Award 2024'
-    ],
+    achievements: [],
+    achievementItems: [],
     galleryImages: [
         'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&auto=format&fit=crop&q=80'
     ]
@@ -1154,56 +1246,11 @@ export const human: Club = {
     ],
 
     achievements: [
-        'Organized Inter-Faculty Poetry and Creative Writing Competition',
-        'Conducted Literary Discussion and Nepali Literature Appreciation Program',
-        'Organized Cultural Awareness and Student Expression Program'
+       
     ],
 
     achievementItems: [
-        {
-            id: 'ha-1',
-            title: 'Inter-Faculty Poetry & Creative Writing Competition',
-
-            description:
-                'Provided students from different faculties with a platform to showcase their creativity through poetry, essays, storytelling, and creative writing.',
-
-            date: 'Dec 2025',
-            category: 'Literature & Creativity',
-            badge: 'Major Event',
-
-            image:
-                'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=800&auto=format&fit=crop&q=80'
-        },
-
-        {
-            id: 'ha-2',
-            title: 'Nepali Literature Appreciation Program',
-
-            description:
-                'Organized an interactive literary session focusing on Nepali literature, poetry, writers, and the importance of preserving Nepal’s literary heritage.',
-
-            date: 'Aug 2025',
-            category: 'Literary Program',
-            badge: 'Cultural Impact',
-
-            image:
-                'https://images.unsplash.com/photo-1519682337058-a94d519337bc?w=800&auto=format&fit=crop&q=80'
-        },
-
-        {
-            id: 'ha-3',
-            title: 'Student Debate & Social Awareness Program',
-
-            description:
-                'Conducted student-centered discussions and debates on contemporary social, educational, cultural, and community issues to encourage critical thinking and confident communication.',
-
-            date: 'Mar 2025',
-            category: 'Debate & Awareness',
-            badge: 'Student Engagement',
-
-            image:
-                'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=800&auto=format&fit=crop&q=80'
-        }
+        
     ],
 
     galleryImages: [
@@ -1308,35 +1355,34 @@ export const vyasABC: Club = {
         }
     ],
     achievements: [
-        'VYAS ABC organizes an Inter-School Vedic Quiz Competition ',
+       
     ],
     achievementItems: [
-        {
-            id: 'vy-1',
-            title: 'Registration and Certification of VYAS ABC as a student club at Aadikavi Bhanubhakta Campus',
-            description: 'VYAS ABC is officially recognized as a student club at Aadikavi Bhanubhakta Campus, marking a significant milestone in our journey to empower youth and promote holistic development.',
-            date: '2082-08-14',
-            category: 'Certification',
-            badge: 'Badge of Recognition',
-            image: '../vyas/certificate.webp'
-        },
-        {
-            id: 'vy-2',
-            title: 'VYAS ABC organizes an Inter-School Vedic Quiz Competition ',
-            description: 'Where knowledge becomes devotion, Where wisdom shapes character, And where young minds rise to enlighten society.',
-            date: 'Jan-21-2025',
-            category: 'Competition',
-            badge: 'Major Milestone',
-            image: '../vyas/quizcom.webp'
-        }
+   
 
     ],
 
     galleryImages: [
         '../vyas/vyas1.webp',
         '../vyas/vyas2.webp'
-
-
+    ],
+    galleryItems: [
+        {
+            id: 'gal-vyas-1',
+            title: 'Vedic Quiz & Youth Gathering',
+            date: 'Jan 2025',
+            category: 'Quiz Competition',
+            description: 'Participating students engaging in the inter-school Vedic quiz competition at Aadikavi Bhanubhakta Campus.',
+            image: '../vyas/vyas1.webp'
+        },
+        {
+            id: 'gal-vyas-2',
+            title: 'Club Formation & Inauguration Ceremony',
+            date: '2082 B.S.',
+            category: 'Official Inauguration',
+            description: 'Executive committee and student members during the charter registration ceremony.',
+            image: '../vyas/vyas2.webp'
+        }
     ]
 };
 
@@ -1354,51 +1400,18 @@ export const ALL_CLUBS: Club[] = [
 ];
 
 export const UPCOMING_EVENTS: ClubEvent[] = [
-    // ABIT Club (abit-club)
-
-    // Free Student Union & Alumni Welfare (free-student-union)
     {
-        id: 'evt-fsu-1',
-        clubId: 'free-student-union',
-        clubName: 'Free Student Union & Alumni Welfare',
-        title: 'Annual Campus Sports & Cultural Week 2026',
-        date: '2026-09-02',
-        time: '08:00 AM - 05:00 PM',
-        venue: 'Campus Main Ground & Bhanu Hall',
-        category: 'Campus Grand Event',
-        description: 'Inter-department cricket, volleyball, dance, poetry, debate, and music competitions celebrating campus unity.',
-        capacity: 2000,
-        registeredCount: 890,
-        image: 'https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=800&auto=format&fit=crop&q=80'
-    },
-     {
         id: 'evt-fsu-2',
         clubId: 'free-student-union',
         clubName: 'Free Student Union & Alumni Welfare',
-        title: 'Global Alumni Mentorship & Career Guidance Assembly',
+        title: 'InterFaculty Futsal Tournament',
         date: '2026-09-18',
         time: '11:00 AM - 03:00 PM',
-        venue: 'Main Auditorium',
-        category: 'Alumni & Career',
-        description: 'Connect with distinguished alumni working across banking, IT, public administration, and research.',
+        venue: 'Damauli Futsal',
+        category: 'Sports',
+        description: 'Annual inter-faculty futsal championship organized by Free Student Union & Alumni Welfare.',
         capacity: 250,
         registeredCount: 140,
-        image: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&auto=format&fit=crop&q=80'
-    },
-
-    // BBA Summit & Management Circle (bba-cloud)
-    {
-        id: 'evt-bba-1',
-        clubId: 'bba-cloud',
-        clubName: 'BBA Summit & Management Circle',
-        title: 'Startup Pitch Deck & Youth Venture Summit 2026',
-        date: '2026-08-28',
-        time: '11:00 AM - 03:00 PM',
-        venue: 'Management Seminar Hall',
-        category: 'Business & Pitch',
-        description: 'Present your innovative business plan to regional venture leaders and banking executives. Winning pitches receive mentorship and incubation support.',
-        capacity: 80,
-        registeredCount: 42,
-        image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&auto=format&fit=crop&q=80'
+        image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&auto=format&fit=crop&q=80'
     }
 ];
