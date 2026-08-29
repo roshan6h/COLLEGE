@@ -50,7 +50,12 @@ import {
     Download,
     Flag,
     BarChart3,
-    Box
+    Box,
+    QrCode,
+    Printer,
+    FileCheck2,
+    Sparkle,
+    CheckCheck
 } from 'lucide-react';
 
 import {
@@ -59,10 +64,49 @@ import {
     ClubNotice,
     Language,
     LeadershipMember,
-    ClubGalleryItem,
     UPCOMING_EVENTS
 } from '../app/data/clubsData';
 import { SuggestionMessageBox } from './SuggestionMessageBox';
+import { RegistrationCertificateDoc } from './RegistrationCertificateDoc';
+import { EventCard } from './EventCard';
+import {
+    MobileEventsCarousel,
+    MobileMembersCarousel,
+    MobileAchievementsCarousel
+} from './MobileCarousels';
+
+// Safe Date Parser that avoids UTC timezone offset bugs
+const parseSafeDate = (dateStr: string) => {
+    if (!dateStr) return { month: 'EVENT', day: 'DATE', dateObj: new Date() };
+    const parts = dateStr.split('-');
+    if (parts.length === 3) {
+        const y = parseInt(parts[0], 10);
+        const m = parseInt(parts[1], 10) - 1;
+        const d = parseInt(parts[2], 10);
+        const dateObj = new Date(y, m, d);
+        const month = dateObj.toLocaleString('en-US', { month: 'short' }).toUpperCase();
+        return { month, day: String(d).padStart(2, '0'), dateObj };
+    }
+    const dateObj = new Date(dateStr);
+    const month = isNaN(dateObj.getTime()) ? 'EVENT' : dateObj.toLocaleString('en-US', { month: 'short' }).toUpperCase();
+    const day = isNaN(dateObj.getTime()) ? 'DATE' : String(dateObj.getDate()).padStart(2, '0');
+    return { month, day, dateObj };
+};
+
+// Category translation helper
+const getCategoryLabel = (cat: string, lang?: Language | string) => {
+    if (lang !== 'np') return cat;
+    switch (cat) {
+        case 'All': return 'सबै';
+        case 'Workshop & Tech': return 'कार्यशाला र प्रविधि';
+        case 'Business & Pitch': return 'व्यापार र पिच';
+        case 'Sports & Athletics': return 'खेलकुद र एथलेटिक्स';
+        case 'Humanitarian & Health': return 'मानवता र स्वास्थ्य';
+        case 'Literature & Arts': return 'साहित्य र कला';
+        case 'Eco & Environment': return 'वातावरण र संरक्षण';
+        default: return cat;
+    }
+};
 
 export interface AchievementCardData {
     id: string;
@@ -386,39 +430,32 @@ export const ClubPage: React.FC<ClubPageProps> = ({
         ];
     }, [club.aboutImages, club.aboutUsImages]);
 
-    // Normalize gallery images/items to structured items with image, title, date, category, description
-    const rawGallery = club.galleryItems || club.gallery || club.galleryImages || [];
-    const galleryItems: { id: string; image: string; title: string; date?: string; category?: string; description?: string }[] = useMemo(() => {
-        return rawGallery.map((item, idx) => {
-            if (typeof item === 'string') {
-                const defaultTitles = [
-                    'Campus Tech Symposium',
-                    'Hands-on React & AI Workshop',
-                    'Inter-College Hackathon 2025',
-                    'Executive Committee Gathering',
-                    'Annual Tech Exhibition & Showcase',
-                    'Student Mentorship & Code Lab',
-                    'Digital Campus Innovation Meet',
-                    'Youth Leadership Forum'
-                ];
-                const defaultYears = ['2026', '2025', '2024', '2024', '2023', '2023', '2022', '2022'];
+    // Normalize gallery images/items strictly from club data in clubsData.ts without hardcoded defaults
+    const galleryItems: { id: string; image: string; title?: string; date?: string; category?: string; description?: string }[] = useMemo(() => {
+        const rawGallery = club.galleryItems || club.gallery || club.galleryImages || [];
+        return rawGallery
+            .map((item, idx) => {
+                if (typeof item === 'string') {
+                    return {
+                        id: `gal-${club.id}-${idx}`,
+                        image: item.trim(),
+                        title: '',
+                        date: '',
+                        category: '',
+                        description: ''
+                    };
+                }
                 return {
-                    id: `gal-${idx}`,
-                    image: item,
-                    title: defaultTitles[idx % defaultTitles.length],
-                    date: defaultYears[idx % defaultYears.length]
+                    id: item.id || `gal-${club.id}-${idx}`,
+                    image: item.image ? item.image.trim() : '',
+                    title: item.title !== undefined ? item.title : '',
+                    date: item.date !== undefined ? item.date : '',
+                    category: item.category !== undefined ? item.category : '',
+                    description: item.description !== undefined ? item.description : ''
                 };
-            }
-            return {
-                id: item.id || `gal-${idx}`,
-                image: item.image,
-                title: item.title || `Moment ${idx + 1}`,
-                date: item.date,
-                category: item.category,
-                description: item.description
-            };
-        });
-    }, [rawGallery]);
+            })
+            .filter((item) => item.image.length > 0);
+    }, [club.galleryItems, club.gallery, club.galleryImages, club.id]);
 
     const galleryList = useMemo(() => galleryItems.map(g => g.image), [galleryItems]);
 
@@ -1150,7 +1187,20 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                         ) : (
                             /* Clean, Flush Left-Aligned Grid - perfectly lined up with the section header */
                             <div className="space-y-5 w-full">
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 w-full">
+                                {/* Mobile Horizontal Swipe Carousel (< sm) */}
+                                <div className="sm:hidden">
+                                    <MobileAchievementsCarousel
+                                        achievements={achievements}
+                                        language={language}
+                                        onSelectAchievement={(ach) => setActiveAchievementPreview(ach)}
+                                        getContextualAchievementImage={getContextualAchievementImage}
+                                        clubCategory={club.category}
+                                        extractYear={extractYear}
+                                    />
+                                </div>
+
+                                {/* Desktop / Tablet Grid (sm+) */}
+                                <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 w-full">
                                     {displayedAchievements.map((ach, idx) => {
                                         const year = extractYear(ach.date, idx);
                                         const categoryTag = ach.category || (idx === 0 ? 'Hackathon & Innovation' : idx === 1 ? 'Technical Training' : idx === 2 ? 'Campus Impact' : 'Academic Milestone');
@@ -1236,7 +1286,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
 
                                 {/* Show More / Less Toggle Button */}
                                 {achievements.length > 3 && (
-                                    <div className="flex justify-start pt-1">
+                                    <div className="hidden sm:flex justify-start pt-1">
                                         <button
                                             onClick={() => setShowAllAchievements((prev) => !prev)}
                                             className="px-5 py-2.5 bg-[#eef2f7] hover:bg-white text-slate-800 hover:text-[#0c72b8] text-xs font-bold rounded-xl shadow-[3px_3px_8px_#d1d9e6,-3px_-3px_8px_#ffffff] hover:shadow-[5px_5px_12px_#c8d2e2,-5px_-5px_12px_#ffffff] border border-white/80 transition-all duration-200 flex items-center gap-1.5 cursor-pointer"
@@ -1615,82 +1665,33 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                             <p className="text-sm text-slate-500 font-medium">No upcoming events at the moment.</p>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-                            {clubEventsList.map((evt) => {
-                                return (
-                                    <div
+                        <div className="space-y-6">
+                            {/* Mobile Horizontal Swipe Carousel (< md) */}
+                            <div className="md:hidden">
+                                <MobileEventsCarousel
+                                    events={clubEventsList}
+                                    language={language}
+                                    onSelectClubById={undefined}
+                                    onOpenModal={(evt) => setSelectedEventForModal(evt)}
+                                    getCategoryLabel={getCategoryLabel}
+                                    parseSafeDate={parseSafeDate}
+                                />
+                            </div>
+
+                            {/* Desktop / Tablet Grid (md+) */}
+                            <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+                                {clubEventsList.map((evt) => (
+                                    <EventCard
                                         key={evt.id}
-                                        className="group bg-[#eef2f7] rounded-3xl p-5 border border-white/80 shadow-[6px_6px_14px_#d1d9e6,-6px_-6px_14px_#ffffff] hover:shadow-[8px_8px_18px_#c8d2e2,-8px_-8px_18px_#ffffff] transition-all flex flex-col justify-between hover:-translate-y-1"
-                                    >
-                                        <div>
-                                            {/* Image Banner with Badges */}
-                                            <div className="relative w-full h-44 sm:h-48 rounded-2xl overflow-hidden bg-slate-200 mb-3.5 shadow-[inset_2px_2px_4px_#d1d9e6,inset_-2px_-2px_4px_#ffffff]">
-                                                <img
-                                                    src={evt.image || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80'}
-                                                    alt={evt.title}
-                                                    referrerPolicy="no-referrer"
-                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                                />
-                                                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent pointer-events-none" />
-                                                
-                                                {evt.category && (
-                                                    <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md text-white text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full border border-white/20 shadow-sm">
-                                                        {evt.category}
-                                                    </div>
-                                                )}
-                                                
-                                                <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-md text-slate-900 rounded-xl px-2.5 py-1 text-center min-w-[46px] shadow-md border border-white/80">
-                                                    <span className="block text-[9px] font-extrabold text-[#0c72b8] tracking-widest uppercase leading-none">
-                                                        {new Date(evt.date).toLocaleString('default', { month: 'short' }).toUpperCase()}
-                                                    </span>
-                                                    <span className="block text-sm font-extrabold text-slate-900 leading-tight mt-0.5">
-                                                        {new Date(evt.date).getDate() || evt.date}
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            {/* Event Title */}
-                                            <h4 
-                                                onClick={() => setSelectedEventForModal(evt)}
-                                                className="text-base sm:text-lg font-bold text-slate-900 font-poppins leading-snug group-hover:text-[#0c72b8] transition-colors line-clamp-2 mb-1.5 cursor-pointer"
-                                            >
-                                                {evt.title}
-                                            </h4>
-
-                                            {/* Description */}
-                                            {evt.description && (
-                                                <p className="text-xs text-slate-500 leading-relaxed line-clamp-2 mb-3 font-normal">
-                                                    {evt.description}
-                                                </p>
-                                            )}
-
-                                            {/* Time & Venue Indicators */}
-                                            <div className="space-y-1.5 text-xs text-slate-600 font-medium pt-3 my-3 border-t border-slate-300/40">
-                                                <div className="flex items-center gap-2 text-slate-700">
-                                                    <Clock className="w-3.5 h-3.5 text-[#0c72b8] shrink-0" />
-                                                    <span className="truncate">{evt.time}</span>
-                                                </div>
-                                                <div className="flex items-center gap-2 text-slate-700">
-                                                    <MapPin className="w-3.5 h-3.5 text-[#0c72b8] shrink-0" />
-                                                    <span className="truncate">{evt.venue}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/* Interactive Actions */}
-                                        <div className="pt-2">
-                                            <button
-                                                type="button"
-                                                onClick={() => setSelectedEventForModal(evt)}
-                                                className="w-full py-2.5 px-4 bg-[#eef2f7] hover:bg-white text-slate-800 hover:text-[#0c72b8] text-xs sm:text-sm font-bold rounded-xl transition-all shadow-[3px_3px_7px_#d1d9e6,-3px_-3px_7px_#ffffff] hover:shadow-[5px_5px_12px_#c8d2e2,-5px_-5px_12px_#ffffff] border border-white/80 cursor-pointer flex items-center justify-center gap-2 group/btn"
-                                            >
-                                                <Info className="w-4 h-4 text-[#0c72b8] group-hover/btn:scale-110 transition-transform" />
-                                                <span>View Details</span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                );
-                            })}
+                                        evt={evt}
+                                        language={language}
+                                        onSelectClubById={undefined}
+                                        onOpenModal={(e) => setSelectedEventForModal(e)}
+                                        getCategoryLabel={getCategoryLabel}
+                                        parseSafeDate={parseSafeDate}
+                                    />
+                                ))}
+                            </div>
                         </div>
                     )}
                 </motion.section>
@@ -2116,7 +2117,8 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                 const milestonesData = (club.historyMilestones && club.historyMilestones.length > 0)
                                     ? club.historyMilestones
                                     : defaultMilestones;
-                             return milestonesData.map((item, idx)  => (
+
+                                return milestonesData.map((item, idx) => (
                                     <motion.div
                                         key={idx}
                                         initial={{ opacity: 0, y: 40 }}
@@ -2480,7 +2482,17 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                         </div>
                     ) : (
                         <div className="space-y-6">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+                            {/* Mobile Horizontal Swipe Carousel (< sm) */}
+                            <div className="sm:hidden">
+                                <MobileMembersCarousel
+                                    members={filteredLeadership}
+                                    language={language}
+                                    clubName={club.name}
+                                />
+                            </div>
+
+                            {/* Desktop / Tablet Grid (sm+) */}
+                            <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
                                 {displayedLeadership.map((member, idx) => {
                                     const roleLower = (member.role || '').toLowerCase();
                                     const isPresident = roleLower.includes('president') && !roleLower.includes('vice');
@@ -2592,7 +2604,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
 
                             {/* Show More / Show Less Toggle Button */}
                             {hasMoreMembers && (
-                                <div className="flex justify-center pt-3">
+                                <div className="hidden sm:flex justify-center pt-3">
                                     <button
                                         onClick={() => setShowAllMembers(!showAllMembers)}
                                         className="inline-flex items-center gap-2.5 px-6 py-3 rounded-2xl bg-[#eef2f7] text-[#0c72b8] text-sm font-extrabold hover:text-[#09568c] shadow-[4px_4px_10px_#d1d9e6,-4px_-4px_10px_#ffffff] active:shadow-[inset_3px_3px_6px_#d1d9e6,inset_-3px_-3px_6px_#ffffff] hover:-translate-y-0.5 border border-white/80 transition-all cursor-pointer"
@@ -2651,8 +2663,8 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                             <p className="text-sm text-slate-500 font-medium">No activity photo collection available yet for this committee.</p>
                         </div>
                     ) : (
-                        /* Pinterest Masonry Columns Grid */
-                        <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 sm:gap-5 space-y-4 sm:space-y-5">
+                        /* Pinterest Masonry Columns Grid - 2 columns on mobile, 2 on sm, 3 on md, 4 on lg */
+                        <div className="columns-2 sm:columns-2 md:columns-3 lg:columns-4 gap-3 sm:gap-5 space-y-3 sm:space-y-5">
                             {galleryItems.map((item, idx) => (
                                 <motion.div
                                     key={item.id || idx}
@@ -2660,26 +2672,26 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ duration: 0.35, delay: (idx % 4) * 0.05 }}
-                                    className="break-inside-avoid group relative flex flex-col cursor-pointer mb-4 sm:mb-5"
+                                    className="break-inside-avoid group relative flex flex-col cursor-pointer mb-3 sm:mb-5"
                                     onClick={() => setSelectedGalleryIndex(idx)}
                                 >
                                     {/* Pinterest Pin Card Container */}
-                                    <div className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-100 shadow-[3px_3px_10px_#d1d9e6,-3px_-3px_10px_#ffffff] border border-white/80 group-hover:shadow-[5px_5px_16px_#c8d2e2,-5px_-5px_16px_#ffffff] transition-all duration-300">
+                                    <div className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-200 shadow-[3px_3px_10px_#d1d9e6,-3px_-3px_10px_#ffffff] border border-white/80 group-hover:shadow-[5px_5px_16px_#c8d2e2,-5px_-5px_16px_#ffffff] transition-all duration-300 min-h-[130px] sm:min-h-[170px]">
                                         {/* Image */}
                                         <img
                                             src={item.image}
-                                            alt={item.title}
+                                            alt={item.title || 'Club activity photo'}
                                             loading="lazy"
                                             referrerPolicy="no-referrer"
-                                            className="w-full h-auto object-cover block group-hover:scale-[1.02] transition-transform duration-500 will-change-transform"
+                                            className="w-full h-auto object-cover block group-hover:scale-[1.03] transition-transform duration-500 will-change-transform min-h-[120px] sm:min-h-[160px]"
                                         />
 
                                         {/* Pinterest Hover Overlay */}
-                                        <div className="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none p-3 sm:p-4 flex flex-col justify-between">
+                                        <div className="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none p-2 sm:p-4 flex flex-col justify-between">
                                             {/* Top Bar: Category pill / Save or View red pill */}
                                             <div className="flex items-center justify-between w-full pointer-events-auto">
                                                 {item.category ? (
-                                                    <span className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider border border-white/20">
+                                                    <span className="px-2 sm:px-3 py-0.5 sm:py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-[9px] sm:text-[10px] font-bold uppercase tracking-wider border border-white/20 truncate max-w-[90px] sm:max-w-none">
                                                         {item.category}
                                                     </span>
                                                 ) : (
@@ -2691,7 +2703,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                                         e.stopPropagation();
                                                         setSelectedGalleryIndex(idx);
                                                     }}
-                                                    className="px-4 py-1.5 rounded-full bg-[#e60023] hover:bg-[#ad081b] text-white text-xs font-bold shadow-md transition-all cursor-pointer transform group-hover:scale-100 scale-95"
+                                                    className="px-2.5 sm:px-4 py-1 sm:py-1.5 rounded-full bg-[#e60023] hover:bg-[#ad081b] text-white text-[10px] sm:text-xs font-bold shadow-md transition-all cursor-pointer transform group-hover:scale-100 scale-95"
                                                     title="View Pin"
                                                 >
                                                     View
@@ -2700,22 +2712,22 @@ export const ClubPage: React.FC<ClubPageProps> = ({
 
                                             {/* Bottom Action Bar: Share & Expand Controls */}
                                             <div className="flex items-center justify-between w-full pointer-events-auto">
-                                                <div className="flex items-center gap-1.5">
+                                                <div className="flex items-center gap-1 sm:gap-1.5">
                                                     <button
                                                         type="button"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
                                                             if (navigator.share) {
-                                                                navigator.share({ title: item.title, url: window.location.href });
+                                                                navigator.share({ title: item.title || 'Club Photo', url: window.location.href });
                                                             } else {
                                                                 navigator.clipboard.writeText(item.image);
                                                                 alert('Photo link copied!');
                                                             }
                                                         }}
-                                                        className="w-8 h-8 rounded-full bg-white/90 hover:bg-white text-slate-800 flex items-center justify-center shadow-md backdrop-blur-md transition-transform hover:scale-110 cursor-pointer"
+                                                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 hover:bg-white text-slate-800 flex items-center justify-center shadow-md backdrop-blur-md transition-transform hover:scale-110 cursor-pointer"
                                                         title="Share photo"
                                                     >
-                                                        <Share2 className="w-3.5 h-3.5" />
+                                                        <Share2 className="w-3 sm:w-3.5 h-3 sm:h-3.5" />
                                                     </button>
                                                     <a
                                                         href={item.image}
@@ -2723,36 +2735,45 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                                         target="_blank"
                                                         rel="noreferrer"
                                                         onClick={(e) => e.stopPropagation()}
-                                                        className="w-8 h-8 rounded-full bg-white/90 hover:bg-white text-slate-800 flex items-center justify-center shadow-md backdrop-blur-md transition-transform hover:scale-110 cursor-pointer"
+                                                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 hover:bg-white text-slate-800 flex items-center justify-center shadow-md backdrop-blur-md transition-transform hover:scale-110 cursor-pointer"
                                                         title="Open in new tab"
                                                     >
-                                                        <ExternalLink className="w-3.5 h-3.5" />
+                                                        <ExternalLink className="w-3 sm:w-3.5 h-3 sm:h-3.5" />
                                                     </a>
                                                 </div>
 
-                                                <span className="w-8 h-8 rounded-full bg-white/90 text-slate-800 flex items-center justify-center shadow-md backdrop-blur-md">
-                                                    <ZoomIn className="w-3.5 h-3.5 text-[#0c72b8]" />
+                                                <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 text-slate-800 flex items-center justify-center shadow-md backdrop-blur-md">
+                                                    <ZoomIn className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#0c72b8]" />
                                                 </span>
                                             </div>
                                         </div>
                                     </div>
 
                                     {/* Pinterest Style Bottom Title & 3-dots Menu */}
-                                    <div className="pt-2 px-1 flex items-start justify-between gap-2">
-                                        <div className="min-w-0">
-                                            <h4 className="text-xs sm:text-sm font-bold text-slate-800 font-poppins line-clamp-2 leading-tight group-hover:text-[#0c72b8] transition-colors">
-                                                {item.title}
-                                            </h4>
-                                            {item.description && (
-                                                <p className="text-[11px] text-slate-500 line-clamp-1 mt-0.5 font-normal">
-                                                    {item.description}
-                                                </p>
-                                            )}
+                                    {(item.title || item.description || item.date) && (
+                                        <div className="pt-1.5 sm:pt-2 px-1 flex items-start justify-between gap-1.5 sm:gap-2">
+                                            <div className="min-w-0">
+                                                {item.title && (
+                                                    <h4 className="text-[11px] sm:text-sm font-bold text-slate-800 font-poppins line-clamp-2 leading-tight group-hover:text-[#0c72b8] transition-colors">
+                                                        {item.title}
+                                                    </h4>
+                                                )}
+                                                {item.description && (
+                                                    <p className="text-[10px] sm:text-[11px] text-slate-500 line-clamp-1 mt-0.5 font-normal hidden sm:block">
+                                                        {item.description}
+                                                    </p>
+                                                )}
+                                                {item.date && !item.description && (
+                                                    <p className="text-[10px] sm:text-[11px] text-slate-400 mt-0.5">
+                                                        {item.date}
+                                                    </p>
+                                                )}
+                                            </div>
+                                            <div className="shrink-0 text-slate-400 hover:text-slate-600 p-0.5 rounded-full hover:bg-slate-200/60 transition-colors">
+                                                <MoreHorizontal className="w-3.5 sm:w-4 h-3.5 sm:h-4" />
+                                            </div>
                                         </div>
-                                        <div className="shrink-0 text-slate-400 hover:text-slate-600 p-0.5 rounded-full hover:bg-slate-200/60 transition-colors">
-                                            <MoreHorizontal className="w-4 h-4" />
-                                        </div>
-                                    </div>
+                                    )}
                                 </motion.div>
                             ))}
                         </div>
@@ -2819,9 +2840,11 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                         />
                                     </div>
                                     <div className="w-full max-w-2xl text-center mt-3 px-4">
-                                        <h3 className="text-white text-base sm:text-lg font-bold font-poppins">
-                                            {galleryItems[selectedGalleryIndex].title}
-                                        </h3>
+                                        {galleryItems[selectedGalleryIndex].title && (
+                                            <h3 className="text-white text-base sm:text-lg font-bold font-poppins">
+                                                {galleryItems[selectedGalleryIndex].title}
+                                            </h3>
+                                        )}
                                         {galleryItems[selectedGalleryIndex].description && (
                                             <p className="text-white/70 text-xs sm:text-sm mt-1">
                                                 {galleryItems[selectedGalleryIndex].description}
@@ -3013,203 +3036,183 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                     </div>
                 </motion.section>
 
-                {/* 10. REGISTRATION CERTIFICATE SECTION */}
+                {/* 10. REGISTRATION CERTIFICATE SECTION - MINIMALIST & AESTHETIC */}
                 <motion.section
                     id="certificate"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: '-40px' }}
-                    transition={{ duration: 0.45, ease: 'easeOut' }}
+                    transition={{ duration: 0.4, ease: 'easeOut' }}
                     className="space-y-4 scroll-mt-36"
                 >
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1">
-                        <div className="flex items-center gap-2.5">
-                            <div className="w-9 h-9 rounded-xl bg-[#eef2f7] text-[#0c72b8] flex items-center justify-center shadow-[inset_1.5px_1.5px_3px_#d1d9e6,inset_-1.5px_-1.5px_3px_#ffffff] border border-white/60 shrink-0">
-                                <Award className="w-4.5 h-4.5" />
+                    {/* Section Header */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-1">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-sky-50 text-[#0c72b8] border border-sky-100 flex items-center justify-center shrink-0">
+                                <Award className="w-5 h-5 stroke-[2.2]" />
                             </div>
                             <div>
-                                <h3 className="text-lg sm:text-xl font-bold text-slate-900 font-poppins">
+                                <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight font-poppins">
                                     {language === 'np' ? 'क्लब दर्ता प्रमाण-पत्र' : 'Club Registration Certificate'}
                                 </h3>
-                                <p className="text-xs text-slate-500 font-medium hidden sm:block">
-                                    Official accreditation record issued by campus administration
+                                <p className="text-xs sm:text-sm text-slate-400 font-medium">
+                                    {language === 'np'
+                                        ? 'क्याम्पस प्रशासनद्वारा जारी आधिकारिक सम्बन्धन अभिलेख'
+                                        : 'Official accreditation record issued by campus administration'}
                                 </p>
                             </div>
                         </div>
 
                         {isClubRegistered ? (
-                            <span className="self-start sm:self-auto inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-300 shadow-[2px_2px_6px_#d1d9e6,-2px_-2px_6px_#ffffff]">
-                                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                            <div className="self-start sm:self-auto inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky-50 border border-sky-200 text-[#0c72b8] text-xs font-semibold">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#0c72b8]" />
+                                <CheckCircle2 className="w-4 h-4 text-[#0c72b8] stroke-[2.5]" />
                                 <span>{language === 'np' ? 'दर्ता प्रमाणित' : 'Certified & Registered'}</span>
-                            </span>
+                            </div>
                         ) : (
-                            <span className="self-start sm:self-auto inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#eef2f7] text-slate-600 text-xs font-bold border border-white/80 shadow-[2px_2px_5px_#d1d9e6,-2px_-2px_5px_#ffffff]">
-                                <AlertCircle className="w-3.5 h-3.5 text-slate-500" />
+                            <div className="self-start sm:self-auto inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-slate-500 text-xs font-semibold">
+                                <AlertCircle className="w-4 h-4 text-slate-400" />
                                 <span>{language === 'np' ? 'दर्ता नभएको' : 'Not Registered'}</span>
-                            </span>
+                            </div>
                         )}
                     </div>
 
                     {isClubRegistered ? (
-                        /* PREMIUM NEUMORPHIC REGISTERED VIEW */
-                        <div className="bg-[#eef2f7] rounded-3xl p-5 sm:p-7 border border-white/80 shadow-[7px_7px_18px_#d1d9e6,-7px_-7px_18px_#ffffff]">
-                            <div className="flex flex-col md:flex-row items-center md:items-start gap-6 lg:gap-8">
-                                {/* Portrait Certificate Photo Frame (Exact A4 210/297 document ratio) */}
-                                <div className="w-full max-w-[260px] sm:max-w-[290px] shrink-0">
-                                    <div className="p-3.5 bg-white/70 rounded-2xl border border-white/90 shadow-[5px_5px_14px_#d1d9e6,-5px_-5px_14px_#ffffff]">
-                                        <div
-                                            onClick={() => setIsCertLightboxOpen(true)}
-                                            className="relative aspect-[210/297] w-full rounded-xl overflow-hidden bg-white shadow-[inset_2px_2px_5px_#d1d9e6,inset_-2px_-2px_5px_#ffffff] border border-slate-200/60 cursor-pointer group"
-                                            title="Click to view full certificate"
-                                        >
-                                            <img
-                                                src={certData?.certificateImage || 'https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?w=1200&auto=format&fit=crop&q=80'}
-                                                alt={`${club.name} Certificate`}
-                                                referrerPolicy="no-referrer"
-                                                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
-                                            />
+                        /* CLEAN MINIMALIST SHOWCASE WITHOUT CONTAINER BACKGROUND */
+                        <div className="pt-2">
+                            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-center">
+                                
+                                {/* LEFT: Reference-styled Certificate Preview (Exact Dimensions) */}
+                                <div className="md:col-span-5 flex flex-col items-center">
+                                    <div 
+                                        onClick={() => setIsCertLightboxOpen(true)}
+                                        className="relative group cursor-pointer w-full max-w-[260px] transition-transform duration-300 hover:scale-[1.02]"
+                                    >
+                                        <RegistrationCertificateDoc
+                                            club={club}
+                                            certData={certData}
+                                            isFullView={false}
+                                        />
 
-                                            {/* Official Ribbon Seal */}
-                                            <div className="absolute top-2 left-2 bg-[#0c72b8] text-white text-[9px] font-bold px-2 py-0.5 rounded shadow-sm flex items-center gap-1">
-                                                <ShieldCheck className="w-3 h-3" />
-                                                <span>Official Seal</span>
+                                        {/* Hover Zoom Overlay Badge */}
+                                        <div className="absolute inset-0 rounded-xl bg-slate-900/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                                            <div className="w-9 h-9 rounded-full bg-white/95 text-slate-800 flex items-center justify-center shadow-lg border border-slate-200">
+                                                <ZoomIn className="w-4 h-4 text-[#0c72b8]" />
                                             </div>
-
-                                            {/* Hover Zoom Overlay */}
-                                            <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center text-white gap-1.5 p-3 text-center backdrop-blur-[1px]">
-                                                <div className="w-10 h-10 rounded-full bg-white/25 backdrop-blur-md flex items-center justify-center shadow-md">
-                                                    <ZoomIn className="w-5 h-5 text-white" />
-                                                </div>
-                                                <span className="text-[11px] font-bold tracking-wide">
-                                                    {language === 'np' ? 'प्रमाणपत्र हेर्नुहोस्' : 'Click to Expand Document'}
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        {/* Frame bottom metadata */}
-                                        <div className="mt-3 pt-2.5 border-t border-slate-200/80 flex items-center justify-between text-[11px] px-1">
-                                            <span className="text-slate-500 font-medium font-mono text-[10px]">
-                                                {certData?.certificateNumber || '०३/०८२/०८३'}
-                                            </span>
-                                            <button
-                                                type="button"
-                                                onClick={() => setIsCertLightboxOpen(true)}
-                                                className="font-bold text-[#0c72b8] hover:text-blue-800 flex items-center gap-1 cursor-pointer transition-colors"
-                                            >
-                                                <ZoomIn className="w-3.5 h-3.5" />
-                                                <span>Preview</span>
-                                            </button>
                                         </div>
                                     </div>
+
+                                    {/* Click to Expand Prompt */}
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsCertLightboxOpen(true)}
+                                        className="mt-3 inline-flex items-center gap-1.5 text-xs text-slate-500 font-medium hover:text-[#0c72b8] transition-colors cursor-pointer"
+                                    >
+                                        <ZoomIn className="w-3.5 h-3.5" />
+                                        <span>{language === 'np' ? 'प्रमाणपत्र ठूलो बनाएर हेर्नुहोस्' : 'Click certificate to expand'}</span>
+                                    </button>
                                 </div>
 
-                                {/* Minimal Neumorphic Details & Metadata Grid */}
-                                <div className="flex-1 w-full space-y-4 pt-1">
+                                {/* RIGHT: Minimalist Information */}
+                                <div className="md:col-span-7 space-y-4">
+                                    
+                                    {/* Club Title & Standing */}
                                     <div className="space-y-1.5">
-                                        <div className="flex flex-wrap items-center gap-2">
-                                            <h4 className="text-lg sm:text-xl font-bold text-slate-900 font-poppins">
+                                        <div className="flex flex-wrap items-center gap-2.5">
+                                            <h4 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight font-poppins">
                                                 {club.name}
                                             </h4>
-                                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold text-emerald-800 bg-emerald-100 border border-emerald-300">
+                                            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold text-[#0c72b8] bg-sky-50 border border-sky-200">
                                                 Active Standing
                                             </span>
                                         </div>
-                                        <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                                        <p className="text-xs sm:text-sm text-slate-500 font-normal leading-relaxed">
                                             {certData?.remarks || (language === 'np'
                                                 ? `आदिकवि भानुभक्त क्याम्पसमा विद्यार्थी क्लब/संस्था निर्देशिका २०७५ बमोजिम दर्ता भएको आधिकारिक क्लब।`
-                                                : `Officially registered under the Aadikavi Bhanubhakta Campus Student Club & Association Guidelines 2075.`)}
+                                                : `Officially accredited student technology committee operating under the Department of Computer Science & Information Technology.`)}
                                         </p>
                                     </div>
 
-                                    {/* Structured Info Cards Grid */}
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                                        {/* Reg No */}
-                                        <div className="p-3.5 bg-white/80 rounded-2xl border border-white/90 shadow-[2px_2px_5px_#d1d9e6,-2px_-2px_5px_#ffffff] flex items-center justify-between gap-2">
-                                            <div className="min-w-0">
-                                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">
-                                                    {language === 'np' ? 'दर्ता नं. (Reg. Number)' : 'Registration Code'}
-                                                </span>
-                                                <span className="font-mono font-bold text-xs sm:text-sm text-slate-900 truncate block">
-                                                    {certData?.certificateNumber || '०३/०८२/०८३'}
-                                                </span>
-                                            </div>
-                                            <button
-                                                type="button"
-                                                onClick={() => {
-                                                    const regNo = certData?.certificateNumber || '०३/०८२/०८३';
-                                                    navigator.clipboard.writeText(regNo);
-                                                    setCopiedCertNo(true);
-                                                    setTimeout(() => setCopiedCertNo(false), 2000);
-                                                }}
-                                                className="p-2 rounded-xl bg-[#eef2f7] hover:bg-white text-slate-600 hover:text-[#0c72b8] shadow-[2px_2px_4px_#d1d9e6,-2px_-2px_4px_#ffffff] active:shadow-[inset_1px_1px_2px_#d1d9e6] transition-all cursor-pointer shrink-0"
-                                                title="Copy Registration Number"
-                                            >
-                                                {copiedCertNo ? (
-                                                    <Check className="w-3.5 h-3.5 text-emerald-600" />
-                                                ) : (
+                                    {/* Card 1: Registration Code */}
+                                    <div className="bg-white rounded-2xl p-4 sm:p-4.5 shadow-xs border border-slate-200/80 flex items-center justify-between gap-4">
+                                        <div className="min-w-0 flex-1">
+                                            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5 font-poppins">
+                                                {language === 'np' ? 'दर्ता कोड' : 'REGISTRATION CODE'}
+                                            </span>
+                                            <span className="font-extrabold text-sm sm:text-base text-slate-900 tracking-tight block truncate font-mono">
+                                                {certData?.certificateNumber || club.certificateNumber || 'ABC-IT-REG-2075/018'}
+                                            </span>
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                const regNo = certData?.certificateNumber || club.certificateNumber || 'ABC-IT-REG-2075/018';
+                                                navigator.clipboard.writeText(regNo);
+                                                setCopiedCertNo(true);
+                                                setTimeout(() => setCopiedCertNo(false), 2000);
+                                            }}
+                                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 text-xs font-semibold transition-all cursor-pointer shrink-0"
+                                            title="Copy Registration Code"
+                                        >
+                                            {copiedCertNo ? (
+                                                <>
+                                                    <Check className="w-3.5 h-3.5 text-[#0c72b8] stroke-[2.5]" />
+                                                    <span className="text-[#0c72b8] font-bold">{language === 'np' ? 'प्रतिलिपि भयो' : 'Copied!'}</span>
+                                                </>
+                                            ) : (
+                                                <>
                                                     <Copy className="w-3.5 h-3.5" />
-                                                )}
-                                            </button>
-                                        </div>
+                                                    <span>{language === 'np' ? 'प्रतिलिपि' : 'Copy'}</span>
+                                                </>
+                                            )}
+                                        </button>
+                                    </div>
 
-                                        {/* Issued Date */}
-                                        <div className="p-3.5 bg-white/80 rounded-2xl border border-white/90 shadow-[2px_2px_5px_#d1d9e6,-2px_-2px_5px_#ffffff]">
-                                            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">
-                                                {language === 'np' ? 'दर्ता मिति (Registered Date)' : 'Registered Date'}
-                                            </span>
-                                            <div className="flex items-center gap-1.5">
-                                                <Calendar className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-                                                <span className="font-bold text-xs sm:text-sm text-slate-900 block truncate">
-                                                    {language === 'np' ? (certData?.registeredDateNp || certData?.registeredDate) : (certData?.registeredDate || '२०८२/०८/१४')}
-                                                </span>
-                                            </div>
+                                    {/* Card 2: Registered Date */}
+                                    <div className="bg-white rounded-2xl p-4 sm:p-4.5 shadow-xs border border-slate-200/80 flex items-center gap-3.5">
+                                        <div className="w-9 h-9 rounded-xl bg-sky-50 text-[#0c72b8] border border-sky-100 flex items-center justify-center shrink-0">
+                                            <Calendar className="w-4.5 h-4.5 stroke-[2.2]" />
                                         </div>
-
-                                        {/* Issuing Authority */}
-                                        <div className="sm:col-span-2 p-3.5 bg-white/80 rounded-2xl border border-white/90 shadow-[2px_2px_5px_#d1d9e6,-2px_-2px_5px_#ffffff]">
-                                            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">
-                                                {language === 'np' ? 'मातृ विभाग / क्याम्पस निर्देशनालय' : 'Issuing Directorate & Campus Authority'}
+                                        <div className="min-w-0 flex-1">
+                                            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5 font-poppins">
+                                                {language === 'np' ? 'दर्ता मिति' : 'REGISTERED DATE'}
                                             </span>
-                                            <div className="flex items-center gap-2">
-                                                <Building2 className="w-4 h-4 text-amber-600 shrink-0" />
-                                                <span className="font-semibold text-xs sm:text-sm text-slate-800 block truncate">
-                                                    {language === 'np'
-                                                        ? (certData?.issuingAuthorityNp || certData?.issuingAuthority || 'आदिकवि भानुभक्त क्याम्पस, व्यास-०१, विज्ञानचौर, तनहुँ')
-                                                        : (certData?.issuingAuthority || 'Aadikavi Bhanubhakta Campus, Vyas-01, Bigyanchaur, Tanahun')}
-                                                </span>
-                                            </div>
+                                            <span className="font-extrabold text-sm sm:text-base text-slate-900 block truncate">
+                                                {language === 'np'
+                                                    ? (certData?.registeredDateNp || certData?.registeredDate || '२०७५/०४/१२')
+                                                    : (certData?.registeredDate || 'July 28, 2018 (2075-04-12)')}
+                                            </span>
                                         </div>
                                     </div>
 
-                                    {/* Action Toolbar */}
-                                    <div className="pt-2 flex flex-wrap items-center gap-3">
+                                    {/* Bottom: Action & Trustmark */}
+                                    <div className="pt-2 flex flex-wrap items-center gap-4">
                                         <button
                                             type="button"
                                             onClick={() => setIsCertLightboxOpen(true)}
-                                            className="px-5 py-2.5 neu-button-primary text-white text-xs font-bold rounded-xl shadow-[3px_3px_7px_#d1d9e6,-3px_-3px_7px_#ffffff] transition-all flex items-center gap-2 cursor-pointer"
+                                            className="px-5 py-2.5 bg-[#0c72b8] hover:bg-[#0a5e99] text-white text-xs sm:text-sm font-bold rounded-xl shadow-sm hover:shadow active:scale-98 transition-all flex items-center gap-2 cursor-pointer font-poppins"
                                         >
-                                            <ZoomIn className="w-4 h-4" />
+                                            <ZoomIn className="w-4 h-4 stroke-[2.2]" />
                                             <span>{language === 'np' ? 'प्रमाण-पत्र पूर्ण हेर्नुहोस्' : 'View Full Document'}</span>
                                         </button>
                                         
-                                        <span className="text-[11px] text-slate-500 font-medium flex items-center gap-1.5">
-                                            <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                                            <span>TU Tribhuvan University Affiliated Record</span>
-                                        </span>
+                                        <div className="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+                                            <ShieldCheck className="w-4 h-4 text-[#0c72b8] shrink-0" />
+                                            <span>TU Tribhuvan University Affiliated</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     ) : (
-                        /* MINIMAL NEUMORPHIC NOT REGISTERED VIEW */
-                        <div className="bg-[#eef2f7] rounded-3xl p-6 sm:p-8 border border-white/80 shadow-[7px_7px_18px_#d1d9e6,-7px_-7px_18px_#ffffff] flex flex-col sm:flex-row items-center sm:items-start gap-4 text-center sm:text-left">
-                            <div className="w-12 h-12 rounded-2xl bg-[#eef2f7] text-slate-400 flex items-center justify-center shrink-0 shadow-[inset_2px_2px_4px_#d1d9e6,inset_-2px_-2px_4px_#ffffff] border border-white/60">
+                        /* MINIMAL NOT REGISTERED VIEW */
+                        <div className="bg-slate-50 rounded-3xl p-6 sm:p-8 border border-slate-200 flex flex-col sm:flex-row items-center sm:items-start gap-4 text-center sm:text-left">
+                            <div className="w-12 h-12 rounded-2xl bg-white text-slate-400 flex items-center justify-center shrink-0 border border-slate-200 shadow-xs">
                                 <FileX className="w-6 h-6 text-slate-400" />
                             </div>
                             <div className="space-y-1.5">
-                                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#eef2f7] text-slate-600 text-xs font-bold border border-white/80 shadow-[2px_2px_4px_#d1d9e6,-2px_-2px_4px_#ffffff]">
-                                    <span>Not Registered</span>
+                                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-200/70 text-slate-600 text-xs font-bold">
+                                    <span>Not Formally Registered</span>
                                 </div>
                                 <h4 className="font-bold text-slate-800 text-sm sm:text-base">
                                     {club.name}
@@ -3570,58 +3573,69 @@ export const ClubPage: React.FC<ClubPageProps> = ({
             {isCertLightboxOpen && (
                 <div
                     onClick={() => setIsCertLightboxOpen(false)}
-                    className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 cursor-pointer backdrop-blur-sm animate-in fade-in"
+                    className="fixed inset-0 z-50 bg-black/85 flex items-center justify-center p-3 sm:p-6 cursor-pointer backdrop-blur-md animate-in fade-in"
                 >
                     <div
                         onClick={(e) => e.stopPropagation()}
-                        className="max-w-lg w-full rounded-3xl overflow-hidden shadow-2xl bg-[#eef2f7] border border-white/90 cursor-default animate-in zoom-in-95 duration-200"
+                        className="max-w-2xl w-full max-h-[90vh] flex flex-col rounded-3xl overflow-hidden shadow-2xl bg-white border border-slate-200 cursor-default animate-in zoom-in-95 duration-200"
                     >
-                        <div className="p-4 sm:p-5 bg-[#eef2f7] border-b border-slate-300/60 flex items-center justify-between shadow-xs">
-                            <div className="flex items-center gap-2.5">
-                                <div className="w-8 h-8 rounded-xl bg-[#eef2f7] text-emerald-700 flex items-center justify-center shadow-[inset_1.5px_1.5px_3px_#d1d9e6,inset_-1.5px_-1.5px_3px_#ffffff] border border-white/60">
-                                    <ShieldCheck className="w-4 h-4" />
+                        {/* Modal Header */}
+                        <div className="p-4 sm:p-5 bg-slate-50 border-b border-slate-200 flex items-center justify-between shrink-0">
+                            <div className="flex items-center gap-3">
+                                <div className="w-9 h-9 rounded-xl bg-blue-50 text-[#0c72b8] flex items-center justify-center border border-blue-200">
+                                    <ShieldCheck className="w-5 h-5" />
                                 </div>
                                 <div className="min-w-0">
-                                    <h4 className="font-bold text-xs sm:text-sm text-slate-900 truncate">
-                                        {club.name} • {language === 'np' ? 'दर्ता प्रमाण-पत्र' : 'Registration Certificate'}
+                                    <h4 className="font-extrabold text-sm sm:text-base text-slate-900 truncate font-poppins">
+                                        {club.name} • {language === 'np' ? 'आधिकारिक दर्ता प्रमाणपत्र' : 'Official Accreditation Record'}
                                     </h4>
-                                    <p className="text-[10px] sm:text-[11px] text-slate-500 font-mono">
-                                        {certData?.certificateNumber || '०३/०८२/०८३'}
+                                    <p className="text-xs text-slate-500 font-mono">
+                                        Ref Code: {certData?.certificateNumber || club.certificateNumber || 'ABC-IT-REG-2075/018'}
                                     </p>
                                 </div>
                             </div>
                             <button
                                 type="button"
                                 onClick={() => setIsCertLightboxOpen(false)}
-                                className="w-8 h-8 rounded-xl bg-[#eef2f7] text-slate-500 hover:text-slate-900 flex items-center justify-center shadow-[2px_2px_5px_#d1d9e6,-2px_-2px_5px_#ffffff] active:shadow-[inset_1px_1px_2px_#d1d9e6] transition-all cursor-pointer"
+                                className="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-700 flex items-center justify-center transition-colors cursor-pointer"
                             >
                                 <X className="w-4 h-4" />
                             </button>
                         </div>
 
-                        {/* Portrait A4 Document Viewport */}
-                        <div className="p-4 sm:p-6 bg-[#eef2f7] flex items-center justify-center">
-                            <div className="w-full max-w-sm aspect-[210/297] rounded-2xl overflow-hidden shadow-[inset_2px_2px_5px_#d1d9e6,inset_-2px_-2px_5px_#ffffff] border border-white/80 bg-white">
-                                <img
-                                    src={certData?.certificateImage || 'https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?w=1200&auto=format&fit=crop&q=80'}
-                                    alt={`${club.name} Certificate`}
-                                    referrerPolicy="no-referrer"
-                                    className="w-full h-full object-contain object-center"
+                        {/* Document Viewport */}
+                        <div className="p-4 sm:p-6 bg-slate-100/70 overflow-y-auto flex items-center justify-center flex-1">
+                            <div className="w-full max-w-lg">
+                                <RegistrationCertificateDoc
+                                    club={club}
+                                    certData={certData}
+                                    isFullView={true}
                                 />
                             </div>
                         </div>
 
-                        <div className="p-3.5 sm:p-4 bg-[#eef2f7] border-t border-slate-300/50 flex items-center justify-between text-xs text-slate-600">
-                            <span className="text-[11px] text-slate-500 font-medium">
-                                Aadikavi Bhanubhakta Campus
-                            </span>
-                            <button
-                                type="button"
-                                onClick={() => setIsCertLightboxOpen(false)}
-                                className="px-4 py-1.5 bg-[#eef2f7] text-[#0c72b8] font-bold text-xs rounded-xl border border-white/80 shadow-[2px_2px_5px_#d1d9e6,-2px_-2px_5px_#ffffff] active:shadow-[inset_1px_1px_2px_#d1d9e6] transition-all cursor-pointer"
-                            >
-                                Close
-                            </button>
+                        {/* Modal Footer */}
+                        <div className="p-4 bg-white border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 shrink-0">
+                            <div className="text-xs text-slate-500 font-medium">
+                                Tribhuvan University Affiliated • Aadikavi Bhanubhakta Campus
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <button
+                                    type="button"
+                                    onClick={() => window.print()}
+                                    className="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                                >
+                                    <Printer className="w-3.5 h-3.5" />
+                                    <span>Print</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setIsCertLightboxOpen(false)}
+                                    className="px-4 py-1.5 bg-[#0c72b8] hover:bg-blue-800 text-white font-bold text-xs rounded-xl shadow-xs transition-colors cursor-pointer"
+                                >
+                                    Done
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -151,12 +151,12 @@ export const abitClubData: Club = {
     facultyAdvisor: 'Er. Ghan Bahadur Thapa',
     president: 'Biwash Ranabhat',
     meetingSchedule: 'Every Friday at 3:30 PM',
-    roomLocation: 'IT Building, Lab 204',
+    roomLocation: 'IT Building',
     contactEmail: 'abit.club@abcampus.edu.np',
     aboutImages: [
-        'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1000&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&auto=format&fit=crop&q=80'
+        '../abit/group.webp',
+        '../abit/023.webp',
+        '../abit/024.webp'
     ],
     featured: true,
     vision: 'To make Aadikavi Bhanubhakta Campus the leading force in technology across Tanahun District by helping students learn practical skills and inspiring the wider community through innovation.',
@@ -354,7 +354,7 @@ export const abitClubData: Club = {
         
         {
             id: 'gal-abit-1',
-            title: '',
+            title: 'Moment 1',
             date: '202',
             category: 'Graduation',
             description: '',
@@ -444,6 +444,68 @@ export const abitClubData: Club = {
             category: 'Graduation',
             description: '',
             image: '/abit/g11.webp'
+        } ,
+        {
+            id: 'gal-abit-12',
+            title: '',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/abit/g12.webp'
+        }
+         ,
+        {
+            id: 'gal-abit-13',
+            title: '',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/abit/g13.webp'
+        }
+         ,
+        {
+            id: 'gal-abit-14',
+            title: '',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/abit/image1.webp'
+        }
+         ,
+        {
+            id: 'gal-abit-15',
+            title: '',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/abit/image2.webp'
+        }
+         ,
+        {
+            id: 'gal-abit-16',
+            title: '',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/abit/image3.webp'
+        }
+         ,
+        {
+            id: 'gal-abit-17',
+            title: '',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/abit/image4.webp'
+        }
+         ,
+        {
+            id: 'gal-abit-18',
+            title: '',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/abit/image5.webp'
         }
     ]
 };
@@ -575,10 +637,10 @@ export const bbaClubData: Club = {
     manifesto: {
         title: 'BBA Summit Leadership & Professional Ethics Manifesto',
         points: [
-            'Promote unity, leadership, academic excellence, teamwork, and personal development among BBA students. ',
-            'Encourage active participation in academic, cultural, social, sports, and extracurricular activities. ',
-            'Provide opportunities to build practical skills, share ideas, showcase talents, and take on leadership responsibilities. ',
-            'Contribute to the overall growth, confidence, and professional development of BBA students at Aadikavi Bhanubhakta Campus'
+            'hh: Promote unity, leadership, academic excellence, teamwork, and personal development among BBA students. ',
+            'hh :Encourage active participation in academic, cultural, social, sports, and extracurricular activities. ',
+            'hh: Provide opportunities to build practical skills, share ideas, showcase talents, and take on leadership responsibilities. ',
+            'hh: Contribute to the overall growth, confidence, and professional development of BBA students at Aadikavi Bhanubhakta Campus'
         ]
     },
     history: 'Established in 2076 B.S. at Aadikavi Bhanubhakta Campus, Damauli, Tanahun, ABC BBA Student Cloud brings BBA students together on a common platform for academic growth, leadership, teamwork, and communication. Founded under the leadership of its first President, Samundra Dhakal, the club encourages student participation in academic, social, cultural, sports, and leadership activities. Today, it continues to serve as a student-led platform fostering collaboration and the overall development of BBA students within the campus',

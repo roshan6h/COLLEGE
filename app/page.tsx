@@ -17,6 +17,7 @@ import { Header } from '@/components/Header';
 import { HeroSection } from '@/components/HeroSection';
 import { DashboardControls } from '@/components/DashboardControls';
 import { ClubCard } from '@/components/ClubCard';
+import { MobileClubCarousel } from '../components/MobileCarousels';
 import { ClubPage } from '@/components/ClubPage';
 import FSUPage from './fsu/page';
 import { EventsCalendarSection } from '@/components/EventsCalendarSection';
@@ -319,16 +320,28 @@ export default function App() {
               />
 
               {viewMode === 'grid' && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-                  {displayedClubs.map((club) => (
-                    <ClubCard
-                      key={club.id}
-                      club={club}
-                      onSelect={(c) => handleSelectClub(c)}
+                <>
+                  {/* Mobile Horizontal Swipe View (< sm) */}
+                  <div className="sm:hidden">
+                    <MobileClubCarousel
+                      clubs={displayedClubs}
+                      onSelectClub={handleSelectClub}
                       language={language}
                     />
-                  ))}
-                </div>
+                  </div>
+
+                  {/* Tablet / Desktop Grid View (sm+) */}
+                  <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+                    {displayedClubs.map((club) => (
+                      <ClubCard
+                        key={club.id}
+                        club={club}
+                        onSelect={(c) => handleSelectClub(c)}
+                        language={language}
+                      />
+                    ))}
+                  </div>
+                </>
               )}
 
               {viewMode === 'list' && (
@@ -411,19 +424,29 @@ export default function App() {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: false, amount: 0.15 }}
                       transition={{ duration: 0.5 }}
-                      className="neu-flat rounded-2xl p-6"
+                      className="neu-flat rounded-2xl p-4 sm:p-6"
                     >
-                      <div className="flex items-center justify-between pb-4 mb-6 border-b border-gray-200">
+                      <div className="flex items-center justify-between pb-4 mb-5 border-b border-gray-200">
                         <div className="flex items-center gap-2">
                           <Layers className="w-5 h-5 text-[#0c72b8]" />
-                          <h3 className="text-xl font-bold text-[#000d27] font-poppins">{categoryName}</h3>
+                          <h3 className="text-lg sm:text-xl font-bold text-[#000d27] font-poppins">{categoryName}</h3>
                         </div>
                         <span className="neu-pressed text-[#0c72b8] text-xs font-bold px-3 py-1 rounded-full">
                           {clubList.length} Committee{clubList.length > 1 ? 's' : ''}
                         </span>
                       </div>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+                      {/* Mobile Horizontal Swipe for Category Cards */}
+                      <div className="sm:hidden">
+                        <MobileClubCarousel
+                          clubs={clubList}
+                          onSelectClub={handleSelectClub}
+                          language={language}
+                        />
+                      </div>
+
+                      {/* Desktop Grid for Category Cards */}
+                      <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
                         {clubList.map((club) => (
                           <ClubCard
                             key={club.id}

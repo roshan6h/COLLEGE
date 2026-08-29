@@ -3,6 +3,8 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ClubEvent, Language } from '../app/data/clubsData';
+import { EventCard } from './EventCard';
+import { MobileEventsCarousel } from './MobileCarousels';
 import {
     Calendar,
     MapPin,
@@ -24,104 +26,7 @@ import {
 } from 'lucide-react';
 
 export const DEFAULT_CLUB_EVENTS: ClubEvent[] = [
-    {
-        id: 'e1',
-        clubId: 'abit-club',
-        clubName: 'ABIT Club (IT & Computer)',
-        title: 'Full-Stack React & AI Agent Hackathon 2026',
-        date: '2026-08-25',
-        time: '09:00 AM - 05:00 PM',
-        venue: 'IT Lab 204 & Main Auditorium',
-        category: 'Workshop & Tech',
-        description: 'Build innovative web applications integrated with AI models. Prize pool worth NPR 50,000 with certificates and mentorship for all participants!',
-        capacity: 100,
-        registeredCount: 68,
-        image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&auto=format&fit=crop&q=80'
-    },
-    {
-        id: 'e2',
-        clubId: 'bba-cloud',
-        clubName: 'BBA Cloud (Business Summit)',
-        title: 'Startup Pitch Deck & Youth Investor Summit',
-        date: '2026-08-28',
-        time: '11:00 AM - 03:00 PM',
-        venue: 'Management Seminar Hall',
-        category: 'Business & Pitch',
-        description: 'Present your business and venture idea to prominent entrepreneurs, chamber of commerce delegates, and regional bank managers. Top 3 ideas win seed funding mentorship.',
-        capacity: 80,
-        registeredCount: 42,
-        image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&auto=format&fit=crop&q=80'
-    },
-    {
-        id: 'e3',
-        clubId: 'free-student-union',
-        clubName: 'Free Student Union (FSU)',
-        title: 'Annual Campus Sports & Cultural Week 2026',
-        date: '2026-09-02',
-        time: '08:00 AM - 05:00 PM',
-        venue: 'Campus Main Ground & Bhanu Hall',
-        category: 'Sports & Athletics',
-        description: 'Inter-department cricket, volleyball, futsal, dance, poetry, debate, and musical competitions celebrating campus unity and athletic talent.',
-        capacity: 2000,
-        registeredCount: 890,
-        image: 'https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=800&auto=format&fit=crop&q=80'
-    },
-    {
-        id: 'e4',
-        clubId: 'nepal-youth-red-cross',
-        clubName: 'Nepal Youth Red Cross Circle',
-        title: 'Grand Blood Donation & Free Health Screening Camp',
-        date: '2026-09-10',
-        time: '09:30 AM - 03:30 PM',
-        venue: 'Student Recreation Gazebo',
-        category: 'Humanitarian & Health',
-        description: 'Donate blood to save lives. Free eye checkup, blood pressure, and blood sugar tests provided by Damauli Hospital medical staff and volunteers.',
-        capacity: 300,
-        registeredCount: 145,
-        image: 'https://images.unsplash.com/photo-1615461066841-6116e61058f4?w=800&auto=format&fit=crop&q=80'
-    },
-    {
-        id: 'e5',
-        clubId: 'aadikavi-nepali-creative-form',
-        clubName: 'Aadikavi Nepali Creative Form',
-        title: 'Inter-College Poetry & Gazal Recitation Competition',
-        date: '2026-09-15',
-        time: '01:00 PM - 04:30 PM',
-        venue: 'Bhanu Memorial Hall',
-        category: 'Literature & Arts',
-        description: 'Showcase your poetic rhythm, storytelling, and ghazal recitation skills. Renowned Nepalese poets and litterateurs will grace the evaluation panel.',
-        capacity: 150,
-        registeredCount: 78,
-        image: 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=800&auto=format&fit=crop&q=80'
-    },
-    {
-        id: 'e6',
-        clubId: 'nature-conservation-club',
-        clubName: 'Nature Conservation & Eco Club',
-        title: 'Clean Seti River Watershed & Tree Plantation Drive',
-        date: '2026-09-22',
-        time: '07:30 AM - 12:00 PM',
-        venue: 'Seti River Bank & Campus Arboretum',
-        category: 'Eco & Environment',
-        description: 'Environmental cleanliness drive and planting 200 indigenous saplings along the riparian zone. Includes gloves, seedling distribution, and eco-badges for volunteers.',
-        capacity: 120,
-        registeredCount: 94,
-        image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=800&auto=format&fit=crop&q=80'
-    },
-    {
-        id: 'e7',
-        clubId: 'women-empowerment-cell',
-        clubName: 'Women Empowerment Cell',
-        title: 'Women in Leadership & Tech Career Masterclass',
-        date: '2026-09-29',
-        time: '01:30 PM - 04:30 PM',
-        venue: 'Conference Hall A',
-        category: 'Workshop & Tech',
-        description: 'Interactive session featuring inspiring female leaders in business, governance, and technology discussing career growth, negotiation, and entrepreneurship.',
-        capacity: 100,
-        registeredCount: 65,
-        image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&auto=format&fit=crop&q=80'
-    }
+   
 ];
 
 interface EventsCalendarSectionProps {
@@ -492,21 +397,31 @@ export const EventsCalendarSection: React.FC<EventsCalendarSectionProps> = ({
                     </div>
                 </motion.div>
 
-                {/* Events Cards Grid with AnimatePresence for seamless filtering */}
+                {/* Events Cards Grid & Mobile Swipe with AnimatePresence for seamless filtering */}
                 <AnimatePresence mode="popLayout">
                     {displayedEvents.length > 0 ? (
                         <motion.div
-                            key={`events-grid-${filterCategory}-${sortAscending ? 'asc' : 'desc'}-${searchQuery ? 'search' : 'all'}`}
+                            key={`events-view-${filterCategory}-${sortAscending ? 'asc' : 'desc'}-${searchQuery ? 'search' : 'all'}`}
                             initial={{ opacity: 0, y: 15 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -15 }}
                             transition={{ duration: 0.3 }}
-                            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
                         >
-                            {displayedEvents.map((evt, idx) => {
-                                const { month, day } = parseSafeDate(evt.date);
+                            {/* Mobile Horizontal Swipe View (< md) */}
+                            <div className="md:hidden">
+                                <MobileEventsCarousel
+                                    events={displayedEvents}
+                                    language={language}
+                                    onSelectClubById={onSelectClubById}
+                                    onOpenModal={(evt) => setActiveEventModal(evt)}
+                                    getCategoryLabel={getCategoryLabel}
+                                    parseSafeDate={parseSafeDate}
+                                />
+                            </div>
 
-                                return (
+                            {/* Tablet / Desktop Grid View (md+) */}
+                            <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                                {displayedEvents.map((evt, idx) => (
                                     <motion.div
                                         key={evt.id}
                                         initial={{ opacity: 0, y: 20 }}
@@ -517,96 +432,19 @@ export const EventsCalendarSection: React.FC<EventsCalendarSectionProps> = ({
                                             ease: [0.22, 1, 0.36, 1]
                                         }}
                                         whileHover={{ y: -6, transition: { duration: 0.2 } }}
-                                        className="group bg-[#eef2f7] rounded-3xl p-5 sm:p-6 border border-white/80 shadow-[6px_6px_16px_#d1d9e6,-6px_-6px_16px_#ffffff] hover:shadow-[9px_9px_22px_#c8d2e2,-9px_-9px_22px_#ffffff] transition-all flex flex-col justify-between relative"
+                                        className="h-full"
                                     >
-                                        <div>
-                                            {/* Top Image Banner */}
-                                            <div className="relative h-44 w-full rounded-2xl overflow-hidden bg-slate-200 mb-4 shadow-[inset_2px_2px_5px_#d1d9e6,inset_-2px_-2px_5px_#ffffff] shrink-0">
-                                                <img
-                                                    src={evt.image || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80'}
-                                                    alt={evt.title}
-                                                    referrerPolicy="no-referrer"
-                                                    loading="lazy"
-                                                    decoding="async"
-                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                                />
-
-                                                {/* Vignette Overlay */}
-                                                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-950/20 to-transparent pointer-events-none" />
-
-                                                {/* Host Club Tag (Clickable to open committee page) */}
-                                                <button
-                                                    type="button"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        if (onSelectClubById && evt.clubId) {
-                                                            onSelectClubById(evt.clubId);
-                                                        }
-                                                    }}
-                                                    className="absolute top-3 left-3 bg-white/95 text-slate-900 text-[11px] font-bold px-3 py-1 rounded-full border border-slate-200/80 shadow-md backdrop-blur-md hover:bg-blue-50 hover:text-[#0c72b8] transition-colors cursor-pointer flex items-center gap-1"
-                                                    title="View host committee details"
-                                                >
-                                                    <Building2 className="w-3 h-3 text-[#0c72b8]" />
-                                                    <span className="max-w-[130px] truncate">{evt.clubName}</span>
-                                                </button>
-
-                                                {/* Date Badge */}
-                                                <div className="absolute top-3 right-3 bg-white text-slate-900 rounded-2xl px-3 py-1.5 text-center min-w-[50px] shadow-md border border-slate-100/90">
-                                                    <span className="block text-[10px] font-extrabold text-[#0c72b8] tracking-widest uppercase leading-none">
-                                                        {month}
-                                                    </span>
-                                                    <span className="block text-base font-extrabold text-slate-900 leading-tight mt-0.5">
-                                                        {day}
-                                                    </span>
-                                                </div>
-
-                                                {/* Category Label Bottom Tag */}
-                                                <div className="absolute bottom-3 left-3 bg-slate-900/80 backdrop-blur-md text-white text-[10px] font-extrabold px-3 py-1 rounded-full shadow-sm">
-                                                    {getCategoryLabel(evt.category, language)}
-                                                </div>
-                                            </div>
-
-                                            {/* Title & Description */}
-                                            <div className="space-y-2">
-                                                <h3
-                                                    onClick={() => setActiveEventModal(evt)}
-                                                    className="text-base sm:text-lg font-bold text-slate-900 group-hover:text-[#0c72b8] transition-colors leading-snug line-clamp-2 font-poppins cursor-pointer"
-                                                >
-                                                    {evt.title}
-                                                </h3>
-
-                                                <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed font-normal">
-                                                    {evt.description}
-                                                </p>
-                                            </div>
-
-                                            {/* Schedule & Location */}
-                                            <div className="space-y-2 text-xs text-slate-600 font-medium pt-3.5 my-3 border-t border-slate-300/40">
-                                                <div className="flex items-center gap-2 text-slate-700">
-                                                    <Clock className="w-3.5 h-3.5 text-[#0c72b8] shrink-0" />
-                                                    <span className="truncate">{evt.date} • {evt.time}</span>
-                                                </div>
-                                                <div className="flex items-center gap-2 text-slate-700">
-                                                    <MapPin className="w-3.5 h-3.5 text-[#0c72b8] shrink-0" />
-                                                    <span className="truncate">{evt.venue}</span>
-                                                </div>
-                                            </div>
-
-                                            {/* Card Action Button */}
-                                            <div className="pt-3 border-t border-slate-300/40">
-                                                <button
-                                                    type="button"
-                                                    onClick={() => setActiveEventModal(evt)}
-                                                    className="w-full py-2.5 px-4 bg-[#eef2f7] hover:bg-white text-slate-800 hover:text-[#0c72b8] text-xs sm:text-sm font-bold rounded-xl transition-all shadow-[3px_3px_7px_#d1d9e6,-3px_-3px_7px_#ffffff] hover:shadow-[5px_5px_12px_#c8d2e2,-5px_-5px_12px_#ffffff] border border-white/80 cursor-pointer flex items-center justify-center gap-2 group/btn active:scale-[0.98]"
-                                                >
-                                                    <Ticket className="w-4 h-4 text-[#0c72b8] group-hover/btn:scale-110 transition-transform" />
-                                                    <span>{language === 'en' ? 'View Event Details' : 'कार्यक्रम विवरण हेर्नुहोस्'}</span>
-                                                </button>
-                                            </div>
-                                        </div>
+                                        <EventCard
+                                            evt={evt}
+                                            language={language}
+                                            onSelectClubById={onSelectClubById}
+                                            onOpenModal={(e) => setActiveEventModal(e)}
+                                            getCategoryLabel={getCategoryLabel}
+                                            parseSafeDate={parseSafeDate}
+                                        />
                                     </motion.div>
-                                );
-                            })}
+                                ))}
+                            </div>
                         </motion.div>
                     ) : (
                         /* Empty Search & Filter State */

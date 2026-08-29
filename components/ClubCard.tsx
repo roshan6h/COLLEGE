@@ -48,7 +48,7 @@ export const ClubCard: React.FC<ClubCardProps> = ({
             whileTap={{ scale: 0.99 }}
             transition={{ duration: 0.35, ease: "easeOut" }}
             onClick={() => onSelect(club)}
-            className="group neu-card p-5 sm:p-6 flex flex-col justify-between relative overflow-hidden cursor-pointer"
+            className="group neu-card p-5 sm:p-6 flex flex-col justify-between relative overflow-hidden cursor-pointer h-full"
         >
             <div>
                 {/* Category Badge & Optional Featured Badge */}
