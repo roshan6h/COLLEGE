@@ -23,7 +23,7 @@
     padding: 0;
     min-height: 100vh;
     overflow-x: hidden;
-    touch-action: pan-y;
+    touch-action: auto;
     -webkit-overflow-scrolling: touch;
   }
 
@@ -47,6 +47,14 @@ button, a, input, select {
 
 .font-quicksand {
   font-family: 'Quicksand', sans-serif;
+}
+
+.font-serif-luxury {
+  font-family: 'Cormorant Garamond', Georgia, Cambria, serif;
+}
+
+.font-script {
+  font-family: 'Alex Brush', 'Brush Script MT', cursive;
 }
 
 .font-devanagari {

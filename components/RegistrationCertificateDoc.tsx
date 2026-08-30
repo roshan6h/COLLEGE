@@ -1,5 +1,5 @@
-import React from 'react';
-import { Award, ShieldCheck } from 'lucide-react';
+import React, { useState } from 'react';
+import { Award, ShieldCheck, FileText } from 'lucide-react';
 import { Club } from '../app/data/clubsData';
 
 interface RegistrationCertificateDocProps {
@@ -11,6 +11,7 @@ interface RegistrationCertificateDocProps {
         issuedBy?: string;
         remarks?: string;
         certificateImage?: string;
+        [key: string]: any;
     };
     isFullView?: boolean;
 }
@@ -20,9 +21,46 @@ export const RegistrationCertificateDoc: React.FC<RegistrationCertificateDocProp
     certData,
     isFullView = false,
 }) => {
+    const [imageError, setImageError] = useState<boolean>(false);
+
+    const rawImage =
+        certData?.certificateImage ||
+        (certData as any)?.image ||
+        (certData as any)?.certificateDocImage ||
+        club.certificate?.certificateImage ||
+        (club.certificate as any)?.image ||
+        club.certificateImage ||
+        (club as any)?.certificateUrl;
+
+    const certImage = typeof rawImage === 'string' && rawImage.trim().length > 0 ? rawImage.trim() : null;
     const regNo = certData?.certificateNumber || club.certificateNumber || 'ABC-IT-REG-2075/018';
     const regDate = certData?.registeredDate || 'July 28, 2018';
 
+    // If an image is explicitly configured in data.ts for this club and hasn't failed to load, display the custom image
+    if (certImage && !imageError) {
+        return (
+            <div
+                className={`relative w-full overflow-hidden select-none transition-all flex items-center justify-center bg-white ${
+                    isFullView
+                        ? 'rounded-2xl shadow-2xl border border-slate-200 p-1 sm:p-2 max-h-[78vh]'
+                        : 'aspect-[1/1.414] rounded-2xl shadow-[5px_5px_14px_#d1d9e6,-5px_-5px_14px_#ffffff] border border-white/90'
+                }`}
+            >
+                <img
+                    src={certImage}
+                    alt={`${club.name} Official Registration Certificate`}
+                    referrerPolicy="no-referrer"
+                    loading="lazy"
+                    onError={() => setImageError(true)}
+                    className={`w-full h-full block ${
+                        isFullView ? 'max-h-[72vh] object-contain rounded-xl' : 'object-cover rounded-2xl'
+                    } transition-transform duration-300 will-change-transform`}
+                />
+            </div>
+        );
+    }
+
+    // Default Fallback: Elegant Procedural Certificate Template
     return (
         <div
             className={`relative w-full aspect-[1/1.414] bg-white overflow-hidden select-none transition-shadow ${

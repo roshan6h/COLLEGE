@@ -169,7 +169,7 @@ export const abitClubData: Club = {
         issuingAuthorityNp: 'आदिकवि भानुभक्त क्याम्पस - विद्यार्थी कल्याण तथा अतिरिक्त क्रियाकलाप निर्देशनालय',
         registrationType: 'Recognized Autonomous IT Student Committee',
         validUntil: 'Academic Year 2083/84 (Active & Renewed)',
-        certificateImage: 'https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?w=1200&auto=format&fit=crop&q=80',
+        certificateImage: '',
         remarks: 'Officially accredited student technology committee operating under the Department of Computer Science & Information Technology.'
     },
     mission: [
@@ -186,12 +186,12 @@ export const abitClubData: Club = {
     },
     advisorMessage: {
         senderName: 'Er. Ghan Bahadur Thapa',
-        senderRole: 'Club Advisor, Dept of CS & IT',
+        senderRole: 'Club Advisor',
         message: 'ABIT Club has consistently led technical excellence on campus. We encourage students from all faculties to join our workshops and embrace digital literacy.',
-        avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&h=300&fit=crop&crop=face'
+        avatarUrl: '/abit/ghan.webp'
     },
     manifesto: {
-        title: 'ABIT IT Code of Conduct & Innovation Charter',
+        title: 'ABIT IT Code of Conduct',
         points: [
             'Open Access: Coding workshops and tech bootcamps remain 100% free for all enrolled campus students.',
             'Practical Mastery: Every member completes at least one hands-on software project per academic year.',
@@ -204,9 +204,9 @@ export const abitClubData: Club = {
         {
             category: 'WHEN IT ALL BEGAN',
             year: '2018',
-            title: 'Founding Charter & Inception',
-            desc: 'Husbanded by campus IT faculty and enthusiastic BICTE & BIM students, ABIT Club was established to bridge academic learning with hands-on coding and technological innovation.',
-            image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&auto=format&fit=crop&q=80'
+            title: 'History',
+            desc: '',
+            image: ''
         }
     ],
     leadership: [
@@ -512,10 +512,10 @@ export const abitClubData: Club = {
 
 export const alumniWelfareData: Club = {
     id: 'free-student-union',
-    name: 'Free Student Union & Alumni Welfare',
-    nepaliName: 'स्वतन्त्र विद्यार्थी युनियन तथा पूर्वविद्यार्थी कल्याण',
+    name: 'Free Student Union',
+    nepaliName: 'स्वतन्त्र विद्यार्थी युनियन ',
     category: 'Student Welfare',
-    logo: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCTjRGdyZbbonJMArck2KAjZKW90z39NnSUFKCejek5yjEyOC_93E0sgxFCj76NJUsqWvFokGGa2RIfFWQikaX4XR8CmX1M8mmcQq4VIqRV0h8QKQDdPR3uExr1dpHswI2HME96rnsuKI2-3x9xOs6G2XLSS-jtc-s2s6IJ7SGOsHHFUSTX2LwSuJpkiB3tSWK1JWeVlBJbM8CUNHcwz7CkdrxWrpyDvRpsLf3jFnFo1pVzCaJqhi7iEdUq2tzHs_StIdsKEhTIIIhNPA',
+    logo: '/fsu/logo1.webp',
     accentColor: '#991b1b',
     description: 'The elected official governing body for all students at Aadikavi Bhanubhakta Campus. FSU works tirelessly to protect student rights, enhance campus infrastructure, coordinate cross-committee activities, and connect active students with the global alumni network.',
     shortDescription: 'The central student union guarding student rights, campus welfare, alumni connections, and institutional growth.',
@@ -595,15 +595,15 @@ export const bbaClubData: Club = {
     name: 'ABC BBA Student Cloud',
     nepaliName: 'एबीसी बीबीए विद्यार्थी क्लाउड',
     category: 'Management',
-    logo: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDzUnP6eSb8SEAUNO-OUesJ2keSdthciymO40Cl281oQvu0Z6K9e9vEN3jfIL8FyM0cqoaDXulhAVrJTq4KX7BqmwuYNzXitE8Bg7hTTz38qgownOQKZUGnZ0y_oL6FVRzNUw_Kk-wOtYFufn_WTwgEycekVZXEtDOFlw8D1IddoCdmf0pgnc5Z2SjcjuAc6l6Pyh-fL-e32hXYQM9XZY-lzfwVLbleDx_KDouzX24FnpCA_u9HpD-2TEw3eotxPkPAE45vEmKQrtP_jA',
+    logo: '/bbalogo.webp',
     accentColor: '#1d4ed8',
     description: 'ABC BBA Student Cloud is a student-led platform at Aadikavi Bhanubhakta Campus, dedicated to the academic, professional, and personal growth of BBA students. Through seminars, training sessions, and field visits, the club builds leadership, teamwork, and practical skills, fostering a united and collaborative student community.',
     establishedYear: 2076,
     memberCount: 85,
     facultyAdvisor: 'Chij Kumar Shrestha',
     president: 'Ashim Bhandari',
-    meetingSchedule: 'Wednesdays at 4:00 PM',
-    roomLocation: 'Management Block, Conference Hall B',
+    meetingSchedule: '',
+    roomLocation: 'BBA Building',
     contactEmail: 'bbastudentcloud1@gmail.com',
     featured: true,
     vision: 'To be a leading student platform that empowers BBA students through diverse academic, professional, and leadership opportunities, fostering a skilled and collaborative student community.',
@@ -865,6 +865,15 @@ export const abccricket: Club = {
         ]
     },
     history: 'Founded in 2081, the club has organized numerous cricket tournaments and matches, fostering a strong sporting culture among students.',
+     historyMilestones: [
+        {
+            category: 'WHEN IT ALL BEGAN',
+            year: '2081',
+            title: 'History',
+            desc: '',
+            image: ''
+        }
+    ],
     leadership: [
         {
             id: 'lit1',
@@ -1005,13 +1014,56 @@ export const abccricket: Club = {
     ],
     achievements: [],
     achievementItems: [],
-    galleryImages: [
-        '../cricket/c2.webp',
-         '../cricket/c3.webp',
-          '../cricket/c4.webp',
-           '../cricket/c5.webp',
-            '../cricket/c6.webp',
-             '../cricket/c7.webp',
+    galleryItems: [
+        
+        {
+            id: 'c1',
+            title: 'Moment 1',
+            date: '2025',
+            category: '',
+            description: '',
+            image: '/cricket/c2.webp'
+        },
+         {
+            id: 'c2',
+            title: 'Moment 2',
+            date: '2025',
+            category: '',
+            description: '',
+            image: '/cricket/c3.webp'
+        },
+         {
+            id: 'c3',
+            title: 'Moment 3',
+            date: '2025',
+            category: '',
+            description: '',
+            image: '/cricket/c4.webp'
+        },
+         {
+            id: 'c4',
+            title: 'Moment 4',
+            date: '2025',
+            category: '',
+            description: '',
+            image: '/cricket/c5.webp'
+        },
+         {
+            id: 'c5',
+            title: 'Moment 5',
+            date: '2025',
+            category: '',
+            description: '',
+            image: '/cricket/c6.webp'
+        },
+         {
+            id: 'c6',
+            title: 'Moment 6',
+            date: '2025',
+            category: '',
+            description: '',
+            image: '/cricket/c7.webp'
+        }
     ]
 };
 
@@ -1116,10 +1168,10 @@ export const human: Club = {
     establishedYear: 2019,
     memberCount: 13,
 
-    facultyAdvisor: 'Club Advisor, Department of Humanities',
+    facultyAdvisor: '',
     president: 'Dilip Karki',
 
-    meetingSchedule: 'Every Wednesday at 3:30 PM',
+    meetingSchedule: '',
     roomLocation: 'Main Campus Building',
 
     contactEmail: 'humanities.club@abcampus.edu.np',
@@ -1157,7 +1209,7 @@ export const human: Club = {
     },
 
     manifesto: {
-        title: 'Humanities Club Values & Creative Charter',
+        title: 'Humanities Club Values',
 
         points: [
             'Creative Expression: Provide every student with a platform to express ideas through writing, art, speech, and performance.',
@@ -1315,10 +1367,112 @@ export const human: Club = {
         
     ],
 
-    galleryImages: [
-        'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=800&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1519682337058-a94d519337bc?w=800&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=800&auto=format&fit=crop&q=80'
+  galleryItems: [
+        
+        {
+            id: 'h1',
+            title: 'Moment 1',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/human/g1.webp'
+        },
+           {
+            id: 'h3',
+            title: 'Moment 1',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/human/g2.webp'
+        },
+           {
+            id: 'h4',
+            title: 'Moment 1',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/human/g3.webp'
+        },
+           {
+            id: 'h5',
+            title: 'Moment 1',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/human/g4.webp'
+        },
+           {
+            id: 'h6',
+            title: 'Moment 1',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/human/g5.webp'
+        },
+           {
+            id: 'h7',
+            title: 'Moment 1',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/human/g6.webp'
+        },
+           {
+            id: 'h8',
+            title: 'Moment 1',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/human/g7.webp'
+        },
+           {
+            id: 'h9',
+            title: 'Moment 1',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/human/g8.webp'
+        },
+           {
+            id: 'h10',
+            title: 'Moment 1',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/human/g9.webp'
+        },
+           {
+            id: 'h11',
+            title: 'Moment 1',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/human/g10.webp'
+        },
+           {
+            id: 'h12',
+            title: 'Moment 1',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/human/g11.webp'
+        },
+           {
+            id: 'h13',
+            title: 'Moment 1',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/human/g12.webp'
+        },
+           {
+            id: 'h14',
+            title: 'Moment 1',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/human/g13.webp'
+        }
     ]
 };
 export const vyasABC: Club = {
@@ -1333,20 +1487,20 @@ export const vyasABC: Club = {
     establishedYear: 2082,
     memberCount: 5,
     president: 'Puspa Pandit',
-    meetingSchedule: 'Fridays at 4:00 PM',
-    roomLocation: 'Bhanubhakta Cultural Hall, Room 201',
+    meetingSchedule: '',
+    roomLocation: 'Campus Main Building',
     contactEmail: 'vyasabc0123@gmail.com',
     vision: 'VYAS ABC is dedicated to fostering the holistic development of students by promoting mental, emotional, physical, and spiritual well-being. The club aims to empower students to build resilience, manage stress effectively, and discover their full potential through a balanced and fulfilling approach to personal growth.',
-    certificate: {
+     certificate: {
         isRegistered: true,
-        certificateNumber: '०३/०८२/०८३',
-        registeredDate: '२०८२/०८/१४ (बिहान ८:४३ बजे)',
-        registeredDateNp: '२०८२/०८/१४',
-        issuingAuthority: 'Aadikavi Bhanubhakta Campus, Vyas-01, Bigyanchaur, Tanahun',
-        issuingAuthorityNp: 'आदिकवि भानुभक्त क्याम्पस, व्यास-०१, विज्ञानचौर, तनहुँ',
-        registrationType: 'विद्यार्थी क्लब/संस्था निर्देशिका २०७५ बमोजिम',
-        validUntil: 'शैक्षिक सत्र २०८२/०८३ (Active)',
-        remarks: 'यस आदिकवि भानुभक्त क्याम्पस व्यास-०१, विज्ञानचौर, तनहुँमा विद्यार्थी क्लब/संस्था निर्देशिका २०७५ बमोजिम दर्ता भएको व्यहोरा प्रमाणित गरिन्छ। क्याम्पस प्रमुख: महाप्रसाद हड्खने।'
+        certificateNumber: '03-067-03',
+        registeredDate: '2082-06-14',
+        registeredDateNp: '२०८२/०६/१४',
+        issuingAuthority: 'Campus Chief, Aadikavi Bhanubhakta Campus',
+        issuingAuthorityNp: 'क्याम्पस प्रमुख, आदिकवि भानुभक्त क्याम्पस',
+        registrationType: 'Student Committee',
+        certificateImage: '../vyas/certificate.webp',
+        remarks: 'Officially registered student club under Aadikavi Bhanubhakta Campus, promoting youth awareness, leadership, and student engagement.'
     },
     mission: [
         'VYAS ABC works to support the overall growth of students by helping them stay mentally, emotionally, and physically healthy. The club helps students build strength, manage stress, and grow into their full potential.'
@@ -1368,6 +1522,15 @@ export const vyasABC: Club = {
         ]
     },
     history: 'Founded in 2082, VYAS ABC has been a beacon of hope and inspiration for countless students, fostering a community dedicated to holistic development and social responsibility.',
+     historyMilestones: [
+        {
+            category: 'WHEN IT ALL BEGAN',
+            year: 'pending',
+            title: 'History',
+            desc: 'pending',
+            image: ''
+        }
+    ],
     leadership: [
 
         {
@@ -1429,21 +1592,13 @@ export const vyasABC: Club = {
         '../vyas/vyas2.webp'
     ],
     galleryItems: [
-        {
-            id: 'gal-vyas-1',
-            title: 'Vedic Quiz & Youth Gathering',
-            date: 'Jan 2025',
-            category: 'Quiz Competition',
-            description: 'Participating students engaging in the inter-school Vedic quiz competition at Aadikavi Bhanubhakta Campus.',
-            image: '../vyas/vyas1.webp'
-        },
-        {
-            id: 'gal-vyas-2',
-            title: 'Club Formation & Inauguration Ceremony',
-            date: '2082 B.S.',
-            category: 'Official Inauguration',
-            description: 'Executive committee and student members during the charter registration ceremony.',
-            image: '../vyas/vyas2.webp'
+         {
+            id: 'gal-abit-1',
+            title: 'Moment 1',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/abit/g1.webp'
         }
     ]
 };
@@ -1462,18 +1617,92 @@ export const ALL_CLUBS: Club[] = [
 ];
 
 export const UPCOMING_EVENTS: ClubEvent[] = [
-    {
-        id: 'evt-fsu-2',
-        clubId: 'free-student-union',
-        clubName: 'Free Student Union & Alumni Welfare',
-        title: 'InterFaculty Futsal Tournament',
-        date: '2026-09-18',
-        time: '11:00 AM - 03:00 PM',
-        venue: 'Damauli Futsal',
-        category: 'Sports',
-        description: 'Annual inter-faculty futsal championship organized by Free Student Union & Alumni Welfare.',
-        capacity: 250,
-        registeredCount: 140,
-        image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&auto=format&fit=crop&q=80'
+    //humanities events
+     {
+        id: 'h1',
+        clubId: 'human-club',
+        clubName: 'Humanities Club',
+        title: ' Educational Seminar',
+        date: '2026',
+        time: 'Pending',
+        venue: 'Pending',
+        category: '',
+        description: 'An informative event organized by the club to provide students with valuable knowledge, practical insights, and opportunities to learn from experienced speakers through presentations, discussions, and interactive sessions.',
+        image: ''
+    },
+     {
+        id: 'h2',
+        clubId: 'human-club',
+        clubName: 'Humanities Club',
+        title: 'Speech & Presentation Competition',
+        date: '2026',
+        time: 'Pending',
+        venue: 'Pending',
+        category: '',
+        description: 'An engaging event organized by the club to encourage students to develop their public speaking, communication, and presentation skills. Participants will have the opportunity to showcase their abilities, express ideas, and gain confidence in front of an audience.',
+        image: ''
+    },
+     {
+        id: 'h3',
+        clubId: 'human-club',
+        clubName: 'Humanities Club',
+        title: 'Essay & Creative Writing Competition',
+        date: '2026',
+        time: 'Pending',
+        venue: 'Pending',
+        category: '',
+        description: 'An exciting event organized by the club to inspire students to express their thoughts, ideas, and creativity through written words. Participants will have the opportunity to showcase their writing skills, explore different genres, and receive feedback from experienced writers and judges.',
+        image: ''
     }
+    ,
+     {
+        id: 'h4',
+        clubId: 'human-club',
+        clubName: 'Humanities Club',
+        title: 'Inter-school/Inter-college Competition',
+        date: '2026',
+        time: 'Pending',
+        venue: 'Pending',
+        category: '',
+        description: 'An exciting event organized by the club to foster collaboration, healthy competition, and cultural exchange among students from different schools and colleges. Participants will have the opportunity to showcase their talents, engage in friendly rivalry, and build connections with peers from diverse backgrounds.',
+        image: ''
+    }, 
+     {
+        id: 'h5',
+        clubId: 'human-club',
+        clubName: 'Humanities Club',
+        title: ' Farewell & Welcome Program',
+        date: '2026',
+        time: 'Pending',
+        venue: 'Pending',
+        category: '',
+        description: 'A special event to celebrate the achievements of graduating students and welcome new ones, fostering a sense of community and continuity within the club.',
+        image: ''
+    }, 
+     {
+        id: 'h6',
+        clubId: 'human-club',
+        clubName: 'Humanities Club',
+        title: 'Social Awareness Program',
+        date: '2026',
+        time: 'Pending',
+        venue: 'Pending',
+        category: '',
+        description: 'An initiative to raise awareness about social issues and promote community engagement through discussions, workshops, and interactive sessions.',
+        image: ''
+    }, 
+     {
+        id: 'h7',
+        clubId: 'human-club',
+        clubName: 'Humanities Club',
+        title: 'Career & Skill Development Program',
+        date: '2026',
+        time: 'Pending',
+        venue: 'Pending',
+        category: '',
+        description: 'An initiative to provide students with opportunities to explore career paths, develop essential skills, and enhance their professional growth through workshops, seminars, and interactive sessions.',
+        image: ''
+    }, 
+   //abit
+
 ];

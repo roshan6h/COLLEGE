@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
     ArrowLeft,
@@ -430,32 +430,39 @@ export const ClubPage: React.FC<ClubPageProps> = ({
         ];
     }, [club.aboutImages, club.aboutUsImages]);
 
-    // Normalize gallery images/items strictly from club data in clubsData.ts without hardcoded defaults
+    // Normalize gallery images/items to structured items with image, title, date, category, description
+    const rawGallery = club.galleryItems || club.gallery || club.galleryImages || [];
     const galleryItems: { id: string; image: string; title?: string; date?: string; category?: string; description?: string }[] = useMemo(() => {
-        const rawGallery = club.galleryItems || club.gallery || club.galleryImages || [];
-        return rawGallery
-            .map((item, idx) => {
-                if (typeof item === 'string') {
-                    return {
-                        id: `gal-${club.id}-${idx}`,
-                        image: item.trim(),
-                        title: '',
-                        date: '',
-                        category: '',
-                        description: ''
-                    };
-                }
+        return rawGallery.map((item, idx) => {
+            if (typeof item === 'string') {
+                const defaultTitles = [
+                    'Campus Tech Symposium',
+                    'Hands-on React & AI Workshop',
+                    'Inter-College Hackathon 2025',
+                    'Executive Committee Gathering',
+                    'Annual Tech Exhibition & Showcase',
+                    'Student Mentorship & Code Lab',
+                    'Digital Campus Innovation Meet',
+                    'Youth Leadership Forum'
+                ];
+                const defaultYears = ['2026', '2025', '2024', '2024', '2023', '2023', '2022', '2022'];
                 return {
-                    id: item.id || `gal-${club.id}-${idx}`,
-                    image: item.image ? item.image.trim() : '',
-                    title: item.title !== undefined ? item.title : '',
-                    date: item.date !== undefined ? item.date : '',
-                    category: item.category !== undefined ? item.category : '',
-                    description: item.description !== undefined ? item.description : ''
+                    id: `gal-${idx}`,
+                    image: item,
+                    title: defaultTitles[idx % defaultTitles.length],
+                    date: defaultYears[idx % defaultYears.length]
                 };
-            })
-            .filter((item) => item.image.length > 0);
-    }, [club.galleryItems, club.gallery, club.galleryImages, club.id]);
+            }
+            return {
+                id: item.id || `gal-${idx}`,
+                image: item.image,
+                title: item.title !== undefined ? item.title : (idx === 0 ? `Moment ${idx + 1}` : ''),
+                date: item.date,
+                category: item.category,
+                description: item.description
+            };
+        });
+    }, [rawGallery]);
 
     const galleryList = useMemo(() => galleryItems.map(g => g.image), [galleryItems]);
 
@@ -476,6 +483,24 @@ export const ClubPage: React.FC<ClubPageProps> = ({
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [selectedGalleryIndex, galleryList.length]);
+
+    const touchStartX = useRef<number | null>(null);
+    const handleGalleryTouchStart = (e: React.TouchEvent) => {
+        touchStartX.current = e.touches[0].clientX;
+    };
+    const handleGalleryTouchEnd = (e: React.TouchEvent) => {
+        if (touchStartX.current === null) return;
+        const touchEndX = e.changedTouches[0].clientX;
+        const diff = touchStartX.current - touchEndX;
+        if (Math.abs(diff) > 40) {
+            if (diff > 0) {
+                setSelectedGalleryIndex((prev) => (prev !== null && prev < galleryList.length - 1 ? prev + 1 : 0));
+            } else {
+                setSelectedGalleryIndex((prev) => (prev !== null && prev > 0 ? prev - 1 : galleryList.length - 1));
+            }
+        }
+        touchStartX.current = null;
+    };
 
     // Achievements State with rich cards - accurately mapped from club data
     const achievements = useMemo<AchievementCardData[]>(() => {
@@ -2633,16 +2658,12 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: '-40px' }}
                     transition={{ duration: 0.5, ease: 'easeOut' }}
-                    className="space-y-8 scroll-mt-36 pt-4"
+                    className="space-y-6 sm:space-y-8 scroll-mt-36 pt-4"
                 >
                     {/* Pinterest Style Header */}
-                    <div className="flex flex-col sm:flex-row sm:items-end justify-between pb-3 border-b border-slate-300/40 gap-4">
+                    <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-slate-300/40 gap-3">
                         <div>
-                            <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider text-[#0c72b8] mb-1">
-                                <Sparkles className="w-3.5 h-3.5" />
-                                <span>VISUAL ARCHIVE & PINS</span>
-                            </div>
-                            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 font-poppins tracking-tight">
+                            <h3 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900 font-poppins tracking-tight">
                                 Moments & Pins
                             </h3>
                         </div>
@@ -2650,7 +2671,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                             <button
                                 type="button"
                                 onClick={() => setSelectedGalleryIndex(0)}
-                                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#eef2f7] text-xs font-bold text-slate-800 hover:text-[#0c72b8] shadow-[3px_3px_8px_#d1d9e6,-3px_-3px_8px_#ffffff] active:shadow-[inset_2px_2px_5px_#d1d9e6,inset_-2px_-2px_5px_#ffffff] border border-white/80 transition-all cursor-pointer self-start sm:self-auto"
+                                className="inline-flex items-center gap-1.5 sm:gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-[#eef2f7] text-[11px] sm:text-xs font-bold text-slate-800 hover:text-[#0c72b8] shadow-[3px_3px_8px_#d1d9e6,-3px_-3px_8px_#ffffff] active:shadow-[inset_2px_2px_5px_#d1d9e6,inset_-2px_-2px_5px_#ffffff] border border-white/80 transition-all cursor-pointer whitespace-nowrap shrink-0"
                             >
                                 <span>Open Fullscreen ({galleryItems.length} photos)</span>
                             </button>
@@ -2663,35 +2684,35 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                             <p className="text-sm text-slate-500 font-medium">No activity photo collection available yet for this committee.</p>
                         </div>
                     ) : (
-                        /* Pinterest Masonry Columns Grid - 2 columns on mobile, 2 on sm, 3 on md, 4 on lg */
-                        <div className="columns-2 sm:columns-2 md:columns-3 lg:columns-4 gap-3 sm:gap-5 space-y-3 sm:space-y-5">
+                        /* Pinterest Masonry Columns Grid (2-column on mobile, responsive up to 4 columns) */
+                        <div className="columns-2 sm:columns-2 md:columns-3 lg:columns-4 gap-2.5 sm:gap-4 md:gap-5 space-y-2.5 sm:space-y-4 md:space-y-5">
                             {galleryItems.map((item, idx) => (
                                 <motion.div
                                     key={item.id || idx}
-                                    initial={{ opacity: 0, y: 16 }}
+                                    initial={{ opacity: 0, y: 12 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
-                                    transition={{ duration: 0.35, delay: (idx % 4) * 0.05 }}
-                                    className="break-inside-avoid group relative flex flex-col cursor-pointer mb-3 sm:mb-5"
+                                    transition={{ duration: 0.35, delay: (idx % 4) * 0.04 }}
+                                    className="break-inside-avoid group relative flex flex-col cursor-pointer mb-2.5 sm:mb-4 md:mb-5"
                                     onClick={() => setSelectedGalleryIndex(idx)}
                                 >
                                     {/* Pinterest Pin Card Container */}
-                                    <div className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-200 shadow-[3px_3px_10px_#d1d9e6,-3px_-3px_10px_#ffffff] border border-white/80 group-hover:shadow-[5px_5px_16px_#c8d2e2,-5px_-5px_16px_#ffffff] transition-all duration-300 min-h-[130px] sm:min-h-[170px]">
+                                    <div className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-100 shadow-[3px_3px_10px_#d1d9e6,-3px_-3px_10px_#ffffff] border border-white/80 group-hover:shadow-[5px_5px_16px_#c8d2e2,-5px_-5px_16px_#ffffff] transition-all duration-300">
                                         {/* Image */}
                                         <img
                                             src={item.image}
-                                            alt={item.title || 'Club activity photo'}
+                                            alt={item.title || `Moment ${idx + 1}`}
                                             loading="lazy"
                                             referrerPolicy="no-referrer"
-                                            className="w-full h-auto object-cover block group-hover:scale-[1.03] transition-transform duration-500 will-change-transform min-h-[120px] sm:min-h-[160px]"
+                                            className="w-full h-auto object-cover block group-hover:scale-[1.02] transition-transform duration-500 will-change-transform rounded-2xl sm:rounded-3xl"
                                         />
 
-                                        {/* Pinterest Hover Overlay */}
-                                        <div className="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none p-2 sm:p-4 flex flex-col justify-between">
+                                        {/* Pinterest Hover Overlay (Desktop/Tablets) */}
+                                        <div className="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none p-2.5 sm:p-3 md:p-4 flex flex-col justify-between">
                                             {/* Top Bar: Category pill / Save or View red pill */}
                                             <div className="flex items-center justify-between w-full pointer-events-auto">
                                                 {item.category ? (
-                                                    <span className="px-2 sm:px-3 py-0.5 sm:py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-[9px] sm:text-[10px] font-bold uppercase tracking-wider border border-white/20 truncate max-w-[90px] sm:max-w-none">
+                                                    <span className="px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-[9px] sm:text-[10px] font-bold uppercase tracking-wider border border-white/20 truncate max-w-[65%]">
                                                         {item.category}
                                                     </span>
                                                 ) : (
@@ -2703,22 +2724,22 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                                         e.stopPropagation();
                                                         setSelectedGalleryIndex(idx);
                                                     }}
-                                                    className="px-2.5 sm:px-4 py-1 sm:py-1.5 rounded-full bg-[#e60023] hover:bg-[#ad081b] text-white text-[10px] sm:text-xs font-bold shadow-md transition-all cursor-pointer transform group-hover:scale-100 scale-95"
+                                                    className="px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-[#e60023] hover:bg-[#ad081b] text-white text-[11px] sm:text-xs font-bold shadow-md transition-all cursor-pointer transform group-hover:scale-100 scale-95"
                                                     title="View Pin"
                                                 >
                                                     View
                                                 </button>
                                             </div>
 
-                                            {/* Bottom Action Bar: Share & Expand Controls */}
+                                            {/* Bottom Action Bar */}
                                             <div className="flex items-center justify-between w-full pointer-events-auto">
-                                                <div className="flex items-center gap-1 sm:gap-1.5">
+                                                <div className="flex items-center gap-1.5">
                                                     <button
                                                         type="button"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
                                                             if (navigator.share) {
-                                                                navigator.share({ title: item.title || 'Club Photo', url: window.location.href });
+                                                                navigator.share({ title: item.title || 'Photo', url: window.location.href });
                                                             } else {
                                                                 navigator.clipboard.writeText(item.image);
                                                                 alert('Photo link copied!');
@@ -2727,7 +2748,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                                         className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 hover:bg-white text-slate-800 flex items-center justify-center shadow-md backdrop-blur-md transition-transform hover:scale-110 cursor-pointer"
                                                         title="Share photo"
                                                     >
-                                                        <Share2 className="w-3 sm:w-3.5 h-3 sm:h-3.5" />
+                                                        <Share2 className="w-3.5 h-3.5" />
                                                     </button>
                                                     <a
                                                         href={item.image}
@@ -2738,42 +2759,50 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                                         className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 hover:bg-white text-slate-800 flex items-center justify-center shadow-md backdrop-blur-md transition-transform hover:scale-110 cursor-pointer"
                                                         title="Open in new tab"
                                                     >
-                                                        <ExternalLink className="w-3 sm:w-3.5 h-3 sm:h-3.5" />
+                                                        <ExternalLink className="w-3.5 h-3.5" />
                                                     </a>
                                                 </div>
 
                                                 <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 text-slate-800 flex items-center justify-center shadow-md backdrop-blur-md">
-                                                    <ZoomIn className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#0c72b8]" />
+                                                    <ZoomIn className="w-3.5 h-3.5 text-[#0c72b8]" />
                                                 </span>
                                             </div>
                                         </div>
                                     </div>
 
                                     {/* Pinterest Style Bottom Title & 3-dots Menu */}
-                                    {(item.title || item.description || item.date) && (
-                                        <div className="pt-1.5 sm:pt-2 px-1 flex items-start justify-between gap-1.5 sm:gap-2">
-                                            <div className="min-w-0">
-                                                {item.title && (
-                                                    <h4 className="text-[11px] sm:text-sm font-bold text-slate-800 font-poppins line-clamp-2 leading-tight group-hover:text-[#0c72b8] transition-colors">
-                                                        {item.title}
-                                                    </h4>
-                                                )}
-                                                {item.description && (
-                                                    <p className="text-[10px] sm:text-[11px] text-slate-500 line-clamp-1 mt-0.5 font-normal hidden sm:block">
-                                                        {item.description}
-                                                    </p>
-                                                )}
-                                                {item.date && !item.description && (
-                                                    <p className="text-[10px] sm:text-[11px] text-slate-400 mt-0.5">
-                                                        {item.date}
-                                                    </p>
-                                                )}
-                                            </div>
-                                            <div className="shrink-0 text-slate-400 hover:text-slate-600 p-0.5 rounded-full hover:bg-slate-200/60 transition-colors">
-                                                <MoreHorizontal className="w-3.5 sm:w-4 h-3.5 sm:h-4" />
-                                            </div>
+                                    <div className="pt-1.5 sm:pt-2 px-0.5 sm:px-1 flex items-start justify-between gap-1 sm:gap-2">
+                                        <div className="min-w-0 flex-1">
+                                            {item.title ? (
+                                                <h4 className="text-xs sm:text-sm font-bold text-slate-800 font-poppins line-clamp-2 leading-tight group-hover:text-[#0c72b8] transition-colors">
+                                                    {item.title}
+                                                </h4>
+                                            ) : null}
+                                            {item.date ? (
+                                                <p className={`text-[10px] sm:text-[11px] text-slate-500 font-medium line-clamp-1 ${item.title ? 'mt-0.5' : 'text-xs font-semibold text-slate-600'}`}>
+                                                    {item.date}
+                                                </p>
+                                            ) : item.description ? (
+                                                <p className="text-[10px] sm:text-[11px] text-slate-500 line-clamp-1 mt-0.5 font-normal">
+                                                    {item.description}
+                                                </p>
+                                            ) : !item.title ? (
+                                                <h4 className="text-xs sm:text-sm font-bold text-slate-800 font-poppins line-clamp-2 leading-tight group-hover:text-[#0c72b8] transition-colors">
+                                                    Moment {idx + 1}
+                                                </h4>
+                                            ) : null}
                                         </div>
-                                    )}
+                                        <div
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setSelectedGalleryIndex(idx);
+                                            }}
+                                            className="shrink-0 text-slate-400 hover:text-slate-600 p-0.5 rounded-full hover:bg-slate-200/60 transition-colors"
+                                            title="Photo options"
+                                        >
+                                            <MoreHorizontal className="w-4 h-4" />
+                                        </div>
+                                    </div>
                                 </motion.div>
                             ))}
                         </div>
@@ -2795,7 +2824,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                         Photo {selectedGalleryIndex + 1} of {galleryItems.length}
                                     </span>
                                     <span className="text-xs text-white/60 hidden sm:inline">
-                                        (Use ← → Arrow keys or buttons to navigate, Esc to close)
+                                        (Use ← → Arrow keys or swipe to navigate, Esc to close)
                                     </span>
                                 </div>
 
@@ -2809,10 +2838,12 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                 </button>
                             </div>
 
-                            {/* Main Frame with Prev & Next */}
+                            {/* Main Frame with Prev & Next and Swipe Support */}
                             <div
                                 onClick={(e) => e.stopPropagation()}
-                                className="relative max-w-5xl w-full max-h-[80vh] flex items-center justify-center"
+                                onTouchStart={handleGalleryTouchStart}
+                                onTouchEnd={handleGalleryTouchEnd}
+                                className="relative max-w-5xl w-full max-h-[80vh] flex items-center justify-center touch-pan-y select-none"
                             >
                                 {/* Left Prev Button */}
                                 {galleryItems.length > 1 && (
@@ -2823,10 +2854,10 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                                 prev !== null && prev > 0 ? prev - 1 : galleryItems.length - 1
                                             )
                                         }
-                                        className="absolute -left-3 sm:-left-6 z-10 p-3 rounded-full bg-black/60 hover:bg-black/80 text-white backdrop-blur-md border border-white/20 shadow-xl transition-transform hover:scale-110 cursor-pointer"
+                                        className="absolute -left-2 sm:-left-6 z-10 p-2.5 sm:p-3 rounded-full bg-black/60 hover:bg-black/80 text-white backdrop-blur-md border border-white/20 shadow-xl transition-transform hover:scale-110 cursor-pointer"
                                         title="Previous Photo (Left Arrow)"
                                     >
-                                        <ChevronLeft className="w-6 h-6" />
+                                        <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
                                     </button>
                                 )}
 
@@ -2834,17 +2865,17 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                     <div className="rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl bg-black border border-white/20 max-h-[70vh] flex items-center justify-center">
                                         <img
                                             src={galleryItems[selectedGalleryIndex].image}
-                                            alt={galleryItems[selectedGalleryIndex].title}
+                                            alt={galleryItems[selectedGalleryIndex].title || 'Club Gallery Photo'}
                                             referrerPolicy="no-referrer"
                                             className="w-full max-h-[68vh] object-contain select-none"
                                         />
                                     </div>
                                     <div className="w-full max-w-2xl text-center mt-3 px-4">
-                                        {galleryItems[selectedGalleryIndex].title && (
+                                        {galleryItems[selectedGalleryIndex].title ? (
                                             <h3 className="text-white text-base sm:text-lg font-bold font-poppins">
                                                 {galleryItems[selectedGalleryIndex].title}
                                             </h3>
-                                        )}
+                                        ) : null}
                                         {galleryItems[selectedGalleryIndex].description && (
                                             <p className="text-white/70 text-xs sm:text-sm mt-1">
                                                 {galleryItems[selectedGalleryIndex].description}
@@ -2867,10 +2898,10 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                                 prev !== null && prev < galleryItems.length - 1 ? prev + 1 : 0
                                             )
                                         }
-                                        className="absolute -right-3 sm:-right-6 z-10 p-3 rounded-full bg-black/60 hover:bg-black/80 text-white backdrop-blur-md border border-white/20 shadow-xl transition-transform hover:scale-110 cursor-pointer"
+                                        className="absolute -right-2 sm:-right-6 z-10 p-2.5 sm:p-3 rounded-full bg-black/60 hover:bg-black/80 text-white backdrop-blur-md border border-white/20 shadow-xl transition-transform hover:scale-110 cursor-pointer"
                                         title="Next Photo (Right Arrow)"
                                     >
-                                        <ChevronRight className="w-6 h-6" />
+                                        <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
                                     </button>
                                 )}
                             </div>
@@ -3095,8 +3126,8 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                         />
 
                                         {/* Hover Zoom Overlay Badge */}
-                                        <div className="absolute inset-0 rounded-xl bg-slate-900/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-                                            <div className="w-9 h-9 rounded-full bg-white/95 text-slate-800 flex items-center justify-center shadow-lg border border-slate-200">
+                                        <div className="absolute inset-0 rounded-2xl bg-slate-900/15 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                                            <div className="w-10 h-10 rounded-full bg-white/95 text-slate-800 flex items-center justify-center shadow-lg border border-slate-200">
                                                 <ZoomIn className="w-4 h-4 text-[#0c72b8]" />
                                             </div>
                                         </div>

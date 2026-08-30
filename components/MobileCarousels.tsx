@@ -122,8 +122,8 @@ export function MobileSwipeCarousel<T>({
             {/* Horizontal Scroll Track */}
             <div
                 ref={scrollContainerRef}
-                className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 px-4 -mx-4 scrollbar-none touch-pan-x"
-                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 px-4 -mx-4 scrollbar-none overscroll-x-contain [touch-action:pan-y_pan-x]"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}
             >
                 {items.map((item, idx) => (
                     <div
