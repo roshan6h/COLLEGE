@@ -1602,6 +1602,167 @@ export const vyasABC: Club = {
         }
     ]
 };
+export const scienceClubData: Club = {
+    id: 'science-club',
+    name: 'ABC Science Club',
+    nepaliName: 'एबीसी विज्ञान क्लब',
+    category: 'Science & Technology',
+    logo: 'https://images.unsplash.com/photo-1507668077129-56e32842fceb?w=800&auto=format&fit=crop&q=80',
+    accentColor: '#059669',
+    description: 'ABC Science Club is dedicated to developing scientific thinking, creativity, curiosity, and innovation among students by providing opportunities to explore, experiment, and learn beyond the classroom.',
+    establishedYear: 2080,
+    memberCount: 10,
+    facultyAdvisor: 'To be updated',
+    president: 'Rubi Khadka',
+    meetingSchedule: 'Fridays at 3:30 PM',
+    roomLocation: 'Science Building',
+    contactEmail: 'rubikhadka302@gmail.com',
+    featured: true,
+    vision: 'To create a vibrant learning environment where students can discover their potential, develop practical and research-oriented skills, and use science and technology for the betterment of society and the community.',
+    certificate: {
+        isRegistered: true,
+        certificateNumber: 'ABC-SCI-REG-2080/012',
+        registeredDate: 'September 17, 2023 (2080-05-31)',
+        registeredDateNp: '२०८०/०५/३१',
+        issuingAuthority: 'Aadikavi Bhanubhakta Campus - Department of Science & Student Affairs',
+        issuingAuthorityNp: 'आदिकवि भानुभक्त क्याम्पस - विज्ञान संकाय तथा विद्यार्थी कल्याण शाखा',
+        registrationType: 'Accredited Departmental Student Organization',
+        validUntil: 'Academic Year 2084/85 (Active & Renewed)',
+        certificateImage: 'https://images.unsplash.com/photo-1589330694653-ded6df03f754?w=1200&auto=format&fit=crop&q=80',
+        remarks: 'Certified departmental club promoting scientific exploration, experimentation, and research among undergraduate scholars.'
+    },
+    mission: [
+        'The ABC Science Club is dedicated to developing scientific thinking, creativity, curiosity, and innovation among students by providing opportunities to explore, experiment, and learn beyond the classroom. Our motive is to encourage students to ask questions, solve real-life problems through scientific methods, share knowledge, and work collaboratively on innovative ideas and projects.'
+    ],
+    presidentMessage: {
+        senderName: 'Rubi Khadka',
+        senderRole: 'President, ABC Science Club',
+        message: 'It is my great pleasure and honor to welcome you to the ABC Science Club. As the President, I believe that science is not only a subject we study but also a way of thinking, questioning, discovering, and creating solutions to real-world problems. Our club is a platform where students can share ideas, explore their curiosity, conduct experiments, develop innovative projects, and learn from one another. Together, we aim to build a culture of creativity, collaboration, research, and scientific thinking. I encourage every member to actively participate, ask questions without hesitation, and turn their ideas into meaningful actions. Let us work together to make the ABC Science Club a place where curiosity becomes knowledge, knowledge becomes innovation, and innovation contributes to a better future.',
+        avatarUrl: '../science/rubi.webp'
+    },
+    manifesto: {
+        title: 'ABC Science Club Scientific Thinking & Innovation Manifesto',
+        points: [
+            'Innovation: Develop scientific thinking, creativity, curiosity, and innovation among students.',
+            'Exploration: Provide continuous opportunities to explore, experiment, and learn beyond traditional classroom boundaries.',
+            'Inquiry: Encourage students to ask questions, share knowledge, and solve real-life problems using scientific methods.',
+            'Collaboration: Collaborate on innovative projects and utilize science and technology for the betterment of society and the community.'
+        ]
+    },
+    history: 'Formed at Aadikavi Bhanubhakta Campus, Damauli, Tanahun, the ABC Science Club serves as a student-led platform to promote scientific inquiry and hands-on learning. Through collaborative projects, laboratory exploration, observational programs, and field visits, the club creates a space where students discover their potential and connect scientific concepts to practical community solutions.',
+    leadership: [
+        {
+            id: 'sci1',
+            name: 'Rubi Khadka',
+            role: 'President',
+            department: 'B.Ed Science',
+            phone: '+977 9806584709',
+            avatarUrl: '../science/rubi.webp',
+            email: 'rubikhadka302@gmail.com'
+        },
+        {
+            id: 'sci2',
+            name: 'Aadit Thapa',
+            role: 'Vice - President',
+            department: 'B.Ed Science',
+            phone: '+977 9828186261',
+            avatarUrl: '../science/adit.webp',
+            email: ''
+        },
+        {
+            id: 'sci3',
+            name: 'Salina Majakoti',
+            role: 'Secretary',
+            department: 'B.Ed Science',
+            phone: '+977 9817164649',
+            avatarUrl: '../science/salina.webp',
+            email: ''
+        },
+        {
+            id: 'sci4',
+            name: 'Ankita Ojha',
+            role: 'Joint - Secretary',
+            department: 'B.Ed Science',
+            phone: '+977 9816677580',
+            avatarUrl: '../science/ankita.webp',
+            email: ''
+        },
+        {
+            id: 'sci5',
+            name: 'Sadikshya Thapa',
+            role: 'Treasurer',
+            department: 'B.Ed Science',
+            phone: '+977 9804125538',
+            avatarUrl: '../science/sadikshya.webp',
+            email: ''
+        },
+        {
+            id: 'sci6',
+            name: 'Asmita Thapa',
+            role: 'Member',
+            department: 'B.Ed Science',
+            phone: '+977 9706432188',
+            avatarUrl: '../science/asmita.webp',
+            email: ''
+        },
+        {
+            id: 'sci7',
+            name: 'Kanchan Bisural',
+            role: 'Member',
+            department: 'B.Ed Science',
+            phone: '+977 9709113321',
+            avatarUrl: '../science/kanchan.webp',
+            email: ''
+        },
+        {
+            id: 'sci8',
+            name: 'Manisha Bhandari',
+            role: 'Member',
+            department: 'B.Ed Science',
+            phone: '+977 9827189014',
+            avatarUrl: '../science/manisha.webp',
+            email: ''
+        },
+        {
+            id: 'sci9',
+            name: 'Roshani Adhikari',
+            role: 'Member',
+            department: 'B.Ed Science',
+            phone: '+977 9704149661',
+            avatarUrl: '../science/roshni.webp',
+            email: ''
+        },
+        {
+            id: 'sci10',
+            name: 'Mandeep Malla',
+            role: 'Member',
+            department: 'B.Ed Science',
+            phone: 'To be updated',
+            avatarUrl: '',
+            email: ''
+        }
+    ],
+    achievements: [],
+  galleryItems: [
+        
+        {
+            id: 'gal-abit-1',
+            title: 'Moment 1',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/abit/g1.webp'
+        },
+        {
+            id: 'gal-abit-2',
+            title: '',
+            date: '202',
+            category: 'Graduation',
+            description: '',
+            image: '/abit/g2.webp'
+        }
+    ]
+};
 
 
 // Master independent array of all 14 clubs with 0 external file dependencies
@@ -1613,6 +1774,7 @@ export const ALL_CLUBS: Club[] = [
     managementclub,
     human,
     vyasABC,
+    scienceClubData
 
 ];
 
@@ -1628,7 +1790,7 @@ export const UPCOMING_EVENTS: ClubEvent[] = [
         venue: 'Pending',
         category: '',
         description: 'An informative event organized by the club to provide students with valuable knowledge, practical insights, and opportunities to learn from experienced speakers through presentations, discussions, and interactive sessions.',
-        image: ''
+        image: '/soon.webp'
     },
      {
         id: 'h2',
@@ -1640,7 +1802,7 @@ export const UPCOMING_EVENTS: ClubEvent[] = [
         venue: 'Pending',
         category: '',
         description: 'An engaging event organized by the club to encourage students to develop their public speaking, communication, and presentation skills. Participants will have the opportunity to showcase their abilities, express ideas, and gain confidence in front of an audience.',
-        image: ''
+        image: '/soon.webp'
     },
      {
         id: 'h3',
@@ -1652,7 +1814,7 @@ export const UPCOMING_EVENTS: ClubEvent[] = [
         venue: 'Pending',
         category: '',
         description: 'An exciting event organized by the club to inspire students to express their thoughts, ideas, and creativity through written words. Participants will have the opportunity to showcase their writing skills, explore different genres, and receive feedback from experienced writers and judges.',
-        image: ''
+        image: '/soon.webp'
     }
     ,
      {
@@ -1665,7 +1827,7 @@ export const UPCOMING_EVENTS: ClubEvent[] = [
         venue: 'Pending',
         category: '',
         description: 'An exciting event organized by the club to foster collaboration, healthy competition, and cultural exchange among students from different schools and colleges. Participants will have the opportunity to showcase their talents, engage in friendly rivalry, and build connections with peers from diverse backgrounds.',
-        image: ''
+        image: '/soon.webp'
     }, 
      {
         id: 'h5',
@@ -1677,7 +1839,7 @@ export const UPCOMING_EVENTS: ClubEvent[] = [
         venue: 'Pending',
         category: '',
         description: 'A special event to celebrate the achievements of graduating students and welcome new ones, fostering a sense of community and continuity within the club.',
-        image: ''
+        image: '/soon.webp'
     }, 
      {
         id: 'h6',
@@ -1689,7 +1851,7 @@ export const UPCOMING_EVENTS: ClubEvent[] = [
         venue: 'Pending',
         category: '',
         description: 'An initiative to raise awareness about social issues and promote community engagement through discussions, workshops, and interactive sessions.',
-        image: ''
+        image: '/soon.webp'
     }, 
      {
         id: 'h7',
@@ -1701,7 +1863,7 @@ export const UPCOMING_EVENTS: ClubEvent[] = [
         venue: 'Pending',
         category: '',
         description: 'An initiative to provide students with opportunities to explore career paths, develop essential skills, and enhance their professional growth through workshops, seminars, and interactive sessions.',
-        image: ''
+        image: '/soon.webp'
     }, 
    //abit
 

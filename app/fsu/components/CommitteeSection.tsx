@@ -1,5 +1,5 @@
-import { useState, ChangeEvent } from "react";
-import { Search, Phone, Shield, Users, ArrowUpRight, ChevronDown, ChevronUp } from "lucide-react";
+import { useState, ChangeEvent, useRef, useCallback, useEffect } from "react";
+import { Search, Phone, Shield, Users, ArrowUpRight, ChevronDown, ChevronUp, MoveHorizontal, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "motion/react";
 
 // Inline type definition to make this component completely self-contained and independent
@@ -27,7 +27,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9804141296",
         isExecutive: true,
         order: 1,
-        photoUrl: "../fsu/anup1.webp"
+        photoUrl: "/anup1.png"
     },
     {
         id: "2",
@@ -38,7 +38,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9826101579",
         isExecutive: true,
         order: 2,
-        photoUrl: "../fsu/suman2.webp"
+        photoUrl: "/suman2.png"
     },
     {
         id: "3",
@@ -49,7 +49,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9804153425",
         isExecutive: true,
         order: 3,
-        photoUrl: "../fsu/sagar.webp"
+        photoUrl: "/sagar.png"
     },
     {
         id: "4",
@@ -60,7 +60,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9827133759",
         isExecutive: true,
         order: 4,
-        photoUrl: "../fsu/ankit.webp"
+        photoUrl: "/ankit.png"
     },
     {
         id: "5",
@@ -71,7 +71,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9806722586",
         isExecutive: true,
         order: 5,
-        photoUrl: "../fsu/roshan.webp"
+        photoUrl: "/roshan.png"
     },
     {
         id: "6",
@@ -82,7 +82,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9766602575",
         isExecutive: false,
         order: 6,
-        photoUrl: "../fsu/asim.webp"
+        photoUrl: "/asim.png"
     },
     {
         id: "7",
@@ -93,7 +93,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9824112635",
         isExecutive: false,
         order: 7,
-        photoUrl: "../fsu/sisir.webp"
+        photoUrl: "/sisir.png"
     },
     {
         id: "8",
@@ -104,7 +104,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9806559252",
         isExecutive: false,
         order: 8,
-        photoUrl: "../fsu/iman.webp"
+        photoUrl: "/iman.png"
     },
     {
         id: "9",
@@ -115,7 +115,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9828185669",
         isExecutive: false,
         order: 9,
-        photoUrl: "../fsu/roshani.webp"
+        photoUrl: "/roshani.png"
     },
     {
         id: "10",
@@ -126,7 +126,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9767279339",
         isExecutive: false,
         order: 10,
-        photoUrl: "../fsu/pramish.webp"
+        photoUrl: "/pramish.png"
     },
     {
         id: "11",
@@ -137,7 +137,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9817140789",
         isExecutive: false,
         order: 11,
-        photoUrl: "../fsu/anisha.webp"
+        photoUrl: "/anisha.png"
     },
     {
         id: "12",
@@ -148,7 +148,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9815105797",
         isExecutive: false,
         order: 12,
-        photoUrl: "../fsu/sadix.webp"
+        photoUrl: "/sadix.png"
     },
     {
         id: "13",
@@ -159,7 +159,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9825496647",
         isExecutive: false,
         order: 13,
-        photoUrl: "../fsu/prami.webp"
+        photoUrl: "/prami.png"
     },
     {
         id: "14",
@@ -170,7 +170,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9745456596",
         isExecutive: false,
         order: 14,
-        photoUrl: "../fsu/amrit.webp"
+        photoUrl: "/amrit.png"
     },
     {
         id: "15",
@@ -181,7 +181,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9707528635",
         isExecutive: false,
         order: 15,
-        photoUrl: "../fsu/krish.webp"
+        photoUrl: "/krish.png"
     },
     {
         id: "16",
@@ -192,7 +192,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9826651749",
         isExecutive: false,
         order: 16,
-        photoUrl: "../fsu/sarita.webp"
+        photoUrl: "/sarita.png"
     },
     {
         id: "17",
@@ -203,7 +203,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9826164208",
         isExecutive: false,
         order: 17,
-        photoUrl: "../fsu/sugam.webp"
+        photoUrl: "/sugam.png"
     },
     {
         id: "18",
@@ -214,7 +214,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9804192736",
         isExecutive: false,
         order: 18,
-        photoUrl: "../fsu/adina.webp"
+        photoUrl: "/adina.png"
     },
     {
         id: "19",
@@ -225,7 +225,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9815182475",
         isExecutive: false,
         order: 19,
-        photoUrl: "../fsu/om.webp"
+        photoUrl: "/om.png"
     },
     {
         id: "20",
@@ -236,7 +236,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9821517591",
         isExecutive: false,
         order: 20,
-        photoUrl: "../fsu/biwash.webp"
+        photoUrl: "/biwash.png"
     },
     {
         id: "21",
@@ -247,7 +247,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9828367332",
         isExecutive: false,
         order: 21,
-        photoUrl: "../fsu/bis.webp"
+        photoUrl: "/f1/bis.png"
     },
     {
         id: "22",
@@ -258,9 +258,10 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         phone: "9762861361",
         isExecutive: false,
         order: 22,
-        photoUrl: "../fsu/bipin.webp"
+        photoUrl: "/bipin.png"
     }
 ];
+
 interface CommitteeSectionProps {
     language: "en" | "np";
 }
@@ -347,6 +348,169 @@ function CommitteeMemberCard({ member, language, getInitials }: MemberCardProps)
                 </a>
             </div>
         </motion.div>
+    );
+}
+
+function FSUMobileMembersCarousel({
+    members,
+    language,
+    getInitials
+}: {
+    members: CommitteeMember[];
+    language: "en" | "np";
+    getInitials: (name: string) => string;
+}) {
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const [activeIndex, setActiveIndex] = useState(0);
+    const [canScrollLeft, setCanScrollLeft] = useState(false);
+    const [canScrollRight, setCanScrollRight] = useState(true);
+
+    const updateScrollState = useCallback(() => {
+        if (!scrollContainerRef.current) return;
+        const container = scrollContainerRef.current;
+        const scrollLeft = container.scrollLeft;
+        const cardWidth = container.firstElementChild
+            ? (container.firstElementChild as HTMLElement).offsetWidth + 16
+            : 280;
+
+        const newIndex = Math.round(scrollLeft / cardWidth);
+        const clampedIndex = Math.max(0, Math.min(newIndex, members.length - 1));
+        setActiveIndex(clampedIndex);
+
+        setCanScrollLeft(scrollLeft > 10);
+        setCanScrollRight(scrollLeft < container.scrollWidth - container.clientWidth - 10);
+    }, [members.length]);
+
+    useEffect(() => {
+        const container = scrollContainerRef.current;
+        if (!container) return;
+
+        updateScrollState();
+        container.addEventListener('scroll', updateScrollState, { passive: true });
+        window.addEventListener('resize', updateScrollState);
+
+        return () => {
+            container.removeEventListener('scroll', updateScrollState);
+            window.removeEventListener('resize', updateScrollState);
+        };
+    }, [updateScrollState]);
+
+    const scrollToIndex = (index: number) => {
+        if (!scrollContainerRef.current) return;
+        const container = scrollContainerRef.current;
+        const targetCard = container.children[index] as HTMLElement;
+        if (targetCard) {
+            targetCard.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'center'
+            });
+        }
+    };
+
+    const handlePrev = () => {
+        if (activeIndex > 0) {
+            scrollToIndex(activeIndex - 1);
+        }
+    };
+
+    const handleNext = () => {
+        if (activeIndex < members.length - 1) {
+            scrollToIndex(activeIndex + 1);
+        }
+    };
+
+    if (!members || members.length === 0) return null;
+
+    return (
+        <div className="relative w-full">
+            {/* Helper Indicator & Counter */}
+            <div className="flex items-center justify-between px-1 mb-3 text-xs text-slate-500">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-200/60 font-medium text-slate-600">
+                    <MoveHorizontal className="w-3.5 h-3.5 text-red-600 animate-pulse" />
+                    <span>
+                        {language === 'en' ? 'Swipe left / right' : 'दायाँ-बायाँ स्वाइप गर्नुहोस्'}
+                    </span>
+                </div>
+
+                <span className="font-semibold text-slate-600 bg-white/80 px-2.5 py-0.5 rounded-full border border-slate-200 shadow-2xs">
+                    {activeIndex + 1} / {members.length}
+                </span>
+            </div>
+
+            {/* Horizontal Scroll Track */}
+            <div
+                ref={scrollContainerRef}
+                className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 px-4 -mx-4 scrollbar-none overscroll-x-contain"
+                style={{
+                    scrollbarWidth: 'none',
+                    msOverflowStyle: 'none',
+                    touchAction: 'pan-x pan-y',
+                    WebkitOverflowScrolling: 'touch'
+                }}
+            >
+                {members.map((member) => (
+                    <div
+                        key={member.id}
+                        className="w-[84vw] max-w-[320px] shrink-0 snap-center transition-opacity duration-300"
+                    >
+                        <CommitteeMemberCard
+                            member={member}
+                            language={language}
+                            getInitials={getInitials}
+                        />
+                    </div>
+                ))}
+            </div>
+
+            {/* Navigation Indicators & Prev/Next buttons */}
+            <div className="flex items-center justify-between mt-2 px-1">
+                <button
+                    type="button"
+                    onClick={handlePrev}
+                    disabled={!canScrollLeft}
+                    aria-label="Previous member"
+                    className={`w-8 h-8 rounded-full flex items-center justify-center border transition-all ${
+                        canScrollLeft
+                            ? 'bg-white text-slate-700 shadow-xs border-slate-200 active:scale-95 cursor-pointer'
+                            : 'bg-slate-100 text-slate-300 border-transparent opacity-40 cursor-not-allowed'
+                    }`}
+                >
+                    <ChevronLeft className="w-4 h-4 stroke-[2.5]" />
+                </button>
+
+                {/* Dot Pagination */}
+                <div className="flex items-center gap-1.5 max-w-[200px] overflow-hidden py-1">
+                    {members.map((_, idx) => (
+                        <button
+                            key={idx}
+                            type="button"
+                            onClick={() => scrollToIndex(idx)}
+                            aria-label={`Go to slide ${idx + 1}`}
+                            className={`transition-all rounded-full cursor-pointer ${
+                                activeIndex === idx
+                                    ? 'w-5 h-1.5 bg-red-600'
+                                    : 'w-1.5 h-1.5 bg-slate-300 hover:bg-slate-400'
+                            }`}
+                        />
+                    ))}
+                </div>
+
+                <button
+                    type="button"
+                    onClick={handleNext}
+                    disabled={!canScrollRight}
+                    aria-label="Next member"
+                    className={`w-8 h-8 rounded-full flex items-center justify-center border transition-all ${
+                        canScrollRight
+                            ? 'bg-white text-slate-700 shadow-xs border-slate-200 active:scale-95 cursor-pointer'
+                            : 'bg-slate-100 text-slate-300 border-transparent opacity-40 cursor-not-allowed'
+                    }`}
+                >
+                    <ChevronRight className="w-4 h-4 stroke-[2.5]" />
+                </button>
+            </div>
+        </div>
     );
 }
 
@@ -468,7 +632,17 @@ export default function CommitteeSection({ language }: CommitteeSectionProps) {
                 {/* Committee Directory Grid */}
                 {filteredMembers.length > 0 ? (
                     <>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
+                        {/* Mobile Horizontal Swipe Carousel (< sm) */}
+                        <div className="sm:hidden">
+                            <FSUMobileMembersCarousel
+                                members={filteredMembers}
+                                language={language}
+                                getInitials={getInitials}
+                            />
+                        </div>
+
+                        {/* Tablet / Desktop Grid (sm+) */}
+                        <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
                             {displayedMembers.map((member) => (
                                 <CommitteeMemberCard
                                     key={member.id}
@@ -479,9 +653,9 @@ export default function CommitteeSection({ language }: CommitteeSectionProps) {
                             ))}
                         </div>
 
-                        {/* Show More / Show Less Button */}
+                        {/* Show More / Show Less Button (Desktop/Tablet) */}
                         {filteredMembers.length > INITIAL_LIMIT && (
-                            <div className="mt-10 flex justify-center">
+                            <div className="hidden sm:flex mt-10 justify-center">
                                 <button
                                     onClick={() => setShowAll(!showAll)}
                                     className="neu-button inline-flex items-center gap-2 text-blue-950 px-7 py-3 rounded-full text-sm font-bold shadow-md transition-all cursor-pointer hover:scale-105"

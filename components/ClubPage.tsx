@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
-    ArrowLeft,
     Users,
     MapPin,
     Award,
@@ -51,11 +50,8 @@ import {
     Flag,
     BarChart3,
     Box,
-    QrCode,
     Printer,
-    FileCheck2,
-    Sparkle,
-    CheckCheck
+    
 } from 'lucide-react';
 
 import {
@@ -64,6 +60,7 @@ import {
     ClubNotice,
     Language,
     LeadershipMember,
+    ClubGalleryItem,
     UPCOMING_EVENTS
 } from '../app/data/clubsData';
 import { SuggestionMessageBox } from './SuggestionMessageBox';
@@ -118,47 +115,12 @@ export interface AchievementCardData {
     badge?: string;
 }
 
-const getContextualAchievementImage = (title: string, idx: number, category: string = ''): string => {
-    const t = (title + ' ' + category).toLowerCase();
-    if (t.includes('hackathon') || t.includes('code') || t.includes('programming') || t.includes('fest') || t.includes('tech')) {
-        return 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&auto=format&fit=crop&q=80';
-    }
-    if (t.includes('train') || t.includes('workshop') || t.includes('bootcamp') || t.includes('react') || t.includes('web') || t.includes('student')) {
-        return 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&auto=format&fit=crop&q=80';
-    }
-    if (t.includes('portal') || t.includes('board') || t.includes('digital') || t.includes('software') || t.includes('feedback') || t.includes('app')) {
-        return 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&auto=format&fit=crop&q=80';
-    }
-    if (t.includes('robot') || t.includes('trophy') || t.includes('champion') || t.includes('runner') || t.includes('award') || t.includes('win') || t.includes('club') || t.includes('year') || t.includes('best')) {
-        return 'https://images.unsplash.com/photo-1567521464027-f127ff144326?w=800&auto=format&fit=crop&q=80';
-    }
-    if (t.includes('sport') || t.includes('cricket') || t.includes('football') || t.includes('athletics')) {
-        return 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=800&auto=format&fit=crop&q=80';
-    }
-    if (t.includes('blood') || t.includes('health') || t.includes('relief') || t.includes('donation') || t.includes('medical')) {
-        return 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=800&auto=format&fit=crop&q=80';
-    }
-    if (t.includes('business') || t.includes('market') || t.includes('summit') || t.includes('venture') || t.includes('pitch') || t.includes('manage')) {
-        return 'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&auto=format&fit=crop&q=80';
-    }
-    if (t.includes('literature') || t.includes('poetry') || t.includes('drama') || t.includes('culture') || t.includes('art') || t.includes('music')) {
-        return 'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=800&auto=format&fit=crop&q=80';
-    }
-    const genericList = [
-        'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1531545514256-b1400bc00f31?w=800&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=800&auto=format&fit=crop&q=80'
-    ];
-    return genericList[idx % genericList.length];
-};
-
 const DEFAULT_CLUB_SAMPLE: Club = {
     id: 'abit-club',
     name: 'ABIT Club (IT & Computer)',
     nepaliName: 'एबीआइटी क्लब (सूचना तथा प्रविधि)',
     category: 'Technology & IT',
-    logo: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=300&h=300&fit=crop&crop=faces',
+    logo: '',
     accentColor: '#0c72b8',
     description: 'The premier Information Technology student committee at Aadikavi Bhanubhakta Campus. Dedicated to fostering software development, artificial intelligence skills, cybersecurity awareness, web technologies, and tech innovation among students.',
     shortDescription: 'Empowering students in IT innovation, coding bootcamps, AI workshops, and hackathons.',
@@ -419,49 +381,35 @@ export const ClubPage: React.FC<ClubPageProps> = ({
     // Distinct About Section Images (configured via aboutImages or aboutUsImages)
     const aboutImageList = useMemo(() => {
         const customAbout = club.aboutImages || club.aboutUsImages;
-        if (customAbout && customAbout.length > 0 && typeof customAbout[0] === 'string' && customAbout[0].startsWith('http')) {
-            return customAbout;
+        if (customAbout && Array.isArray(customAbout) && customAbout.length > 0) {
+            return customAbout.map((img) => (typeof img === 'string' ? img.trim() : '')).filter(Boolean);
         }
-        // Elegant reliable curated college & campus images
-        return [
-            'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1000&auto=format&fit=crop&q=80',
-            'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&auto=format&fit=crop&q=80',
-            'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&auto=format&fit=crop&q=80'
-        ];
+        return [];
     }, [club.aboutImages, club.aboutUsImages]);
 
     // Normalize gallery images/items to structured items with image, title, date, category, description
     const rawGallery = club.galleryItems || club.gallery || club.galleryImages || [];
     const galleryItems: { id: string; image: string; title?: string; date?: string; category?: string; description?: string }[] = useMemo(() => {
-        return rawGallery.map((item, idx) => {
-            if (typeof item === 'string') {
-                const defaultTitles = [
-                    'Campus Tech Symposium',
-                    'Hands-on React & AI Workshop',
-                    'Inter-College Hackathon 2025',
-                    'Executive Committee Gathering',
-                    'Annual Tech Exhibition & Showcase',
-                    'Student Mentorship & Code Lab',
-                    'Digital Campus Innovation Meet',
-                    'Youth Leadership Forum'
-                ];
-                const defaultYears = ['2026', '2025', '2024', '2024', '2023', '2023', '2022', '2022'];
+        return rawGallery
+            .map((item, idx) => {
+                if (typeof item === 'string') {
+                    return {
+                        id: `gal-${idx}`,
+                        image: item.trim(),
+                        title: undefined,
+                        date: undefined
+                    };
+                }
                 return {
-                    id: `gal-${idx}`,
-                    image: item,
-                    title: defaultTitles[idx % defaultTitles.length],
-                    date: defaultYears[idx % defaultYears.length]
+                    id: item.id || `gal-${idx}`,
+                    image: (typeof item.image === 'string' ? item.image.trim() : ''),
+                    title: item.title,
+                    date: item.date,
+                    category: item.category,
+                    description: item.description
                 };
-            }
-            return {
-                id: item.id || `gal-${idx}`,
-                image: item.image,
-                title: item.title !== undefined ? item.title : (idx === 0 ? `Moment ${idx + 1}` : ''),
-                date: item.date,
-                category: item.category,
-                description: item.description
-            };
-        });
+            })
+            .filter((item) => typeof item.image === 'string' && item.image.length > 0);
     }, [rawGallery]);
 
     const galleryList = useMemo(() => galleryItems.map(g => g.image), [galleryItems]);
@@ -516,7 +464,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                 date: item.date,
                 category: item.category || (idx === 0 ? 'Major Milestone' : idx === 1 ? 'Capacity Building' : 'Campus Impact'),
                 badge: item.badge || (idx === 0 ? 'Major Milestone' : idx === 1 ? 'Capacity Building' : 'Institutional Impact'),
-                image: item.image || getContextualAchievementImage(item.title, idx, club.category)
+                image: (typeof item.image === 'string' && item.image.trim().length > 0) ? item.image.trim() : undefined
             }));
         }
 
@@ -536,7 +484,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                         date: item.date,
                         category: item.category || (idx === 0 ? 'Major Milestone' : idx === 1 ? 'Capacity Building' : 'Campus Impact'),
                         badge: item.badge || (idx === 0 ? 'Major Milestone' : idx === 1 ? 'Capacity Building' : 'Institutional Impact'),
-                        image: item.image || getContextualAchievementImage(item.title, idx, club.category)
+                        image: (typeof item.image === 'string' && item.image.trim().length > 0) ? item.image.trim() : undefined
                     };
                 }
                 return {
@@ -546,7 +494,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                     date: undefined,
                     category: (idx === 0 ? 'Major Milestone' : idx === 1 ? 'Capacity Building' : 'Campus Initiative'),
                     badge: (idx === 0 ? 'Major Milestone' : idx === 1 ? 'Capacity Building' : 'Campus Impact'),
-                    image: getContextualAchievementImage(item, idx, club.category)
+                    image: undefined
                 };
             });
         }
@@ -583,22 +531,31 @@ export const ClubPage: React.FC<ClubPageProps> = ({
         return `To establish ${club.name} as a leading student platform at Aadikavi Bhanubhakta Campus, empowering students through diverse academic, professional, and leadership opportunities while fostering a skilled, collaborative, and socially responsible community.`;
     }, [club.name, club.vision]);
 
-    const missionStatement = React.useMemo(() => {
+    const missionList = React.useMemo<string[]>(() => {
         const rawMission = (club as any).mission;
-        if (typeof rawMission === 'string' && rawMission.trim()) {
-            return rawMission.trim();
-        }
         if (Array.isArray(rawMission) && rawMission.length > 0) {
-            return `${club.name} is committed to organizing seminars, workshops, training sessions, and community-oriented initiatives in coordination with Aadikavi Bhanubhakta Campus. Through these programs, the club aims to enhance student practical knowledge, leadership abilities, communication skills, and professional competence.`;
+            const filtered = rawMission.map((m: any) => String(m).trim()).filter(Boolean);
+            if (filtered.length > 0) return filtered;
         }
-        return `${club.name} is committed to organizing seminars, workshops, training sessions, and community-oriented initiatives in coordination with Aadikavi Bhanubhakta Campus. Through these programs, the club aims to enhance student practical knowledge, leadership abilities, communication skills, and professional competence.`;
+        if (typeof rawMission === 'string' && rawMission.trim()) {
+            return [rawMission.trim()];
+        }
+        return [
+            `${club.name} is committed to organizing seminars, workshops, training sessions, and community-oriented initiatives in coordination with Aadikavi Bhanubhakta Campus. Through these programs, the club aims to enhance student practical knowledge, leadership abilities, communication skills, and professional competence.`
+        ];
     }, [club.name, club.mission]);
+
+    const missionStatement = React.useMemo(() => {
+        return missionList.join(' ');
+    }, [missionList]);
 
     const defaultPresidentMessage = {
         senderName: club.presidentMessage?.senderName || club.president || 'President',
         senderRole: club.presidentMessage?.senderRole || `President, ${club.name}`,
         message: club.presidentMessage?.message || `Greetings respected teachers, guests, and fellow students! As the President of ${club.name}, I warmly welcome you to our official committee hub. Our committee was established in ${club.establishedYear || '2018'} with a clear commitment to fostering student potential. Extracurricular engagement is key to holistic personal and professional growth. I invite all passionate scholars of Aadikavi Bhanubhakta Campus to join hands with us, participate in our initiatives, and lead positive change together.`,
-        avatarUrl: club.presidentMessage?.avatarUrl || leadershipList.find((m) => m.role === 'President')?.avatarUrl || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face'
+        avatarUrl: (club.presidentMessage?.avatarUrl && club.presidentMessage.avatarUrl.trim().length > 0)
+            ? club.presidentMessage.avatarUrl.trim()
+            : (leadershipList.find((m) => m.role === 'President')?.avatarUrl || '')
     };
 
     const presidentLeader = leadershipList.find((m) => m.role.toLowerCase().includes('president') && !m.role.toLowerCase().includes('vice')) || leadershipList.find((m) => m.role.toLowerCase().includes('president'));
@@ -612,7 +569,9 @@ export const ClubPage: React.FC<ClubPageProps> = ({
         senderName: club.advisorMessage?.senderName || club.facultyAdvisor || 'Club Advisor',
         senderRole: club.advisorMessage?.senderRole || `Club Advisor, ${club.name}`,
         message: club.advisorMessage?.message || `At Aadikavi Bhanubhakta Campus, student committees form the heartbeat of experiential learning. ${club.name} has consistently demonstrated excellence in organizing high-impact academic and extracurricular initiatives. As club advisor, I take pride in mentoring our dedicated executive board and encourage every student to actively participate in this vibrant platform.`,
-        avatarUrl: club.advisorMessage?.avatarUrl || leadershipList.find((m) => m.role === 'Club Advisor' || m.role === 'Faculty Advisor')?.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&h=300&fit=crop&crop=face'
+        avatarUrl: (club.advisorMessage?.avatarUrl && club.advisorMessage.avatarUrl.trim().length > 0)
+            ? club.advisorMessage.avatarUrl.trim()
+            : (leadershipList.find((m) => m.role === 'Club Advisor' || m.role === 'Faculty Advisor')?.avatarUrl || '')
     };
 
     const defaultManifesto = {
@@ -811,12 +770,18 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                         <div className="relative shrink-0 flex flex-col items-center">
                             <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-[#eef2f7] p-2 flex items-center justify-center shadow-[6px_6px_14px_#d1d9e6,-6px_-6px_14px_#ffffff] border border-white/90 group transition-all duration-300">
                                 <div className="w-full h-full rounded-full bg-white p-1.5 flex items-center justify-center shadow-[inset_2px_2px_4px_#d1d9e6,inset_-2px_-2px_4px_#ffffff] overflow-hidden">
-                                    <img
-                                        src={club.logo}
-                                        alt={club.name}
-                                        referrerPolicy="no-referrer"
-                                        className="w-full h-full object-contain rounded-full group-hover:scale-105 transition-transform duration-300"
-                                    />
+                                    {club.logo ? (
+                                        <img
+                                            src={club.logo}
+                                            alt={club.name}
+                                            referrerPolicy="no-referrer"
+                                            className="w-full h-full object-contain rounded-full group-hover:scale-105 transition-transform duration-300"
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full rounded-full flex items-center justify-center font-black text-xl sm:text-2xl text-[#0c72b8] bg-blue-50 font-poppins">
+                                            {clubAcronym || 'ABC'}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -1059,12 +1024,18 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                 </p>
 
                                 <div className="pt-3 border-t border-slate-300/40 flex items-center gap-3 relative z-10">
-                                    <img
-                                        src={defaultPresidentMessage.avatarUrl}
-                                        alt={defaultPresidentMessage.senderName}
-                                        referrerPolicy="no-referrer"
-                                        className="w-11 h-11 rounded-full object-cover border-2 border-[#0c72b8] shadow-xs"
-                                    />
+                                    {defaultPresidentMessage.avatarUrl ? (
+                                        <img
+                                            src={defaultPresidentMessage.avatarUrl}
+                                            alt={defaultPresidentMessage.senderName}
+                                            referrerPolicy="no-referrer"
+                                            className="w-11 h-11 rounded-full object-cover border-2 border-[#0c72b8] shadow-xs shrink-0"
+                                        />
+                                    ) : (
+                                        <div className="w-11 h-11 rounded-full bg-blue-50 border-2 border-[#0c72b8] text-[#0c72b8] font-black text-xs flex items-center justify-center shadow-xs shrink-0 font-poppins">
+                                            {defaultPresidentMessage.senderName.slice(0, 2).toUpperCase()}
+                                        </div>
+                                    )}
                                     <div className="min-w-0">
                                         <h5 className="text-xs sm:text-sm font-bold text-slate-900 truncate">{defaultPresidentMessage.senderName}</h5>
                                         <p className="text-[11px] text-slate-500 truncate">{defaultPresidentMessage.senderRole}</p>
@@ -1218,7 +1189,6 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                         achievements={achievements}
                                         language={language}
                                         onSelectAchievement={(ach) => setActiveAchievementPreview(ach)}
-                                        getContextualAchievementImage={getContextualAchievementImage}
                                         clubCategory={club.category}
                                         extractYear={extractYear}
                                     />
@@ -1228,9 +1198,8 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                 <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 w-full">
                                     {displayedAchievements.map((ach, idx) => {
                                         const year = extractYear(ach.date, idx);
-                                        const categoryTag = ach.category || (idx === 0 ? 'Hackathon & Innovation' : idx === 1 ? 'Technical Training' : idx === 2 ? 'Campus Impact' : 'Academic Milestone');
+                                        const categoryTag = ach.category || (idx === 0 ? 'Major Milestone' : idx === 1 ? 'Capacity Building' : idx === 2 ? 'Campus Impact' : 'Academic Milestone');
                                         const awardBadge = ach.badge || (idx === 0 ? 'Major Milestone' : idx === 1 ? 'Capacity Building' : idx === 2 ? 'Institutional Impact' : 'Excellence Award');
-                                        const fallbackImg = getContextualAchievementImage(ach.title, idx, club.category);
 
                                         return (
                                             <motion.div
@@ -1244,40 +1213,62 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                                 className="group bg-[#eef2f7] rounded-3xl p-4 sm:p-4.5 border border-white/90 shadow-[5px_5px_15px_#d1d9e6,-5px_-5px_15px_#ffffff] hover:shadow-[7px_7px_20px_#c8d2e2,-7px_-7px_20px_#ffffff] transition-all flex flex-col justify-between cursor-pointer relative overflow-hidden text-left"
                                             >
                                                 <div className="space-y-3">
-                                                    {/* Media Viewport */}
-                                                    <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-slate-200 shadow-[inset_1.5px_1.5px_3px_#d1d9e6,inset_-1.5px_-1.5px_3px_#ffffff]">
-                                                        <img
-                                                            src={ach.image || fallbackImg}
-                                                            alt={ach.title}
-                                                            referrerPolicy="no-referrer"
-                                                            onError={(e) => {
-                                                                e.currentTarget.src = fallbackImg;
-                                                            }}
-                                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                                        />
-                                                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
+                                                    {/* Media Viewport if image is present */}
+                                                    {ach.image ? (
+                                                        <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-slate-200 shadow-[inset_1.5px_1.5px_3px_#d1d9e6,inset_-1.5px_-1.5px_3px_#ffffff]">
+                                                            <img
+                                                                src={ach.image}
+                                                                alt={ach.title}
+                                                                referrerPolicy="no-referrer"
+                                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                                            />
+                                                            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
 
-                                                        {/* Top Date Pill */}
-                                                        <div className="absolute top-2.5 left-2.5 flex items-center gap-1">
-                                                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold text-slate-800 bg-white/95 backdrop-blur-md shadow-xs flex items-center gap-1 border border-white/80">
-                                                                <Calendar className="w-3 h-3 text-[#0c72b8]" />
-                                                                <span>{year}</span>
-                                                            </span>
-                                                        </div>
+                                                            {/* Top Date Pill */}
+                                                            {year && (
+                                                                <div className="absolute top-2.5 left-2.5 flex items-center gap-1">
+                                                                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold text-slate-800 bg-white/95 backdrop-blur-md shadow-xs flex items-center gap-1 border border-white/80">
+                                                                        <Calendar className="w-3 h-3 text-[#0c72b8]" />
+                                                                        <span>{year}</span>
+                                                                    </span>
+                                                                </div>
+                                                            )}
 
-                                                        {/* Top Category Pill */}
-                                                        <div className="absolute top-2.5 right-2.5">
-                                                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold text-[#0c72b8] bg-white/95 backdrop-blur-md shadow-xs border border-white/80 truncate max-w-[130px]">
-                                                                {categoryTag}
-                                                            </span>
-                                                        </div>
+                                                            {/* Top Category Pill */}
+                                                            {categoryTag && (
+                                                                <div className="absolute top-2.5 right-2.5">
+                                                                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold text-[#0c72b8] bg-white/95 backdrop-blur-md shadow-xs border border-white/80 truncate max-w-[130px]">
+                                                                        {categoryTag}
+                                                                    </span>
+                                                                </div>
+                                                            )}
 
-                                                        {/* Hover Quick View Trigger */}
-                                                        <div className="absolute bottom-2.5 right-2.5 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-xs text-white text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex items-center gap-1">
-                                                            <ZoomIn className="w-3 h-3" />
-                                                            <span>View Details</span>
+                                                            {/* Hover Quick View Trigger */}
+                                                            <div className="absolute bottom-2.5 right-2.5 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-xs text-white text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex items-center gap-1">
+                                                                <ZoomIn className="w-3 h-3" />
+                                                                <span>View Details</span>
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    ) : (
+                                                        <div className="relative w-full p-3 rounded-2xl bg-white/60 border border-white/90 shadow-[inset_1.5px_1.5px_3px_#d1d9e6,inset_-1.5px_-1.5px_3px_#ffffff] flex items-center justify-between">
+                                                            <div className="flex items-center gap-2">
+                                                                <div className="w-8 h-8 rounded-xl bg-blue-50 text-[#0c72b8] flex items-center justify-center shrink-0 border border-blue-100">
+                                                                    <Trophy className="w-4 h-4 text-[#0c72b8]" />
+                                                                </div>
+                                                                {categoryTag && (
+                                                                    <span className="text-[11px] font-bold text-[#0c72b8] truncate max-w-[150px]">
+                                                                        {categoryTag}
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                            {year && (
+                                                                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold text-slate-700 bg-white shadow-xs border border-white/80 flex items-center gap-1 shrink-0">
+                                                                    <Calendar className="w-3 h-3 text-[#0c72b8]" />
+                                                                    <span>{year}</span>
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    )}
 
                                                     {/* Headline & Description */}
                                                     <div className="space-y-1.5 pt-0.5">
@@ -1344,70 +1335,53 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                     transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                     className="bg-[#eef2f7] rounded-3xl p-6 sm:p-9 lg:p-10 shadow-[7px_7px_20px_#d1d9e6,-7px_-7px_20px_#ffffff] border border-white/90 scroll-mt-36 relative overflow-hidden"
                 >
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-                        {/* LEFT: Curated College & Campus Bento Photo Showcase */}
-                        <div className="lg:col-span-5 space-y-3.5">
-                            {/* Main Feature Campus Photo */}
-                            <motion.div
-                                whileHover={{ scale: 1.01 }}
-                                transition={{ duration: 0.25 }}
-                                className="relative rounded-3xl p-2.5 bg-[#eef2f7] shadow-[inset_3px_3px_6px_#d1d9e6,inset_-3px_-3px_6px_#ffffff] group overflow-hidden"
-                            >
-                                <div className="relative w-full h-56 sm:h-64 rounded-2xl overflow-hidden shadow-xs bg-slate-200">
-                                    <img
-                                        src={aboutImageList[0]}
-                                        alt={`${club.name} About Feature`}
-                                        referrerPolicy="no-referrer"
-                                        onError={(e) => {
-                                            (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1000&auto=format&fit=crop&q=80';
-                                        }}
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                                    />
-                                </div>
-                            </motion.div>
-
-                            {/* Bottom 2-Photo Grid */}
-                            <div className="grid grid-cols-2 gap-3.5">
+                    <div className={aboutImageList.length > 0 ? "grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center" : "max-w-4xl mx-auto space-y-6"}>
+                        {/* LEFT: Curated Photo Showcase (only if aboutImageList has items) */}
+                        {aboutImageList.length > 0 && (
+                            <div className="lg:col-span-5 space-y-3.5">
+                                {/* Main Feature Campus Photo */}
                                 <motion.div
-                                    whileHover={{ scale: 1.02 }}
+                                    whileHover={{ scale: 1.01 }}
                                     transition={{ duration: 0.25 }}
-                                    className="rounded-2xl p-2 bg-[#eef2f7] shadow-[inset_2.5px_2.5px_5px_#d1d9e6,inset_-2.5px_-2.5px_5px_#ffffff] group"
+                                    className="relative rounded-3xl p-2.5 bg-[#eef2f7] shadow-[inset_3px_3px_6px_#d1d9e6,inset_-3px_-3px_6px_#ffffff] group overflow-hidden"
                                 >
-                                    <div className="w-full h-24 sm:h-28 rounded-xl overflow-hidden bg-slate-200 shadow-2xs">
+                                    <div className="relative w-full h-56 sm:h-64 rounded-2xl overflow-hidden shadow-xs bg-slate-200">
                                         <img
-                                            src={aboutImageList[1]}
-                                            alt={`${club.name} About Photo 2`}
+                                            src={aboutImageList[0]}
+                                            alt={`${club.name} About Feature`}
                                             referrerPolicy="no-referrer"
-                                            onError={(e) => {
-                                                (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&auto=format&fit=crop&q=80';
-                                            }}
-                                            className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                                         />
                                     </div>
                                 </motion.div>
 
-                                <motion.div
-                                    whileHover={{ scale: 1.02 }}
-                                    transition={{ duration: 0.25 }}
-                                    className="rounded-2xl p-2 bg-[#eef2f7] shadow-[inset_2.5px_2.5px_5px_#d1d9e6,inset_-2.5px_-2.5px_5px_#ffffff] group"
-                                >
-                                    <div className="w-full h-24 sm:h-28 rounded-xl overflow-hidden bg-slate-200 shadow-2xs">
-                                        <img
-                                            src={aboutImageList[2]}
-                                            alt={`${club.name} About Photo 3`}
-                                            referrerPolicy="no-referrer"
-                                            onError={(e) => {
-                                                (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&auto=format&fit=crop&q=80';
-                                            }}
-                                            className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
-                                        />
+                                {/* Additional Photos if present */}
+                                {aboutImageList.length > 1 && (
+                                    <div className={`grid grid-cols-${Math.min(aboutImageList.length - 1, 2)} gap-3.5`}>
+                                        {aboutImageList.slice(1, 3).map((img, idx) => (
+                                            <motion.div
+                                                key={idx}
+                                                whileHover={{ scale: 1.02 }}
+                                                transition={{ duration: 0.25 }}
+                                                className="rounded-2xl p-2 bg-[#eef2f7] shadow-[inset_2.5px_2.5px_5px_#d1d9e6,inset_-2.5px_-2.5px_5px_#ffffff] group"
+                                            >
+                                                <div className="w-full h-24 sm:h-28 rounded-xl overflow-hidden bg-slate-200 shadow-2xs">
+                                                    <img
+                                                        src={img}
+                                                        alt={`${club.name} About Photo ${idx + 2}`}
+                                                        referrerPolicy="no-referrer"
+                                                        className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
+                                                    />
+                                                </div>
+                                            </motion.div>
+                                        ))}
                                     </div>
-                                </motion.div>
+                                )}
                             </div>
-                        </div>
+                        )}
 
-                        {/* RIGHT: Refined Editorial Storytelling & Details */}
-                        <div className="lg:col-span-7 space-y-6">
+                        {/* RIGHT / MAIN: Refined Editorial Storytelling & Details */}
+                        <div className={aboutImageList.length > 0 ? "lg:col-span-7 space-y-6" : "space-y-6"}>
                             {/* Header / Eyebrow */}
                             <div className="space-y-1.5">
                                 <div className="flex items-center gap-2 text-xs font-black tracking-widest text-[#0c72b8] uppercase font-poppins">
@@ -1643,9 +1617,20 @@ export const ClubPage: React.FC<ClubPageProps> = ({
 
                             {/* Statement Body with animated left accent highlight */}
                             <div className="relative pl-4 sm:pl-5 border-l-3 border-[#800000] py-1 transition-all duration-300 group-hover:pl-6">
-                                <p className="text-sm sm:text-[15px] lg:text-base text-slate-700 leading-relaxed font-normal tracking-normal transition-colors group-hover:text-slate-900">
-                                    {missionStatement}
-                                </p>
+                                {missionList.length > 1 ? (
+                                    <ul className="space-y-2.5 text-sm sm:text-[15px] lg:text-base text-slate-700 leading-relaxed font-normal">
+                                        {missionList.map((item, idx) => (
+                                            <li key={idx} className="flex items-start gap-2.5">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-[#800000] mt-2 shrink-0" />
+                                                <span>{item}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <p className="text-sm sm:text-[15px] lg:text-base text-slate-700 leading-relaxed font-normal tracking-normal transition-colors group-hover:text-slate-900">
+                                        {missionList[0]}
+                                    </p>
+                                )}
                             </div>
                         </div>
 
@@ -1747,9 +1732,9 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                     {/* Fluid Wave Process Flow for Desktop & Tablet */}
                     <div className="hidden md:block relative w-full pt-4 pb-4 px-4">
                         {/* Background SVG Fluid Sine Wave */}
-                        <div className="relative w-full h-[260px]">
+                        <div className="relative w-full h-[290px]">
                             <svg
-                                viewBox="0 0 1000 260"
+                                viewBox="0 0 1000 290"
                                 fill="none"
                                 preserveAspectRatio="none"
                                 className="absolute inset-0 w-full h-full pointer-events-none overflow-visible"
@@ -1769,7 +1754,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
 
                                 {/* Background ambient glow wave */}
                                 <motion.path
-                                    d="M 40 185 C 90 185, 130 205, 175 205 C 235 205, 330 55, 430 55 C 530 55, 595 195, 690 195 C 770 195, 830 90, 915 90 C 960 90, 985 105, 1000 105"
+                                    d="M 15 235 C 55 235, 85 235, 125 235 C 225 235, 275 65, 375 65 C 475 65, 525 235, 625 235 C 725 235, 775 65, 875 65 C 915 65, 955 65, 985 65"
                                     stroke="#0c72b8"
                                     strokeWidth="8"
                                     strokeOpacity="0.15"
@@ -1779,7 +1764,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
 
                                 {/* Main Crisp Continuous Fluid Sine Wave */}
                                 <motion.path
-                                    d="M 40 185 C 90 185, 130 205, 175 205 C 235 205, 330 55, 430 55 C 530 55, 595 195, 690 195 C 770 195, 830 90, 915 90 C 960 90, 985 105, 1000 105"
+                                    d="M 15 235 C 55 235, 85 235, 125 235 C 225 235, 275 65, 375 65 C 475 65, 525 235, 625 235 C 725 235, 775 65, 875 65 C 915 65, 955 65, 985 65"
                                     stroke="url(#waveGradient)"
                                     strokeWidth="3.5"
                                     strokeLinecap="round"
@@ -1806,14 +1791,14 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                             whileInView={{ opacity: 1, y: 0 }}
                                             viewport={{ once: true }}
                                             transition={{ duration: 0.4, delay: 0.1 }}
-                                            className="absolute left-[3%] top-[5px] w-[240px] lg:w-[260px] z-10"
+                                            className="absolute left-[2%] top-[10px] w-[21%] lg:w-[22%] max-w-[240px] z-10"
                                         >
                                             <div className="relative">
                                                 <div className="flex items-baseline justify-between">
                                                     <h3 className="text-base lg:text-lg font-bold text-slate-900 group-hover:text-[#0c72b8] transition-colors font-poppins">
                                                         {title}
                                                     </h3>
-                                                    <span className="text-slate-300/40 group-hover:text-blue-400/40 text-5xl lg:text-6xl font-black font-poppins transition-colors select-none -mt-3">
+                                                    <span className="text-slate-300/40 group-hover:text-blue-400/40 text-4xl lg:text-5xl font-black font-poppins transition-colors select-none -mt-2">
                                                         1
                                                     </span>
                                                 </div>
@@ -1830,7 +1815,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                             viewport={{ once: true }}
                                             transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.2 }}
                                             whileHover={{ scale: 1.15, transition: { duration: 0.2 } }}
-                                            className="absolute left-[17.5%] top-[205px] -translate-x-1/2 -translate-y-1/2 z-20 cursor-pointer"
+                                            className="absolute left-[12.5%] top-[235px] -translate-x-1/2 -translate-y-1/2 z-20 cursor-pointer"
                                         >
                                             <div className="relative flex items-center justify-center">
                                                 {/* Ambient blue pulse glow */}
@@ -1865,7 +1850,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                             viewport={{ once: true }}
                                             transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.35 }}
                                             whileHover={{ scale: 1.15, transition: { duration: 0.2 } }}
-                                            className="absolute left-[43%] top-[55px] -translate-x-1/2 -translate-y-1/2 z-20 cursor-pointer"
+                                            className="absolute left-[37.5%] top-[65px] -translate-x-1/2 -translate-y-1/2 z-20 cursor-pointer"
                                         >
                                             <div className="relative flex items-center justify-center">
                                                 <div className="absolute inset-0 bg-[#0c72b8]/20 rounded-full blur-lg group-hover:blur-xl group-hover:scale-150 transition-all duration-300" />
@@ -1884,14 +1869,14 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                             whileInView={{ opacity: 1, y: 0 }}
                                             viewport={{ once: true }}
                                             transition={{ duration: 0.4, delay: 0.25 }}
-                                            className="absolute left-[31%] top-[145px] w-[240px] lg:w-[260px] z-10"
+                                            className="absolute left-[27%] top-[165px] w-[21%] lg:w-[22%] max-w-[240px] z-10"
                                         >
                                             <div className="relative">
                                                 <div className="flex items-baseline justify-between">
                                                     <h3 className="text-base lg:text-lg font-bold text-slate-900 group-hover:text-[#0c72b8] transition-colors font-poppins">
                                                         {title}
                                                     </h3>
-                                                    <span className="text-slate-300/40 group-hover:text-blue-400/40 text-5xl lg:text-6xl font-black font-poppins transition-colors select-none -mt-3">
+                                                    <span className="text-slate-300/40 group-hover:text-blue-400/40 text-4xl lg:text-5xl font-black font-poppins transition-colors select-none -mt-2">
                                                         2
                                                     </span>
                                                 </div>
@@ -1920,7 +1905,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                             viewport={{ once: true }}
                                             transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.5 }}
                                             whileHover={{ scale: 1.15, transition: { duration: 0.2 } }}
-                                            className="absolute left-[69%] top-[195px] -translate-x-1/2 -translate-y-1/2 z-20 cursor-pointer"
+                                            className="absolute left-[62.5%] top-[235px] -translate-x-1/2 -translate-y-1/2 z-20 cursor-pointer"
                                         >
                                             <div className="relative flex items-center justify-center">
                                                 <div className="absolute inset-0 bg-[#0c72b8]/20 rounded-full blur-lg group-hover:blur-xl group-hover:scale-150 transition-all duration-300" />
@@ -1939,14 +1924,14 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                             whileInView={{ opacity: 1, y: 0 }}
                                             viewport={{ once: true }}
                                             transition={{ duration: 0.4, delay: 0.4 }}
-                                            className="absolute left-[57%] top-[5px] w-[240px] lg:w-[260px] z-10"
+                                            className="absolute left-[52%] top-[10px] w-[21%] lg:w-[22%] max-w-[240px] z-10"
                                         >
                                             <div className="relative">
                                                 <div className="flex items-baseline justify-between">
                                                     <h3 className="text-base lg:text-lg font-bold text-slate-900 group-hover:text-[#0c72b8] transition-colors font-poppins">
                                                         {title}
                                                     </h3>
-                                                    <span className="text-slate-300/40 group-hover:text-blue-400/40 text-5xl lg:text-6xl font-black font-poppins transition-colors select-none -mt-3">
+                                                    <span className="text-slate-300/40 group-hover:text-blue-400/40 text-4xl lg:text-5xl font-black font-poppins transition-colors select-none -mt-2">
                                                         3
                                                     </span>
                                                 </div>
@@ -1975,7 +1960,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                             viewport={{ once: true }}
                                             transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.65 }}
                                             whileHover={{ scale: 1.15, transition: { duration: 0.2 } }}
-                                            className="absolute left-[91.5%] top-[90px] -translate-x-1/2 -translate-y-1/2 z-20 cursor-pointer"
+                                            className="absolute left-[87.5%] top-[65px] -translate-x-1/2 -translate-y-1/2 z-20 cursor-pointer"
                                         >
                                             <div className="relative flex items-center justify-center">
                                                 <div className="absolute inset-0 bg-[#0c72b8]/20 rounded-full blur-lg group-hover:blur-xl group-hover:scale-150 transition-all duration-300" />
@@ -1994,14 +1979,14 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                             whileInView={{ opacity: 1, y: 0 }}
                                             viewport={{ once: true }}
                                             transition={{ duration: 0.4, delay: 0.55 }}
-                                            className="absolute right-[2%] top-[145px] w-[240px] lg:w-[260px] z-10"
+                                            className="absolute left-[77%] top-[165px] w-[21%] lg:w-[22%] max-w-[240px] z-10"
                                         >
                                             <div className="relative">
                                                 <div className="flex items-baseline justify-between">
                                                     <h3 className="text-base lg:text-lg font-bold text-slate-900 group-hover:text-[#0c72b8] transition-colors font-poppins">
                                                         {title}
                                                     </h3>
-                                                    <span className="text-slate-300/40 group-hover:text-blue-400/40 text-5xl lg:text-6xl font-black font-poppins transition-colors select-none -mt-3">
+                                                    <span className="text-slate-300/40 group-hover:text-blue-400/40 text-4xl lg:text-5xl font-black font-poppins transition-colors select-none -mt-2">
                                                         4
                                                     </span>
                                                 </div>
@@ -2066,161 +2051,140 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                 </motion.section>
 
                 {/* 7. HISTORY & HERITAGE SECTION (Editorial Neumorphic Journey) */}
-                <motion.section
-                    id="history"
-                    initial={{ opacity: 0, y: 28 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: '-40px' }}
-                    transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                    className="relative space-y-8 scroll-mt-36 pt-2 pb-6"
-                >
-                    {/* Header Row matching site aesthetic & Poppins typography */}
-                    <div className="relative flex flex-col items-center text-center space-y-3 max-w-xl mx-auto">
-                        <div className="inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-widest text-[#0c72b8] bg-blue-500/10 px-3.5 py-1.5 rounded-full border border-blue-500/20 shadow-xs">
-                            <Clock className="w-3.5 h-3.5 text-[#0c72b8]" />
-                            <span>ESTABLISHED {club.establishedYear || '2018'} • HERITAGE</span>
-                        </div>
-                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight font-poppins">
-                            Our Journey <span className="text-[#0c72b8]">with {clubAcronym}</span>
-                        </h2>
-                        <p className="text-sm sm:text-base text-slate-600 font-normal max-w-lg leading-relaxed">
-                            Tracing the foundational milestones, leadership breakthroughs, and defining achievements of {club.name}.
-                        </p>
-                    </div>
-
-                    {/* Timeline Container with Fluid Spine & Neumorphic Cards */}
-                    <div className="relative max-w-4xl mx-auto pt-6 pb-10">
-                        {/* Dynamic Fluid Animated Spine Line */}
-                        <div className="absolute left-6 md:left-[36%] top-4 bottom-4 w-[2px] pointer-events-none">
-                            {/* Base track */}
-                            <div className="w-full h-full bg-slate-300/60" />
-                            {/* Animated Glowing Gradient Fill on Scroll */}
-                            <motion.div
-                                initial={{ height: 0 }}
-                                whileInView={{ height: '100%' }}
-                                viewport={{ once: true, margin: '-20px' }}
-                                transition={{ duration: 1.6, ease: [0.25, 1, 0.5, 1] }}
-                                className="absolute top-0 left-0 w-full bg-gradient-to-b from-[#0c72b8] via-[#0c72b8] to-[#0c72b8]/40 shadow-[0_0_8px_rgba(12,114,184,0.5)]"
-                            />
+                {club.historyMilestones && club.historyMilestones.length > 0 && (
+                    <motion.section
+                        id="history"
+                        initial={{ opacity: 0, y: 28 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: '-40px' }}
+                        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                        className="relative space-y-8 scroll-mt-36 pt-2 pb-6"
+                    >
+                        {/* Header Row matching site aesthetic & Poppins typography */}
+                        <div className="relative flex flex-col items-center text-center space-y-3 max-w-xl mx-auto">
+                            <div className="inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-widest text-[#0c72b8] bg-blue-500/10 px-3.5 py-1.5 rounded-full border border-blue-500/20 shadow-xs">
+                                <Clock className="w-3.5 h-3.5 text-[#0c72b8]" />
+                                <span>ESTABLISHED {club.establishedYear || '2018'} • HERITAGE</span>
+                            </div>
+                            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight font-poppins">
+                                Our Journey <span className="text-[#0c72b8]">with {clubAcronym}</span>
+                            </h2>
+                            <p className="text-sm sm:text-base text-slate-600 font-normal max-w-lg leading-relaxed">
+                                Tracing the foundational milestones, leadership breakthroughs, and defining achievements of {club.name}.
+                            </p>
                         </div>
 
-                        {/* Milestone Items */}
-                        <div className="space-y-16 sm:space-y-24">
-                            {(() => {
-                                const estYear = parseInt(String(club.establishedYear || '2018'), 10) || 2018;
-                                const defaultMilestones = [
-                                    {
-                                        category: 'WHEN IT ALL BEGAN',
-                                        year: `${estYear}`,
-                                        title: 'Inauguration & Founding Charter',
-                                        desc: `Pioneered by foundational student leaders under campus faculty guidance, ${club.name} was formally chartered to provide structured extracurricular growth, leadership opportunities, and academic excellence.`,
-                                        image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&auto=format&fit=crop&q=80'
-                                    },
-                                    {
-                                        category: 'EXPLORATION, RESEARCHING & WORKSHOPS',
-                                        year: `${estYear}–${estYear + 2}`,
-                                        title: 'Workshops, Labs & Institutional Expansion',
-                                        desc: `Organized regular capacity-building bootcamps, student mentorship networks, and established standard operational procedures to institutionalize student leadership across campus departments.`,
-                                        image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&auto=format&fit=crop&q=80'
-                                    },
-                                    {
-                                        category: 'FLAGSHIP INITIATIVES & ACCREDITATION',
-                                        year: `${estYear + 3}`,
-                                        title: 'Campus-wide Accreditation & Flagship Programs',
-                                        desc: `Successfully launched annual flagship conventions, inter-campus contests, and published student research portfolios, earning formal accreditation from campus governance.`,
-                                        image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&auto=format&fit=crop&q=80'
-                                    },
-                                    {
-                                        category: 'COMMUNITY & FUTURE HORIZON',
-                                        year: `${estYear + 4} to Now`,
-                                        title: 'Autonomous Chapter & Modern Excellence',
-                                        desc: `Today, ${club.name} serves ${club.memberCount || '150+'}+ active members with digitized operations, regional partnerships, and community empowerment initiatives across Tanahun district.`,
-                                        image: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&auto=format&fit=crop&q=80'
-                                    }
-                                ];
+                        {/* Timeline Container with Fluid Spine & Neumorphic Cards */}
+                        <div className="relative max-w-4xl mx-auto pt-6 pb-10">
+                            {/* Dynamic Fluid Animated Spine Line */}
+                            <div className="absolute left-6 md:left-[36%] top-4 bottom-4 w-[2px] pointer-events-none">
+                                {/* Base track */}
+                                <div className="w-full h-full bg-slate-300/60" />
+                                {/* Animated Glowing Gradient Fill on Scroll */}
+                                <motion.div
+                                    initial={{ height: 0 }}
+                                    whileInView={{ height: '100%' }}
+                                    viewport={{ once: true, margin: '-20px' }}
+                                    transition={{ duration: 1.6, ease: [0.25, 1, 0.5, 1] }}
+                                    className="absolute top-0 left-0 w-full bg-gradient-to-b from-[#0c72b8] via-[#0c72b8] to-[#0c72b8]/40 shadow-[0_0_8px_rgba(12,114,184,0.5)]"
+                                />
+                            </div>
 
-                                const milestonesData = (club.historyMilestones && club.historyMilestones.length > 0)
-                                    ? club.historyMilestones
-                                    : defaultMilestones;
+                            {/* Milestone Items */}
+                            <div className="space-y-16 sm:space-y-24">
+                                {club.historyMilestones.map((item, idx) => {
+                                    const hasCustomImage = typeof item.image === 'string' && item.image.trim().length > 0;
 
-                                return milestonesData.map((item, idx) => (
-                                    <motion.div
-                                        key={idx}
-                                        initial={{ opacity: 0, y: 40 }}
-                                        whileInView={{ opacity: 1, y: 0 }}
-                                        viewport={{ once: true, margin: '-60px' }}
-                                        transition={{ duration: 0.6, delay: idx * 0.12, ease: [0.22, 1, 0.36, 1] }}
-                                        className="relative flex flex-col md:flex-row items-start md:items-center gap-6 sm:gap-10 lg:gap-14 group"
-                                    >
-                                        {/* Left Side: Editorial Image Card with Floating Navigation Pips */}
-                                        <div className="w-full md:w-[36%] shrink-0 pl-14 md:pl-0">
-                                            <motion.div
-                                                whileHover={{ y: -6, scale: 1.02 }}
-                                                transition={{ duration: 0.3, ease: 'easeOut' }}
-                                                className="relative w-full max-w-[280px] mx-auto md:mr-0 rounded-3xl overflow-hidden shadow-[6px_6px_16px_#d1d9e6,-6px_-6px_16px_#ffffff] border-2 border-white bg-slate-200 aspect-[4/5] group/card cursor-pointer"
-                                            >
-                                                <img
-                                                    src={item.image || 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&auto=format&fit=crop&q=80'}
-                                                    alt={item.title}
-                                                    referrerPolicy="no-referrer"
-                                                    className="w-full h-full object-cover grayscale-[10%] group-hover/card:grayscale-0 group-hover/card:scale-105 transition-all duration-700 ease-out"
-                                                />
-                                                {/* Warm photo vintage overlay */}
-                                                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-black/10 pointer-events-none" />
+                                    return (
+                                        <motion.div
+                                            key={idx}
+                                            initial={{ opacity: 0, y: 40 }}
+                                            whileInView={{ opacity: 1, y: 0 }}
+                                            viewport={{ once: true, margin: '-60px' }}
+                                            transition={{ duration: 0.6, delay: idx * 0.12, ease: [0.22, 1, 0.36, 1] }}
+                                            className="relative flex flex-col md:flex-row items-start md:items-center gap-6 sm:gap-10 lg:gap-14 group"
+                                        >
+                                            {/* Left Side: Image Card if image exists */}
+                                            <div className="w-full md:w-[36%] shrink-0 pl-14 md:pl-0">
+                                                {hasCustomImage ? (
+                                                    <motion.div
+                                                        whileHover={{ y: -6, scale: 1.02 }}
+                                                        transition={{ duration: 0.3, ease: 'easeOut' }}
+                                                        className="relative w-full max-w-[280px] mx-auto md:mr-0 rounded-3xl overflow-hidden shadow-[6px_6px_16px_#d1d9e6,-6px_-6px_16px_#ffffff] border-2 border-white bg-slate-200 aspect-[4/5] group/card cursor-pointer"
+                                                    >
+                                                        <img
+                                                            src={item.image}
+                                                            alt={item.title || `${club.name} Milestone`}
+                                                            referrerPolicy="no-referrer"
+                                                            className="w-full h-full object-cover grayscale-[10%] group-hover/card:grayscale-0 group-hover/card:scale-105 transition-all duration-700 ease-out"
+                                                        />
+                                                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-black/10 pointer-events-none" />
+                                                    </motion.div>
+                                                ) : (
+                                                    <div className="relative w-full max-w-[280px] mx-auto md:mr-0 rounded-3xl overflow-hidden shadow-[inset_4px_4px_10px_#d1d9e6,inset_-4px_-4px_10px_#ffffff] border border-white/80 bg-[#eef2f7] aspect-[4/5] flex flex-col items-center justify-center p-6 text-center">
+                                                        <Clock className="w-10 h-10 text-[#0c72b8]/60 mb-2" />
+                                                        <span className="text-xs font-bold text-slate-500 uppercase tracking-wider font-poppins">
+                                                            {item.year || club.establishedYear}
+                                                        </span>
+                                                        <span className="text-[11px] text-slate-400 mt-1 font-poppins">
+                                                            {item.title || 'Foundational Milestone'}
+                                                        </span>
+                                                    </div>
+                                                )}
+                                            </div>
 
-                                                {/* Subtle Left & Right Circle Indicator Pips matching reference */}
-                                                <div className="absolute left-2.5 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-xs text-slate-700 flex items-center justify-center shadow-md opacity-80 group-hover/card:opacity-100 group-hover/card:bg-[#0c72b8] group-hover/card:text-white transition-all text-xs select-none">
-                                                    ←
-                                                </div>
-                                                <div className="absolute right-2.5 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-xs text-slate-700 flex items-center justify-center shadow-md opacity-80 group-hover/card:opacity-100 group-hover/card:bg-[#0c72b8] group-hover/card:text-white transition-all text-xs select-none">
-                                                    →
-                                                </div>
-                                            </motion.div>
-                                        </div>
+                                            {/* Center Spine Dot on Desktop */}
+                                            <div className="hidden md:flex absolute left-[36%] top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+                                                <motion.div
+                                                    whileHover={{ scale: 1.4 }}
+                                                    className="relative w-4 h-4 rounded-full bg-white border-3 border-[#0c72b8] shadow-[0_0_10px_rgba(12,114,184,0.4)] group-hover:bg-[#0c72b8] transition-colors cursor-pointer"
+                                                >
+                                                    <span className="absolute inset-0 rounded-full bg-[#0c72b8]/30 animate-ping opacity-75" />
+                                                </motion.div>
+                                            </div>
 
-                                        {/* Center Spine Dot on Desktop */}
-                                        <div className="hidden md:flex absolute left-[36%] top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-                                            <motion.div
-                                                whileHover={{ scale: 1.4 }}
-                                                className="relative w-4 h-4 rounded-full bg-white border-3 border-[#0c72b8] shadow-[0_0_10px_rgba(12,114,184,0.4)] group-hover:bg-[#0c72b8] transition-colors cursor-pointer"
-                                            >
-                                                <span className="absolute inset-0 rounded-full bg-[#0c72b8]/30 animate-ping opacity-75" />
-                                            </motion.div>
-                                        </div>
+                                            {/* Mobile Spine Dot */}
+                                            <div className="md:hidden absolute left-[24px] top-6 -translate-x-1/2 z-10">
+                                                <div className="w-3.5 h-3.5 rounded-full bg-white border-2.5 border-[#0c72b8] shadow-sm" />
+                                            </div>
 
-                                        {/* Mobile Spine Dot */}
-                                        <div className="md:hidden absolute left-[24px] top-6 -translate-x-1/2 z-10">
-                                            <div className="w-3.5 h-3.5 rounded-full bg-white border-2.5 border-[#0c72b8] shadow-sm" />
-                                        </div>
+                                            {/* Right Side: Narrative Content in Poppins styling */}
+                                            <div className="flex-1 pl-14 md:pl-6 space-y-2.5">
+                                                {/* Category Subheading in Uppercase Bold */}
+                                                {item.category && item.category.trim() && (
+                                                    <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#0c72b8] font-poppins block">
+                                                        {item.category}
+                                                    </span>
+                                                )}
 
-                                        {/* Right Side: Editorial Year & Narrative Content in Poppins styling */}
-                                        <div className="flex-1 pl-14 md:pl-6 space-y-2.5">
-                                            {/* Category Subheading in Uppercase Bold */}
-                                            <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#0c72b8] font-poppins block">
-                                                {item.category}
-                                            </span>
+                                                {/* Prominent Poppins Year with Clean Aesthetic */}
+                                                {item.year && item.year.trim() && (
+                                                    <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 font-poppins tracking-tight group-hover:text-[#0c72b8] transition-colors leading-tight">
+                                                        {item.year}
+                                                    </h3>
+                                                )}
 
-                                            {/* Prominent Poppins Year with Clean Aesthetic */}
-                                            <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 font-poppins tracking-tight group-hover:text-[#0c72b8] transition-colors leading-tight">
-                                                {item.year}
-                                            </h3>
+                                                {/* Milestone Title */}
+                                                {item.title && item.title.trim() && (
+                                                    <h4 className="text-base sm:text-lg font-bold text-slate-800 font-poppins pt-0.5 leading-snug">
+                                                        {item.title}
+                                                    </h4>
+                                                )}
 
-                                            {/* Milestone Title */}
-                                            <h4 className="text-base sm:text-lg font-bold text-slate-800 font-poppins pt-0.5 leading-snug">
-                                                {item.title}
-                                            </h4>
-
-                                            {/* Narrative Description Paragraph */}
-                                            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal pt-1 max-w-xl">
-                                                {item.desc}
-                                            </p>
-                                        </div>
-                                    </motion.div>
-                                ));
-                            })()}
+                                                {/* Narrative Description Paragraph */}
+                                                {item.desc && item.desc.trim() && (
+                                                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal pt-1 max-w-xl">
+                                                        {item.desc}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        </motion.div>
+                                    );
+                                })}
+                            </div>
                         </div>
-                    </div>
-                </motion.section>
+                    </motion.section>
+                )}
 
                 {/* 8. EXECUTIVE LEADERSHIP COMMITTEE SECTION */}
                 <motion.section
@@ -2951,13 +2915,19 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                             <div className="space-y-4 flex-1 flex flex-col">
                                 <div className="flex items-start gap-3.5 sm:gap-4 pb-4 border-b border-slate-300/50">
                                     <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#eef2f7] p-1 flex items-center justify-center shadow-[4px_4px_10px_#d1d9e6,-4px_-4px_10px_#ffffff] border border-white/90 shrink-0 group-hover:scale-105 transition-transform">
-                                        <div className="w-full h-full rounded-full bg-[#eef2f7] p-0.5 flex items-center justify-center shadow-[inset_2px_2px_4px_#d1d9e6,inset_-2px_-2px_4px_#ffffff]">
-                                            <img
-                                                src={defaultPresidentMessage.avatarUrl}
-                                                alt={defaultPresidentMessage.senderName}
-                                                referrerPolicy="no-referrer"
-                                                className="w-full h-full rounded-full object-cover"
-                                            />
+                                        <div className="w-full h-full rounded-full bg-[#eef2f7] p-0.5 flex items-center justify-center shadow-[inset_2px_2px_4px_#d1d9e6,inset_-2px_-2px_4px_#ffffff] overflow-hidden">
+                                            {defaultPresidentMessage.avatarUrl ? (
+                                                <img
+                                                    src={defaultPresidentMessage.avatarUrl}
+                                                    alt={defaultPresidentMessage.senderName}
+                                                    referrerPolicy="no-referrer"
+                                                    className="w-full h-full rounded-full object-cover"
+                                                />
+                                            ) : (
+                                                <div className="w-full h-full rounded-full bg-blue-50 text-[#0c72b8] font-black text-sm flex items-center justify-center font-poppins">
+                                                    {defaultPresidentMessage.senderName.slice(0, 2).toUpperCase()}
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
 
@@ -3016,13 +2986,19 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                             <div className="space-y-4 flex-1 flex flex-col">
                                 <div className="flex items-start gap-3.5 sm:gap-4 pb-4 border-b border-slate-300/50">
                                     <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#eef2f7] p-1 flex items-center justify-center shadow-[4px_4px_10px_#d1d9e6,-4px_-4px_10px_#ffffff] border border-white/90 shrink-0 group-hover:scale-105 transition-transform">
-                                        <div className="w-full h-full rounded-full bg-[#eef2f7] p-0.5 flex items-center justify-center shadow-[inset_2px_2px_4px_#d1d9e6,inset_-2px_-2px_4px_#ffffff]">
-                                            <img
-                                                src={defaultAdvisorMessage.avatarUrl}
-                                                alt={defaultAdvisorMessage.senderName}
-                                                referrerPolicy="no-referrer"
-                                                className="w-full h-full rounded-full object-cover"
-                                            />
+                                        <div className="w-full h-full rounded-full bg-[#eef2f7] p-0.5 flex items-center justify-center shadow-[inset_2px_2px_4px_#d1d9e6,inset_-2px_-2px_4px_#ffffff] overflow-hidden">
+                                            {defaultAdvisorMessage.avatarUrl ? (
+                                                <img
+                                                    src={defaultAdvisorMessage.avatarUrl}
+                                                    alt={defaultAdvisorMessage.senderName}
+                                                    referrerPolicy="no-referrer"
+                                                    className="w-full h-full rounded-full object-cover"
+                                                />
+                                            ) : (
+                                                <div className="w-full h-full rounded-full bg-red-50 text-[#800000] font-black text-sm flex items-center justify-center font-poppins">
+                                                    {defaultAdvisorMessage.senderName.slice(0, 2).toUpperCase()}
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
 
@@ -3448,28 +3424,48 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                         onClick={(e) => e.stopPropagation()}
                         className="max-w-2xl w-full rounded-3xl overflow-hidden shadow-2xl bg-[#eef2f7] border border-white/90 cursor-default animate-in zoom-in-95 duration-200"
                     >
-                        <div className="relative w-full h-56 sm:h-64 bg-slate-900">
-                            <img
-                                src={selectedEventForModal.image || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80'}
-                                alt={selectedEventForModal.title}
-                                className="w-full h-full object-cover"
-                            />
-                            <button
-                                onClick={() => setSelectedEventForModal(null)}
-                                className="absolute top-4 right-4 p-2 bg-black/60 hover:bg-black/80 text-white rounded-full transition-colors cursor-pointer"
-                            >
-                                <X className="w-5 h-5" />
-                            </button>
-                            <div className="absolute bottom-3 left-4 flex flex-wrap gap-2">
-                                <span className="bg-white/95 text-[#0c72b8] text-xs font-extrabold px-3 py-1 rounded-full shadow-md">
-                                    {selectedEventForModal.category}
-                                </span>
-                                <span className="bg-[#800000] text-white text-xs font-extrabold px-3 py-1 rounded-full shadow-md flex items-center gap-1.5">
-                                    <Calendar className="w-3.5 h-3.5" />
-                                    <span>{selectedEventForModal.date}</span>
-                                </span>
+                        {selectedEventForModal.image ? (
+                            <div className="relative w-full h-56 sm:h-64 bg-slate-900">
+                                <img
+                                    src={selectedEventForModal.image}
+                                    alt={selectedEventForModal.title}
+                                    className="w-full h-full object-cover"
+                                />
+                                <button
+                                    onClick={() => setSelectedEventForModal(null)}
+                                    className="absolute top-4 right-4 p-2 bg-black/60 hover:bg-black/80 text-white rounded-full transition-colors cursor-pointer"
+                                >
+                                    <X className="w-5 h-5" />
+                                </button>
+                                <div className="absolute bottom-3 left-4 flex flex-wrap gap-2">
+                                    <span className="bg-white/95 text-[#0c72b8] text-xs font-extrabold px-3 py-1 rounded-full shadow-md">
+                                        {selectedEventForModal.category}
+                                    </span>
+                                    <span className="bg-[#800000] text-white text-xs font-extrabold px-3 py-1 rounded-full shadow-md flex items-center gap-1.5">
+                                        <Calendar className="w-3.5 h-3.5" />
+                                        <span>{selectedEventForModal.date}</span>
+                                    </span>
+                                </div>
                             </div>
-                        </div>
+                        ) : (
+                            <div className="relative w-full p-6 bg-gradient-to-r from-[#0c72b8] to-[#075990] text-white flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                    <span className="bg-white/20 backdrop-blur-md text-white text-xs font-extrabold px-3 py-1 rounded-full">
+                                        {selectedEventForModal.category}
+                                    </span>
+                                    <span className="bg-white/20 backdrop-blur-md text-white text-xs font-extrabold px-3 py-1 rounded-full flex items-center gap-1.5">
+                                        <Calendar className="w-3.5 h-3.5" />
+                                        <span>{selectedEventForModal.date}</span>
+                                    </span>
+                                </div>
+                                <button
+                                    onClick={() => setSelectedEventForModal(null)}
+                                    className="p-2 bg-white/20 hover:bg-white/30 text-white rounded-full transition-colors cursor-pointer"
+                                >
+                                    <X className="w-5 h-5" />
+                                </button>
+                            </div>
+                        )}
 
                         <div className="p-6 sm:p-8 space-y-5 bg-[#eef2f7]">
                             <div>
@@ -3528,45 +3524,69 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                         onClick={(e) => e.stopPropagation()}
                         className="max-w-xl w-full rounded-3xl overflow-hidden shadow-2xl bg-[#eef2f7] border border-white/90 cursor-default animate-in zoom-in-95 duration-200"
                     >
-                        <div className="relative h-60 sm:h-72 w-full overflow-hidden bg-slate-800">
-                            <img
-                                src={activeAchievementPreview.image}
-                                alt={activeAchievementPreview.title}
-                                referrerPolicy="no-referrer"
-                                className="w-full h-full object-cover"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                        {activeAchievementPreview.image ? (
+                            <div className="relative h-60 sm:h-72 w-full overflow-hidden bg-slate-800">
+                                <img
+                                    src={activeAchievementPreview.image}
+                                    alt={activeAchievementPreview.title}
+                                    referrerPolicy="no-referrer"
+                                    className="w-full h-full object-cover"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
 
-                            <button
-                                onClick={() => setActiveAchievementPreview(null)}
-                                className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/50 text-white hover:bg-black/70 flex items-center justify-center backdrop-blur-sm transition-colors cursor-pointer"
-                            >
-                                <X className="w-4 h-4" />
-                            </button>
+                                <button
+                                    onClick={() => setActiveAchievementPreview(null)}
+                                    className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/50 text-white hover:bg-black/70 flex items-center justify-center backdrop-blur-sm transition-colors cursor-pointer"
+                                >
+                                    <X className="w-4 h-4" />
+                                </button>
 
-                            <div className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-between gap-2">
+                                <div className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-between gap-2">
+                                    <div className="flex items-center gap-2">
+                                        {activeAchievementPreview.date && (
+                                            <span className="px-3 py-1 rounded-full text-xs font-extrabold text-slate-900 bg-white/95 backdrop-blur-md shadow-sm flex items-center gap-1.5">
+                                                <Calendar className="w-3.5 h-3.5 text-[#0c72b8]" />
+                                                <span>{activeAchievementPreview.date}</span>
+                                            </span>
+                                        )}
+                                        {activeAchievementPreview.category && (
+                                            <span className="px-3 py-1 rounded-full text-xs font-bold text-[#0c72b8] bg-white/95 backdrop-blur-md shadow-sm">
+                                                {activeAchievementPreview.category}
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    {activeAchievementPreview.badge && (
+                                        <span className="px-3 py-1 rounded-full text-xs font-bold text-amber-900 bg-amber-200/90 backdrop-blur-md shadow-sm flex items-center gap-1.5">
+                                            <Trophy className="w-3.5 h-3.5 text-amber-700" />
+                                            <span>{activeAchievementPreview.badge}</span>
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="relative p-6 bg-gradient-to-r from-blue-900 to-slate-800 text-white flex items-center justify-between">
                                 <div className="flex items-center gap-2">
                                     {activeAchievementPreview.date && (
-                                        <span className="px-3 py-1 rounded-full text-xs font-extrabold text-slate-900 bg-white/95 backdrop-blur-md shadow-sm flex items-center gap-1.5">
+                                        <span className="px-3 py-1 rounded-full text-xs font-extrabold text-slate-900 bg-white shadow-sm flex items-center gap-1.5">
                                             <Calendar className="w-3.5 h-3.5 text-[#0c72b8]" />
                                             <span>{activeAchievementPreview.date}</span>
                                         </span>
                                     )}
                                     {activeAchievementPreview.category && (
-                                        <span className="px-3 py-1 rounded-full text-xs font-bold text-[#0c72b8] bg-white/95 backdrop-blur-md shadow-sm">
+                                        <span className="px-3 py-1 rounded-full text-xs font-bold text-[#0c72b8] bg-white shadow-sm">
                                             {activeAchievementPreview.category}
                                         </span>
                                     )}
                                 </div>
-
-                                {activeAchievementPreview.badge && (
-                                    <span className="px-3 py-1 rounded-full text-xs font-bold text-amber-900 bg-amber-200/90 backdrop-blur-md shadow-sm flex items-center gap-1.5">
-                                        <Trophy className="w-3.5 h-3.5 text-amber-700" />
-                                        <span>{activeAchievementPreview.badge}</span>
-                                    </span>
-                                )}
+                                <button
+                                    onClick={() => setActiveAchievementPreview(null)}
+                                    className="w-9 h-9 rounded-full bg-white/20 text-white hover:bg-white/30 flex items-center justify-center transition-colors cursor-pointer"
+                                >
+                                    <X className="w-4 h-4" />
+                                </button>
                             </div>
-                        </div>
+                        )}
 
                         <div className="p-6 sm:p-7 space-y-4 bg-[#eef2f7]">
                             <div>

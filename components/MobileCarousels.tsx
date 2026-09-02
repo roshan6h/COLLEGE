@@ -122,8 +122,13 @@ export function MobileSwipeCarousel<T>({
             {/* Horizontal Scroll Track */}
             <div
                 ref={scrollContainerRef}
-                className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 px-4 -mx-4 scrollbar-none overscroll-x-contain [touch-action:pan-y_pan-x]"
-                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}
+                className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 px-4 -mx-4 scrollbar-none overscroll-x-contain"
+                style={{
+                    scrollbarWidth: 'none',
+                    msOverflowStyle: 'none',
+                    touchAction: 'pan-x pan-y',
+                    WebkitOverflowScrolling: 'touch'
+                }}
             >
                 {items.map((item, idx) => (
                     <div
@@ -406,7 +411,7 @@ export interface MobileAchievementsCarouselProps<T extends AchievementCardItem =
     achievements: T[];
     language?: Language | string;
     onSelectAchievement: (ach: T) => void;
-    getContextualAchievementImage: (title: string, idx: number, category?: string) => string;
+    getContextualAchievementImage?: (title: string, idx: number, category?: string) => string;
     clubCategory?: string;
     extractYear: (dateStr?: string, fallbackIdx?: number) => string;
 }
@@ -415,7 +420,6 @@ export function MobileAchievementsCarousel<T extends AchievementCardItem = Achie
     achievements,
     language = 'en',
     onSelectAchievement,
-    getContextualAchievementImage,
     clubCategory = '',
     extractYear
 }: MobileAchievementsCarouselProps<T>) {
@@ -428,9 +432,8 @@ export function MobileAchievementsCarousel<T extends AchievementCardItem = Achie
             getItemKey={(ach, idx) => ach.id || `ach-${idx}`}
             renderItem={(ach, idx) => {
                 const year = extractYear(ach.date, idx);
-                const categoryTag = ach.category || (idx === 0 ? 'Hackathon & Innovation' : idx === 1 ? 'Technical Training' : idx === 2 ? 'Campus Impact' : 'Academic Milestone');
+                const categoryTag = ach.category || (idx === 0 ? 'Major Milestone' : idx === 1 ? 'Capacity Building' : idx === 2 ? 'Campus Impact' : 'Academic Milestone');
                 const awardBadge = ach.badge || (idx === 0 ? 'Major Milestone' : idx === 1 ? 'Capacity Building' : idx === 2 ? 'Institutional Impact' : 'Excellence Award');
-                const fallbackImg = getContextualAchievementImage(ach.title, idx, clubCategory);
 
                 return (
                     <div
@@ -438,40 +441,62 @@ export function MobileAchievementsCarousel<T extends AchievementCardItem = Achie
                         className="group bg-[#eef2f7] rounded-3xl p-4.5 border border-white/90 shadow-[5px_5px_15px_#d1d9e6,-5px_-5px_15px_#ffffff] active:shadow-[3px_3px_8px_#c8d2e2,-3px_-3px_8px_#ffffff] transition-all flex flex-col justify-between cursor-pointer relative overflow-hidden text-left h-full"
                     >
                         <div className="space-y-3">
-                            {/* Media Viewport */}
-                            <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-slate-200 shadow-[inset_1.5px_1.5px_3px_#d1d9e6,inset_-1.5px_-1.5px_3px_#ffffff]">
-                                <img
-                                    src={ach.image || fallbackImg}
-                                    alt={ach.title}
-                                    referrerPolicy="no-referrer"
-                                    onError={(e) => {
-                                        e.currentTarget.src = fallbackImg;
-                                    }}
-                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                            {/* Media Viewport if image exists */}
+                            {ach.image ? (
+                                <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-slate-200 shadow-[inset_1.5px_1.5px_3px_#d1d9e6,inset_-1.5px_-1.5px_3px_#ffffff]">
+                                    <img
+                                        src={ach.image}
+                                        alt={ach.title}
+                                        referrerPolicy="no-referrer"
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
 
-                                {/* Top Date Pill */}
-                                <div className="absolute top-2.5 left-2.5 flex items-center gap-1">
-                                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold text-slate-800 bg-white/95 backdrop-blur-md shadow-xs flex items-center gap-1 border border-white/80">
-                                        <Calendar className="w-3 h-3 text-[#0c72b8]" />
-                                        <span>{year}</span>
-                                    </span>
-                                </div>
+                                    {/* Top Date Pill */}
+                                    {year && (
+                                        <div className="absolute top-2.5 left-2.5 flex items-center gap-1">
+                                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold text-slate-800 bg-white/95 backdrop-blur-md shadow-xs flex items-center gap-1 border border-white/80">
+                                                <Calendar className="w-3 h-3 text-[#0c72b8]" />
+                                                <span>{year}</span>
+                                            </span>
+                                        </div>
+                                    )}
 
-                                {/* Top Category Pill */}
-                                <div className="absolute top-2.5 right-2.5">
-                                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold text-[#0c72b8] bg-white/95 backdrop-blur-md shadow-xs border border-white/80 truncate max-w-[130px]">
-                                        {categoryTag}
-                                    </span>
-                                </div>
+                                    {/* Top Category Pill */}
+                                    {categoryTag && (
+                                        <div className="absolute top-2.5 right-2.5">
+                                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold text-[#0c72b8] bg-white/95 backdrop-blur-md shadow-xs border border-white/80 truncate max-w-[130px]">
+                                                {categoryTag}
+                                            </span>
+                                        </div>
+                                    )}
 
-                                {/* Quick View Trigger */}
-                                <div className="absolute bottom-2.5 right-2.5 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-xs text-white text-[10px] font-bold flex items-center gap-1">
-                                    <ZoomIn className="w-3 h-3" />
-                                    <span>View</span>
+                                    {/* Quick View Trigger */}
+                                    <div className="absolute bottom-2.5 right-2.5 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-xs text-white text-[10px] font-bold flex items-center gap-1">
+                                        <ZoomIn className="w-3 h-3" />
+                                        <span>View</span>
+                                    </div>
                                 </div>
-                            </div>
+                            ) : (
+                                <div className="relative w-full p-3 rounded-2xl bg-white/60 border border-white/90 shadow-[inset_1.5px_1.5px_3px_#d1d9e6,inset_-1.5px_-1.5px_3px_#ffffff] flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-8 h-8 rounded-xl bg-blue-50 text-[#0c72b8] flex items-center justify-center shrink-0 border border-blue-100">
+                                            <Trophy className="w-4 h-4 text-[#0c72b8]" />
+                                        </div>
+                                        {categoryTag && (
+                                            <span className="text-[11px] font-bold text-[#0c72b8] truncate max-w-[140px]">
+                                                {categoryTag}
+                                            </span>
+                                        )}
+                                    </div>
+                                    {year && (
+                                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold text-slate-700 bg-white shadow-xs border border-white/80 flex items-center gap-1 shrink-0">
+                                            <Calendar className="w-3 h-3 text-[#0c72b8]" />
+                                            <span>{year}</span>
+                                        </span>
+                                    )}
+                                </div>
+                            )}
 
                             {/* Headline & Description */}
                             <div className="space-y-1.5 pt-0.5">
