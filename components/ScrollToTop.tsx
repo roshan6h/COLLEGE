@@ -1,23 +1,40 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowUp } from 'lucide-react';
 
 export const ScrollToTop: React.FC = () => {
     const [isVisible, setIsVisible] = useState(false);
     const [scrollProgress, setScrollProgress] = useState(0);
+    const isVisibleRef = useRef(false);
+    const progressRef = useRef(0);
 
     useEffect(() => {
-        const handleScroll = () => {
-            const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const currentProgress = totalHeight > 0 ? (window.scrollY / totalHeight) * 100 : 0;
-            setScrollProgress(currentProgress);
+        let ticking = false;
 
-            if (window.scrollY > 250) {
-                setIsVisible(true);
-            } else {
-                setIsVisible(false);
+        const handleScroll = () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const scrollY = window.scrollY || window.pageYOffset || 0;
+                    const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+                    const rawProgress = totalHeight > 0 ? (scrollY / totalHeight) * 100 : 0;
+                    const currentProgress = Math.min(100, Math.max(0, Math.round(rawProgress)));
+
+                    const shouldBeVisible = scrollY > 250;
+                    if (shouldBeVisible !== isVisibleRef.current) {
+                        isVisibleRef.current = shouldBeVisible;
+                        setIsVisible(shouldBeVisible);
+                    }
+
+                    if (Math.abs(currentProgress - progressRef.current) >= 1) {
+                        progressRef.current = currentProgress;
+                        setScrollProgress(currentProgress);
+                    }
+
+                    ticking = false;
+                });
+                ticking = true;
             }
         };
 
@@ -44,10 +61,10 @@ export const ScrollToTop: React.FC = () => {
                     initial={{ opacity: 0, scale: 0.6, y: 20 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.6, y: 20 }}
-                    whileHover={{ scale: 1.1, y: -2 }}
-                    whileTap={{ scale: 0.92 }}
-                    transition={{ duration: 0.25 }}
-                    className="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full bg-[#000d27] text-white shadow-xl flex items-center justify-center cursor-pointer border border-blue-400/40 hover:border-amber-400 group"
+                    whileHover={{ scale: 1.08, y: -2 }}
+                    whileTap={{ scale: 0.94 }}
+                    transition={{ duration: 0.2 }}
+                    className="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full bg-[#000d27] text-white shadow-xl flex items-center justify-center cursor-pointer border border-blue-400/40 hover:border-amber-400 group transform translate-z-0 will-change-transform"
                     aria-label="Scroll to top"
                     title="Scroll to Top"
                 >
@@ -66,7 +83,7 @@ export const ScrollToTop: React.FC = () => {
                             cx="22"
                             cy="22"
                             r={radius}
-                            className="text-amber-400 transition-all duration-150"
+                            className="text-amber-400 transition-all duration-100 ease-out"
                             strokeWidth="2.5"
                             strokeDasharray={circumference}
                             strokeDashoffset={strokeDashoffset}

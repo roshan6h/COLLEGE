@@ -17,7 +17,7 @@ import { Header } from '@/components/Header';
 import { HeroSection } from '@/components/HeroSection';
 import { DashboardControls } from '@/components/DashboardControls';
 import { ClubCard } from '@/components/ClubCard';
-import { MobileClubCarousel } from '../components/MobileCarousels';
+import { MobileClubCarousel } from '@/components/MobileCarousels';
 import { ClubPage } from '@/components/ClubPage';
 import FSUPage from './fsu/page';
 import { EventsCalendarSection } from '@/components/EventsCalendarSection';
@@ -348,8 +348,8 @@ export default function App() {
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: false, amount: 0.15 }}
-                  transition={{ duration: 0.5 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4 }}
                   className="neu-flat rounded-2xl p-2 sm:p-4 overflow-hidden"
                 >
                   <div className="overflow-x-auto">
@@ -373,6 +373,8 @@ export default function App() {
                                   src={club.logo}
                                   alt={club.name}
                                   referrerPolicy="no-referrer"
+                                  loading="lazy"
+                                  decoding="async"
                                   className="w-10 h-10 rounded-full object-cover neu-pressed shrink-0"
                                 />
                                 <div>
@@ -422,8 +424,8 @@ export default function App() {
                       key={categoryName}
                       initial={{ opacity: 0, y: 30 }}
                       whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: false, amount: 0.15 }}
-                      transition={{ duration: 0.5 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.4 }}
                       className="neu-flat rounded-2xl p-4 sm:p-6"
                     >
                       <div className="flex items-center justify-between pb-4 mb-5 border-b border-gray-200">

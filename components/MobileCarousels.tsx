@@ -35,7 +35,7 @@ export function MobileSwipeCarousel<T>({
     getItemKey = (_, idx) => idx,
     language = 'en',
     accentColor = '#0c72b8',
-    cardWidthClass = 'w-[84vw] max-w-[320px]',
+    cardWidthClass = 'w-[84vw] max-w-[328px]',
     ariaLabelPrefix = 'slide'
 }: MobileSwipeCarouselProps<T>) {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -43,58 +43,174 @@ export function MobileSwipeCarousel<T>({
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(true);
 
+    // Dynamic side padding so the active card is always mathematically centered
+    // Initialized to fixed 24px to prevent SSR / client hydration mismatches
+    const [sidePadding, setSidePadding] = useState<number>(24);
+
+    const activeIndexRef = useRef(0);
+    const isScrollingRef = useRef(false);
+
+    const updateMeasurements = useCallback(() => {
+        if (!scrollContainerRef.current) return;
+        const container = scrollContainerRef.current;
+        const firstCard = container.firstElementChild as HTMLElement | null;
+        if (firstCard) {
+            const cardWidth = firstCard.offsetWidth;
+            const containerWidth = container.clientWidth;
+            const calculatedPadding = Math.max(16, Math.floor((containerWidth - cardWidth) / 2));
+            setSidePadding(calculatedPadding);
+        }
+    }, []);
+
     const updateScrollState = useCallback(() => {
         if (!scrollContainerRef.current) return;
         const container = scrollContainerRef.current;
         const scrollLeft = container.scrollLeft;
-        const cardWidth = container.firstElementChild
-            ? (container.firstElementChild as HTMLElement).offsetWidth + 16
-            : 280;
-
-        const newIndex = Math.round(scrollLeft / cardWidth);
-        const clampedIndex = Math.max(0, Math.min(newIndex, items.length - 1));
-        setActiveIndex(clampedIndex);
 
         setCanScrollLeft(scrollLeft > 10);
         setCanScrollRight(scrollLeft < container.scrollWidth - container.clientWidth - 10);
+
+        // Find which card is closest to the horizontal center of the container
+        const containerCenter = scrollLeft + container.clientWidth / 2;
+        let closestIndex = 0;
+        let minDistance = Infinity;
+
+        for (let i = 0; i < container.children.length; i++) {
+            const child = container.children[i] as HTMLElement;
+            const childCenter = child.offsetLeft + child.offsetWidth / 2;
+            const distance = Math.abs(containerCenter - childCenter);
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestIndex = i;
+            }
+        }
+
+        const clampedIndex = Math.max(0, Math.min(closestIndex, items.length - 1));
+        if (clampedIndex !== activeIndexRef.current) {
+            activeIndexRef.current = clampedIndex;
+            setActiveIndex(clampedIndex);
+        }
     }, [items.length]);
+
+    const handleScroll = useCallback(() => {
+        if (!isScrollingRef.current) {
+            isScrollingRef.current = true;
+            requestAnimationFrame(() => {
+                updateScrollState();
+                isScrollingRef.current = false;
+            });
+        }
+    }, [updateScrollState]);
 
     useEffect(() => {
         const container = scrollContainerRef.current;
         if (!container) return;
 
+        updateMeasurements();
         updateScrollState();
-        container.addEventListener('scroll', updateScrollState, { passive: true });
+        window.addEventListener('resize', updateMeasurements);
         window.addEventListener('resize', updateScrollState);
 
         return () => {
-            container.removeEventListener('scroll', updateScrollState);
+            window.removeEventListener('resize', updateMeasurements);
             window.removeEventListener('resize', updateScrollState);
         };
-    }, [updateScrollState]);
+    }, [updateMeasurements, updateScrollState]);
 
-    const scrollToIndex = (index: number) => {
+    const scrollToIndex = useCallback((index: number) => {
         if (!scrollContainerRef.current) return;
         const container = scrollContainerRef.current;
-        const targetCard = container.children[index] as HTMLElement;
+        const targetCard = container.children[index] as HTMLElement | undefined;
         if (targetCard) {
             targetCard.scrollIntoView({
                 behavior: 'smooth',
-                block: 'nearest',
-                inline: 'center'
+                inline: 'center',
+                block: 'nearest'
             });
+            activeIndexRef.current = index;
+            setActiveIndex(index);
         }
-    };
+    }, []);
 
     const handlePrev = () => {
-        if (activeIndex > 0) {
-            scrollToIndex(activeIndex - 1);
+        if (activeIndexRef.current > 0) {
+            scrollToIndex(activeIndexRef.current - 1);
         }
     };
 
     const handleNext = () => {
-        if (activeIndex < items.length - 1) {
-            scrollToIndex(activeIndex + 1);
+        if (activeIndexRef.current < items.length - 1) {
+            scrollToIndex(activeIndexRef.current + 1);
+        }
+    };
+
+    // Mouse pointer drag for desktop testing / previews (Touch screens use native 120fps snap)
+    const isDraggingRef = useRef(false);
+    const startXRef = useRef(0);
+    const startScrollLeftRef = useRef(0);
+    const hasDraggedRef = useRef(false);
+
+    const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+        if (e.pointerType !== 'mouse' || e.button !== 0) return;
+        if (!scrollContainerRef.current) return;
+
+        isDraggingRef.current = true;
+        startXRef.current = e.clientX;
+        startScrollLeftRef.current = scrollContainerRef.current.scrollLeft;
+        hasDraggedRef.current = false;
+
+        // Temporarily disable scroll-snap during mouse drag so it tracks 1:1 without resistance
+        scrollContainerRef.current.style.scrollSnapType = 'none';
+        scrollContainerRef.current.style.scrollBehavior = 'auto';
+
+        try {
+            (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+        } catch {}
+    };
+
+    const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+        if (!isDraggingRef.current || !scrollContainerRef.current) return;
+        const deltaX = e.clientX - startXRef.current;
+        if (Math.abs(deltaX) > 4) {
+            hasDraggedRef.current = true;
+        }
+        if (hasDraggedRef.current) {
+            scrollContainerRef.current.scrollLeft = startScrollLeftRef.current - deltaX;
+        }
+    };
+
+    const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+        if (!isDraggingRef.current || !scrollContainerRef.current) return;
+        isDraggingRef.current = false;
+        const container = scrollContainerRef.current;
+
+        try {
+            (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+        } catch {}
+
+        // Restore snap type and smooth scrolling
+        container.style.scrollSnapType = 'x mandatory';
+        container.style.scrollBehavior = 'smooth';
+
+        if (hasDraggedRef.current) {
+            const deltaX = e.clientX - startXRef.current;
+            if (deltaX < -35 && activeIndexRef.current < items.length - 1) {
+                scrollToIndex(activeIndexRef.current + 1);
+            } else if (deltaX > 35 && activeIndexRef.current > 0) {
+                scrollToIndex(activeIndexRef.current - 1);
+            } else {
+                scrollToIndex(activeIndexRef.current);
+            }
+        }
+    };
+
+    const handleClickCapture = (e: React.MouseEvent) => {
+        if (hasDraggedRef.current) {
+            e.stopPropagation();
+            e.preventDefault();
+            setTimeout(() => {
+                hasDraggedRef.current = false;
+            }, 50);
         }
     };
 
@@ -103,7 +219,7 @@ export function MobileSwipeCarousel<T>({
     return (
         <div className="relative w-full">
             {/* Helper Indicator & Item Counter */}
-            <div className="flex items-center justify-between px-1 mb-3 text-xs text-slate-500">
+            <div className="flex items-center justify-between px-2 mb-3 text-xs text-slate-500">
                 <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-200/60 font-medium text-slate-600">
                     <MoveHorizontal
                         className="w-3.5 h-3.5 animate-pulse"
@@ -119,11 +235,22 @@ export function MobileSwipeCarousel<T>({
                 </span>
             </div>
 
-            {/* Horizontal Scroll Track */}
+            {/* Horizontal Scroll Track: Centered, native momentum on touch, drag-capable on mouse */}
             <div
                 ref={scrollContainerRef}
-                className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 px-4 -mx-4 scrollbar-none overscroll-x-contain"
+                suppressHydrationWarning
+                onScroll={handleScroll}
+                onPointerDown={handlePointerDown}
+                onPointerMove={handlePointerMove}
+                onPointerUp={handlePointerUp}
+                onPointerCancel={handlePointerUp}
+                onClickCapture={handleClickCapture}
+                className="flex gap-4 overflow-x-auto overflow-y-hidden snap-x snap-mandatory py-5 -mx-4 scrollbar-none cursor-grab active:cursor-grabbing select-none"
                 style={{
+                    paddingLeft: `${sidePadding}px`,
+                    paddingRight: `${sidePadding}px`,
+                    scrollPaddingLeft: `${sidePadding}px`,
+                    scrollPaddingRight: `${sidePadding}px`,
                     scrollbarWidth: 'none',
                     msOverflowStyle: 'none',
                     touchAction: 'pan-x pan-y',

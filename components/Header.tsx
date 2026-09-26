@@ -40,12 +40,14 @@ export const CampusLogoBadge: React.FC<{ size?: 'sm' | 'md' | 'lg'; className?: 
         >
             <div className="w-full h-full rounded-full bg-white flex items-center justify-center p-0.5 shadow-2xs overflow-hidden">
                 <img
-                    src='/logo2.jpg'
-                    alt="Aadikavi Bhanubhakta Campus"
+                    src="/logo2.jpg"
+                    alt="Aadikavi Bhanubhakta Campus Logo"
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-contain rounded-full"
                     referrerPolicy="no-referrer"
-                    onError={(e) => {
-                        (e.target as HTMLImageElement).src = '/logo2.jpg';
+                    onError={(o) => {
+                        (o.target as HTMLImageElement).src = "/logo2.jpg";
                     }}
                 />
             </div>
@@ -253,6 +255,8 @@ export const Header: React.FC<HeaderProps> = ({
                                                     src={club.logo}
                                                     alt={club.name}
                                                     referrerPolicy="no-referrer"
+                                                    loading="lazy"
+                                                    decoding="async"
                                                     className="w-9 h-9 rounded-full object-cover border border-gray-200 shrink-0 group-hover:border-blue-500"
                                                 />
                                                 <div className="flex flex-col min-w-0 flex-1">
@@ -325,7 +329,9 @@ export const Header: React.FC<HeaderProps> = ({
                                                     src={club.logo}
                                                     alt={club.name}
                                                     referrerPolicy="no-referrer"
-                                                    className="w-8 h-8 rounded-full object-cover border border-gray-200 group-hover/item:border-blue-500 shrink-0"
+                                                    loading="lazy"
+                                                    decoding="async"
+                                                    className="w-8 h-8 rounded-full object-cover shrink-0"
                                                 />
                                                 <div className="flex flex-col min-w-0">
                                                     <span className="text-sm font-medium text-gray-900 group-hover/item:text-blue-700 truncate">
@@ -343,16 +349,18 @@ export const Header: React.FC<HeaderProps> = ({
                         </AnimatePresence>
                     </div>
 
-                    {/* Globe Language Switch Button */}
-                    <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={onLanguageToggle}
-                        className="p-2 sm:p-2.5 text-slate-700 hover:text-slate-900 bg-white hover:bg-slate-100 border border-slate-200/80 transition-colors rounded-full cursor-pointer flex items-center justify-center shadow-2xs"
-                        title="Toggle Language"
-                    >
-                        <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-slate-700" />
-                    </motion.button>
+                    {/* Globe Language Switch Button (Hidden on Club Page) */}
+                    {!isClubView && (
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={onLanguageToggle}
+                            className="p-2 sm:p-2.5 text-slate-700 hover:text-slate-900 bg-white hover:bg-slate-100 border border-slate-200/80 transition-colors rounded-full cursor-pointer flex items-center justify-center shadow-2xs"
+                            title="Toggle Language"
+                        >
+                            <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-slate-700" />
+                        </motion.button>
+                    )}
 
                     {/* Contact Us Campus Blue Button */}
                     <motion.button
@@ -366,51 +374,83 @@ export const Header: React.FC<HeaderProps> = ({
                 </motion.nav>
 
                 {/* Mobile Menu Button */}
-                <button
+                <motion.button
+                    whileTap={{ scale: 0.92 }}
                     onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                    className="md:hidden p-2 text-gray-700 hover:text-[#061129] rounded-lg cursor-pointer"
+                    className="md:hidden w-10 h-10 rounded-xl bg-white hover:bg-slate-100 active:bg-slate-200 text-gray-700 hover:text-[#061129] border border-slate-200/90 shadow-2xs transition-colors cursor-pointer flex items-center justify-center relative overflow-hidden"
+                    aria-label="Toggle navigation menu"
                 >
-                    {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-                </button>
+                    <AnimatePresence mode="wait" initial={false}>
+                        {isMobileMenuOpen ? (
+                            <motion.div
+                                key="close"
+                                initial={{ rotate: -90, opacity: 0 }}
+                                animate={{ rotate: 0, opacity: 1 }}
+                                exit={{ rotate: 90, opacity: 0 }}
+                                transition={{ duration: 0.18, ease: 'easeOut' }}
+                            >
+                                <X className="w-5 h-5 text-slate-800" />
+                            </motion.div>
+                        ) : (
+                            <motion.div
+                                key="menu"
+                                initial={{ rotate: 90, opacity: 0 }}
+                                animate={{ rotate: 0, opacity: 1 }}
+                                exit={{ rotate: -90, opacity: 0 }}
+                                transition={{ duration: 0.18, ease: 'easeOut' }}
+                            >
+                                <Menu className="w-5 h-5 text-slate-800" />
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </motion.button>
             </div>
 
             {/* Mobile Drawer Menu */}
             <AnimatePresence>
                 {isMobileMenuOpen && (
                     <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.25 }}
-                        className="md:hidden bg-white border-b border-gray-200 p-4 space-y-4 overflow-hidden"
+                        initial={{ opacity: 0, y: -12, scaleY: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scaleY: 1 }}
+                        exit={{ opacity: 0, y: -10, scaleY: 0.95 }}
+                        transition={{ 
+                            duration: 0.25, 
+                            ease: [0.32, 0.72, 0, 1] 
+                        }}
+                        style={{ transformOrigin: 'top center', willChange: 'opacity, transform' }}
+                        className="md:hidden bg-white/95 backdrop-blur-xl border-b border-slate-200/90 p-4 sm:p-5 space-y-4 shadow-xl overflow-hidden"
                     >
                         {/* Mobile Search Bar */}
                         <div className="relative w-full">
-                            <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                             <input
                                 type="text"
                                 value={searchQuery}
                                 onChange={(e) => onSearchChange(e.target.value)}
                                 placeholder={
-                                    language === 'en' ? 'Search committees...' : 'समितिहरू खोज्नुहोस्...'
+                                    language === 'en' ? 'Search committees, members, events...' : 'समितिहरू, सदस्यहरू, कार्यक्रमहरू खोज्नुहोस्...'
                                 }
-                                className="w-full bg-gray-100 border border-gray-200 rounded-lg pl-9 pr-8 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full bg-slate-100/90 focus:bg-white border border-slate-200 rounded-xl pl-10 pr-9 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#0c72b8]/30 focus:border-[#0c72b8] transition-all placeholder:text-slate-400"
                             />
                             {searchQuery && (
                                 <button
                                     onClick={() => onSearchChange('')}
-                                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 p-1"
+                                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 cursor-pointer"
+                                    aria-label="Clear search query"
                                 >
-                                    <X className="w-3.5 h-3.5" />
+                                    <X className="w-4 h-4" />
                                 </button>
                             )}
                         </div>
 
-                        <div className="space-y-1">
-                            <div className="text-xs font-bold uppercase tracking-wider text-gray-400 px-2 py-1">
-                                Student Committees
+                        <div className="space-y-2">
+                            <div className="flex items-center justify-between text-[11px] font-extrabold uppercase tracking-wider text-slate-400 px-1 py-0.5">
+                                <span>{language === 'en' ? 'Student Committees' : 'विद्यार्थी समितिहरू'}</span>
+                                <span className="text-[#0c72b8] bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100 font-bold">
+                                    {clubs.length} Clubs
+                                </span>
                             </div>
-                            <div className="max-h-60 overflow-y-auto space-y-1">
+                            <div className="max-h-60 sm:max-h-72 overflow-y-auto space-y-1 pr-1 overscroll-contain custom-scrollbar">
                                 {(searchQuery.trim() ? searchResults : clubs).map((club) => (
                                     <button
                                         key={club.id}
@@ -418,45 +458,51 @@ export const Header: React.FC<HeaderProps> = ({
                                             onSelectClub(club);
                                             setIsMobileMenuOpen(false);
                                         }}
-                                        className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-blue-50 text-left text-sm font-medium text-gray-800"
+                                        className="w-full flex items-center gap-3 p-2.5 rounded-xl hover:bg-blue-50/80 active:bg-blue-100/80 text-left text-sm font-medium text-slate-800 transition-colors cursor-pointer group"
                                     >
                                         <img
                                             src={club.logo}
                                             alt={club.name}
                                             referrerPolicy="no-referrer"
-                                            className="w-7 h-7 rounded-full object-cover shrink-0"
+                                            loading="lazy"
+                                            decoding="async"
+                                            className="w-8 h-8 rounded-full object-cover shrink-0"
                                         />
-                                        <div className="flex flex-col min-w-0">
-                                            <span className="truncate">{language === 'np' && club.nepaliName ? club.nepaliName : club.name}</span>
-                                            <span className="text-[11px] text-gray-500 truncate">{club.category}</span>
+                                        <div className="flex flex-col min-w-0 flex-1">
+                                            <span className="truncate text-sm text-slate-800 font-semibold group-hover:text-[#0c72b8] transition-colors">
+                                                {language === 'np' && club.nepaliName ? club.nepaliName : club.name}
+                                            </span>
+                                            <span className="text-[11px] text-slate-500 truncate">{club.category}</span>
                                         </div>
                                     </button>
                                 ))}
                                 {searchQuery.trim() && searchResults.length === 0 && (
-                                    <div className="p-3 text-center text-xs text-gray-500">
-                                        {language === 'en' ? 'No committees found' : 'कुनै समिति भेटिएन'}
+                                    <div className="p-4 text-center text-xs text-gray-500 bg-slate-50 rounded-xl">
+                                        {language === 'en' ? 'No committees found matching your search' : 'कुनै समिति भेटिएन'}
                                     </div>
                                 )}
                             </div>
                         </div>
 
-                        <div className="pt-2 border-t border-gray-100 flex flex-col gap-2">
-                            <button
-                                onClick={onLanguageToggle}
-                                className="w-full py-2 bg-gray-100 text-gray-800 font-medium text-sm rounded-lg flex items-center justify-center gap-2"
-                            >
-                                <Globe className="w-4 h-4" />
-                                <span>{language === 'en' ? 'Language: English (Switch to नेपाली)' : 'भाषा: नेपाली (Switch to English)'}</span>
-                            </button>
+                        <div className={`pt-3 border-t border-slate-200/70 grid ${isClubView ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2'} gap-2.5`}>
+                            {!isClubView && (
+                                <button
+                                    onClick={onLanguageToggle}
+                                    className="w-full py-2.5 px-3 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-800 font-semibold text-xs sm:text-sm rounded-xl flex items-center justify-center gap-2 transition-colors cursor-pointer border border-slate-200/60"
+                                >
+                                    <Globe className="w-4 h-4 text-slate-700" />
+                                    <span>{language === 'en' ? 'Language: English (नेपाली)' : 'भाषा: नेपाली (English)'}</span>
+                                </button>
+                            )}
                             <button
                                 onClick={() => {
                                     scrollToContact();
                                     setIsMobileMenuOpen(false);
                                 }}
-                                className="w-full py-2.5 bg-[#0c72b8] text-white font-medium text-sm rounded-lg flex items-center justify-center gap-2"
+                                className="w-full py-2.5 px-3 bg-[#0c72b8] hover:bg-[#0a5f9c] active:bg-[#084b7a] text-white font-semibold text-xs sm:text-sm rounded-xl flex items-center justify-center gap-2 transition-colors shadow-2xs cursor-pointer"
                             >
-                                <PhoneCall className="w-4 h-4 text-amber-400" />
-                                <span>Contact Us</span>
+                                <PhoneCall className="w-4 h-4 text-amber-300" />
+                                <span>{language === 'en' ? 'Contact Us' : 'सम्पर्क गर्नुहोस्'}</span>
                             </button>
                         </div>
                     </motion.div>

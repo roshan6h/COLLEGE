@@ -12,6 +12,19 @@ export type ClubCategory =
     | 'Academic & Analytics'
     | string;
 
+export interface MemberSocials {
+    facebook?: string;
+    linkedin?: string;
+    twitter?: string;
+    x?: string;
+    instagram?: string;
+    github?: string;
+    whatsapp?: string;
+    website?: string;
+    email?: string;
+    [key: string]: string | undefined;
+}
+
 export interface LeadershipMember {
     id: string;
     name: string;
@@ -20,6 +33,17 @@ export interface LeadershipMember {
     email: string;
     phone?: string;
     avatarUrl: string;
+    socials?: MemberSocials;
+    socialLinks?: Array<{ platform: string; url: string; label?: string }>;
+    facebook?: string;
+    linkedin?: string;
+    twitter?: string;
+    x?: string;
+    instagram?: string;
+    github?: string;
+    whatsapp?: string;
+    website?: string;
+    [key: string]: any;
 }
 
 export interface ClubEvent {
@@ -136,7 +160,18 @@ export interface Club {
     }>;
     [key: string]: any;
 }
-
+export const RedCross: Club = {
+    id: 'red-cross',
+    name: 'Red Cross',
+    nepaliName: 'रेड क्रस',
+    category: 'Student Welfare',
+    logo: '/fsu/logo1.webp',
+    accentColor: '#991b1b',
+    shortDescription: 'The central student union guarding student rights, campus welfare and institutional growth.',
+    memberCount: 2400,
+    president: 'Anup Aale Magar',
+    featured: true,
+};
 export const abitClubData: Club = {
     id: 'abit-club',
     name: 'ABIT Club',
@@ -215,8 +250,10 @@ export const abitClubData: Club = {
             name: 'Biwash Ranabhat',
             role: 'President',
             department: 'BICTE 8th Semester',
-            email: '',
-            phone: '+977 9815178591',
+            email: 'biwash.ranabhat@student.abcampus.edu.np',
+            linkedin: 'https://www.linkedin.com/in/biwash-ranabhat',
+            github: 'https://github.com/biwash-ranabhat',
+            facebook: 'https://www.facebook.com/biwash.ranabhat',
             avatarUrl: '../abit/bibash.webp'
         },
         {
@@ -225,7 +262,8 @@ export const abitClubData: Club = {
             role: 'Vice President',
             department: 'BICTE 6th Semester',
             email: '',
-            phone: '+977 9815189764',
+            linkedin: 'https://www.linkedin.com/in/rajib-ranabhat',
+            facebook: 'https://www.facebook.com/rajib.ranabhat',
             avatarUrl: '/abit/rajip.webp'
         },
         {
@@ -234,7 +272,8 @@ export const abitClubData: Club = {
             role: 'Secretary',
             department: 'BICTE 6th Semester',
             email: '',
-            phone: '+977 9819186920',
+            github: 'https://github.com/suraj-tech',
+            linkedin: 'https://www.linkedin.com/in/suraj-bishwakarma',
             avatarUrl: '/abit/suraj.webp',
         },
         {
@@ -242,8 +281,9 @@ export const abitClubData: Club = {
             name: 'Prerana Thapa',
             role: 'Treasurer',
             department: 'BICTE 6th Semester',
-            email: '',
-            phone: '+977 9829161624',
+            email: 'prerana.thapa@student.abcampus.edu.np',
+            linkedin: 'https://www.linkedin.com/in/prerana-thapa',
+            facebook: 'https://www.facebook.com/prerana.thapa',
             avatarUrl: '/abit/prerna.webp',
         },
         {
@@ -251,8 +291,9 @@ export const abitClubData: Club = {
             name: 'Ashim Chhetri',
             role: 'Joint Secretary',
             department: 'BICTE 5th Semester',
-            email: '',
-            phone: '+977 9712062701',
+            email: 'ashim.chhetri@student.abcampus.edu.np',
+            linkedin: 'https://www.linkedin.com/in/ashim-chhetri',
+            facebook: 'https://www.facebook.com/ashim.chhetri',
             avatarUrl: '/abit/ashim.webp'
         },
         {
@@ -260,8 +301,9 @@ export const abitClubData: Club = {
             name: 'Rohit Thapa',
             role: 'Spokesperson',
             department: 'BICTE 8th Semester',
-            email: '',
-            phone: '+977 9709018353',
+            email: 'rohit.thapa@student.abcampus.edu.np',
+            facebook: 'https://www.facebook.com/rohit.thapa',
+            linkedin: 'https://www.linkedin.com/in/rohit-thapa',
             avatarUrl: '/abit/rohit.webp'
         },
         {
@@ -269,8 +311,9 @@ export const abitClubData: Club = {
             name: 'Samikshya Shrestha',
             role: 'Member',
             department: 'BICTE 5th Semester',
-            email: '',
-            phone: '+977 9864378850',
+            email: 'samikshya.shrestha@student.abcampus.edu.np',
+            linkedin: 'https://www.linkedin.com/in/samikshya-shrestha',
+            facebook: 'https://www.facebook.com/samikshya.shrestha',
             avatarUrl: '/abit/samikshya.webp'
         },
         {
@@ -278,8 +321,9 @@ export const abitClubData: Club = {
             name: 'Diwash Bastola',
             role: 'Member',
             department: 'BICTE 5th Semester',
-            email: '',
-            phone: '+977 9844927162',
+            email: 'diwash.bastola@student.abcampus.edu.np',
+            linkedin: 'https://www.linkedin.com/in/diwash-bastola',
+            facebook: 'https://www.facebook.com/diwash.bastola',
             avatarUrl: '/abit/dibash.webp'
         },
         {
@@ -287,8 +331,9 @@ export const abitClubData: Club = {
             name: 'Nisha Giri',
             role: 'Member',
             department: 'BICTE 6th Semester',
-            email: '',
-            phone: '+977 9709018440',
+            email: 'nisha.giri@student.abcampus.edu.np',
+            facebook: 'https://www.facebook.com/nisha.giri',
+            linkedin: 'https://www.linkedin.com/in/nisha-giri',
             avatarUrl: '/abit/nisha.webp'
         },
         {
@@ -296,8 +341,9 @@ export const abitClubData: Club = {
             name: 'Diwash Ranabhat',
             role: 'Member',
             department: 'BICTE 6th Semester',
-            email: '',
-            phone: '+977 9762861070',
+            email: 'diwash.ranabhat@student.abcampus.edu.np',
+            linkedin: 'https://www.linkedin.com/in/diwash-ranabhat',
+            facebook: 'https://www.facebook.com/diwash.ranabhat',
             avatarUrl: '/abit/diwash.webp'
         },
         {
@@ -305,17 +351,20 @@ export const abitClubData: Club = {
             name: 'Biwash Ranabhat',
             role: 'Member',
             department: 'BICTE 8th Semester',
-            email: '',
-            phone: '+977 9707529958',
+            email: 'biwash.member@student.abcampus.edu.np',
+            facebook: 'https://www.facebook.com/biwash.ranabhat.member',
+            linkedin: 'https://www.linkedin.com/in/biwash-ranabhat',
             avatarUrl: '/abit/bibmem.webp'
         },
-           {
+        {
             id: 'l12',
             name: 'Er. Ghan Bahadur Thapa',
             role: 'Club Advisor',
             department: 'Department of Computer Science & IT',
             email: 'ghanbahadur@abcampus.edu.np',
-            phone: '+977 9841154498',
+            linkedin: 'https://www.linkedin.com/in/ghan-bahadur-thapa',
+            facebook: 'https://www.facebook.com/ghanbahadur.thapa',
+            github: 'https://github.com/ghanbahadur',
             avatarUrl: '/abit/ghan.webp'
         },
         {
@@ -324,7 +373,8 @@ export const abitClubData: Club = {
             role: 'Club Advisor',
             department: 'Department of Computer Science & IT',
             email: 'mahaprashad@abcampus.edu.np',
-            phone: '+977 9856012345',
+            linkedin: 'https://www.linkedin.com/in/mahaprashad-hadkhale',
+            facebook: 'https://www.facebook.com/mahaprashad.hadkhale',
             avatarUrl: '/abit/maha.webp'
         },
     ],
@@ -364,7 +414,7 @@ export const abitClubData: Club = {
             id: 'gal-abit-2',
             title: '',
             date: '202',
-            category: 'Graduation',
+            category: 'Workshop',
             description: '',
             image: '/abit/g2.webp'
         },
@@ -517,77 +567,11 @@ export const alumniWelfareData: Club = {
     category: 'Student Welfare',
     logo: '/fsu/logo1.webp',
     accentColor: '#991b1b',
-    description: 'The elected official governing body for all students at Aadikavi Bhanubhakta Campus. FSU works tirelessly to protect student rights, enhance campus infrastructure, coordinate cross-committee activities, and connect active students with the global alumni network.',
-    shortDescription: 'The central student union guarding student rights, campus welfare, alumni connections, and institutional growth.',
-    establishedYear: 1987,
+    shortDescription: 'The central student union guarding student rights, campus welfare and institutional growth.',
     memberCount: 2400,
-    facultyAdvisor: 'Campus Chief - Prof. Dr. Bhoj Raj Kafle',
     president: 'Anup Aale Magar',
-    meetingSchedule: 'Bi-weekly Sunday at 2:00 PM',
-    roomLocation: 'FSU Secretariat, Main Admin Wing',
-    contactEmail: 'fsu@abcampus.edu.np',
     featured: true,
-    vision: 'To serve as a resilient voice for student rights, campus excellence, and a vibrant lifelong alumni network.',
-    mission: [
-        'Safeguard student welfare, library resources, and academic equity.',
-        'Establish an active Alumni Mentorship & Career Guidance network.',
-        'Organize the annual Campus Week and inter-college sports championships.'
-    ],
-    presidentMessage: {
-        senderName: 'Anup Aale Magar',
-        senderRole: 'President, Free Student Union',
-        message: 'Welcome fellow students and alumni! FSU stands firm as the voice of every student at Aadikavi Bhanubhakta Campus. We invite you to stay engaged and contribute to our campus community.',
-        avatarUrl: '../fsu/anup.webp'
-    },
-    advisorMessage: {
-        senderName: 'Prof. Dr. Bhoj Raj Kafle',
-        senderRole: 'Campus Chief',
-        message: 'Student leadership and alumni relations are integral to institutional quality. FSU continues to lead campus development with high dedication.',
-        avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&h=300&fit=crop&crop=face'
-    },
-    manifesto: {
-        title: 'FSU Student Welfare Charter',
-        points: [
-            'Student Defense: Unwavering commitment to student rights and academic fairness.',
-            'Infrastructure Expansion: Upgrading digital library, canteen hygiene, and campus sports fields.',
-            'Alumni Connection: Creating career placement pathways with distinguished ABC alumni.'
-        ]
-    },
-    history: 'Founded in 1987 alongside the establishment of Aadikavi Bhanubhakta Campus, FSU has spearheaded decades of academic advancements, campus expansions, and alumni welfare initiatives.',
-    leadership: [
-        {
-            id: 'fsu1',
-            name: 'Anup Aale Magar',
-            role: 'President',
-            department: 'MBS 2nd Year',
-            email: 'anup.magar@student.abcampus.edu.np',
-            phone: '+977 9856098765',
-            avatarUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=300&h=300&fit=crop&crop=face'
-        },
-        {
-            id: 'fsu2',
-            name: 'Saraswati Devkota',
-            role: 'Vice President',
-            department: 'MA Nepali',
-            email: 'saraswati.d@student.abcampus.edu.np',
-            phone: '+977 9846234567',
-            avatarUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=300&h=300&fit=crop&crop=face'
-        },
-        {
-            id: 'fsu3',
-            name: 'Deepak Raj Thapa',
-            role: 'Secretary',
-            department: 'BBS 4th Year',
-            email: 'deepak.thapa@student.abcampus.edu.np',
-            phone: '+977 9860345678',
-            avatarUrl: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=300&h=300&fit=crop&crop=face'
-        }
-    ],
-    achievements: [],
-    achievementItems: [],
-    galleryImages: [
-        'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&auto=format&fit=crop&q=80'
-    ]
+    
 };
 
 export const bbaClubData: Club = {
@@ -651,7 +635,6 @@ export const bbaClubData: Club = {
             role: 'Club Advisor',
             department: 'Department of Management',
             email: '',
-            phone: '+977 9856011223',
             avatarUrl: '../bba/chij2.webp'
         },
         {
@@ -659,7 +642,6 @@ export const bbaClubData: Club = {
             name: 'Ashim Bhandari',
             role: 'President',
             department: 'BBA 6th Semester',
-            phone: '+977 9817152251',
             avatarUrl: '../bba/asim.webp',
             email: ""
         }
@@ -669,7 +651,6 @@ export const bbaClubData: Club = {
             name: 'Shreedhar Khatri',
             role: 'Vice - President',
             department: 'BBA 6th Semester',
-            phone: '+977 9829181846',
             avatarUrl: '../bba/sri.webp',
             email: ""
         },
@@ -678,7 +659,6 @@ export const bbaClubData: Club = {
             name: 'Shristi Shrestha',
             role: 'Secretary',
             department: 'BBA 6th Semester',
-            phone: '+977 9806765816',
             avatarUrl: '../bba/sristi.webp',
             email: ""
         },
@@ -687,7 +667,6 @@ export const bbaClubData: Club = {
             name: 'Sushma Thapa',
             role: 'Joint - Secretary',
             department: 'BBA 6th Semester',
-            phone: '+977 9829196990',
             avatarUrl: '../bba/susma.webp',
             email: ""
         },
@@ -696,7 +675,6 @@ export const bbaClubData: Club = {
             name: 'Sabita Adhikari',
             role: 'Treasurer',
             department: 'BBA 8th Semester',
-            phone: '+977 9824104395',
             avatarUrl: '../bba/sabita.webp',
             email: ""
         },
@@ -705,7 +683,6 @@ export const bbaClubData: Club = {
             name: 'Safalta Gauli',
             role: 'Spokesperson',
             department: 'BBA 6th Semester',
-            phone: '+9779701368577',
             avatarUrl: '../bba/safalta.webp',
             email: ""
         },
@@ -714,7 +691,6 @@ export const bbaClubData: Club = {
             name: 'Kripa Ranabhat',
             role: 'Member',
             department: 'BBA 6th Semester',
-            phone: '+9779817136160 ',
             avatarUrl: '../bba/kripa.webp',
             email: ""
         },
@@ -723,7 +699,6 @@ export const bbaClubData: Club = {
             name: 'Sapana Thapa',
             role: 'Member',
             department: 'BBA 6th Semester',
-            phone: '+9779806762359',
             avatarUrl: '../bba/sapana.webp',
             email: ""
         },
@@ -732,7 +707,6 @@ export const bbaClubData: Club = {
             name: 'Bishnu Ranabhat',
             role: 'Member',
             department: 'BBA 6th Semester',
-            phone: '+9779702722010 ',
             avatarUrl: '../bba/bisnu.webp',
             email: ""
         },
@@ -741,7 +715,6 @@ export const bbaClubData: Club = {
             name: 'Bipin Adhikari',
             role: 'Member',
             department: 'BBA 6th Semester',
-            phone: '+9779762861361',
             avatarUrl: '../bba/bipin.webp',
             email: ""
         },
@@ -750,7 +723,6 @@ export const bbaClubData: Club = {
             name: 'Sumitra Dhungana',
             role: 'Member',
             department: 'BBA 6th Semester',
-            phone: '+9779767561994',
             avatarUrl: '../bba/sumitra.webp',
             email: ""
         },
@@ -759,7 +731,6 @@ export const bbaClubData: Club = {
             name: 'Apshara Thakuri',
             role: 'Member',
             department: 'BBA 4th Semester',
-            phone: '+9779702618709',
             avatarUrl: '../bba/apsara.webp',
             email: ""
         },
@@ -768,7 +739,6 @@ export const bbaClubData: Club = {
             name: 'Sujata B.K',
             role: 'Member',
             department: 'BBA 6th Semester',
-            phone: '+9779815166331',
             avatarUrl: '../bba/sujata.webp',
             email: ""
         },
@@ -777,7 +747,6 @@ export const bbaClubData: Club = {
             name: 'Sadiksha Adhikari',
             role: 'Member',
             department: 'BBA 4th Semester',
-            phone: '+9779815105797 ',
             avatarUrl: '../bba/sadik.webp',
             email: ""
         },
@@ -786,7 +755,6 @@ export const bbaClubData: Club = {
             name: 'Jamira Miya',
             role: 'Member',
             department: 'BBA 6th Semester',
-            phone: '+9779842268371 ',
             avatarUrl: '../bba/jamira.webp',
             email: ""
         },
@@ -795,7 +763,6 @@ export const bbaClubData: Club = {
             name: 'Asmita B.K',
             role: 'Member',
             department: 'BBA 6th Semester',
-            phone: '+9779769499653 ',
             avatarUrl: '../bba/asmita.webp',
             email: ""
         },
@@ -804,7 +771,6 @@ export const bbaClubData: Club = {
             name: 'Jharana Sapkota',
             role: 'Member',
             department: 'BBA 6th Semester',
-            phone: 'To be updated',
             avatarUrl: '../bba/jharna.webp',
             email: ""
         }
@@ -881,7 +847,6 @@ export const abccricket: Club = {
             role: 'Club Advisor',
             department: 'MA Nepali 2nd Year',
             email: '',
-            phone: '+977 ',
             avatarUrl: '/cricket/shiva.webp'
         },
         {
@@ -890,7 +855,6 @@ export const abccricket: Club = {
             role: 'Club Advisor',
             department: 'MA Nepali 2nd Year',
             email: '',
-            phone: '+977 9846954665',
             avatarUrl: '/cricket/dikpal.webp'
         },
         {
@@ -899,7 +863,6 @@ export const abccricket: Club = {
             role: 'President',
             department: 'MA Nepali 2nd Year',
             email: '',
-            phone: '+977 9767279339',
             avatarUrl: '/cricket/pramish.webp'
         },
         {
@@ -908,7 +871,6 @@ export const abccricket: Club = {
             role: 'Vice President',
             department: 'BBS 2nd Year',
             email: '',
-            phone: '+977 9704703317',
             avatarUrl: '/cricket/laxg.webp'
         },
         {
@@ -917,7 +879,6 @@ export const abccricket: Club = {
             role: 'Secretary',
             department: '',
             email: '',
-            phone: '+977 9762861361',
             avatarUrl: '/cricket/bipin.webp',
         },
         {
@@ -926,7 +887,6 @@ export const abccricket: Club = {
             role: 'Joint Secretary',
             department: 'BICTE 4th Semester',
             email: '',
-            phone: '+977 9704506956',
             avatarUrl: '/cricket/bipug.webp'
         },
         {
@@ -935,7 +895,6 @@ export const abccricket: Club = {
             role: 'Treasurer',
             department: 'BICTE 4th Semester',
             email: '',
-            phone: '+977 9806783037',
             avatarUrl: '/cricket/bisham.webp'
         },
         {
@@ -944,7 +903,6 @@ export const abccricket: Club = {
             role: 'Joint Treasurer',
             department: 'BICTE 4th Semester',
             email: '',
-            phone: '+977 9812345678',
             avatarUrl: '/cricket/sabing.webp'
         },
         {
@@ -953,7 +911,6 @@ export const abccricket: Club = {
             role: 'Member',
             department: 'BICTE 4th Semester',
             email: '',
-            phone: '+977 9712062701',
             avatarUrl: '/cricket/ashim.webp',
         },
         {
@@ -962,7 +919,6 @@ export const abccricket: Club = {
             role: 'Member',
             department: 'BBS 2nd Year',
             email: '',
-            phone: '+977 9704703317',
             avatarUrl: '/cricket/ankit.webp'
         },
         {
@@ -971,7 +927,6 @@ export const abccricket: Club = {
             role: 'Member',
             department: 'BBS 2nd Year',
             email: '',
-            phone: '+977 ',
             avatarUrl: '/cricket/mandip.webp'
         },
         {
@@ -980,7 +935,6 @@ export const abccricket: Club = {
             role: 'Member',
             department: 'BBS 2nd Year',
             email: '',
-            phone: '+977',
             avatarUrl: '/cricket/sandip.webp'
         },
         {
@@ -989,7 +943,6 @@ export const abccricket: Club = {
             role: 'Member',
             department: 'BBS 2nd Year',
             email: '',
-            phone: '+977 9820616913',
             avatarUrl: '/cricket/sagar.webp'
         },
         {
@@ -998,7 +951,6 @@ export const abccricket: Club = {
             role: 'Member',
             department: 'BBS 2nd Year',
             email: '',
-            phone: '+977',
             avatarUrl: '/cricket/chandan.webp'
         },
         {
@@ -1007,7 +959,6 @@ export const abccricket: Club = {
             role: 'Member',
             department: 'BBS 2nd Year',
             email: '',
-            phone: '+977',
             avatarUrl: '/cricket/sandesh.webp'
         }
 
@@ -1130,7 +1081,6 @@ export const managementclub: Club = {
             role: 'Club Advisor',
             department: 'Department of Accountancy',
             email: 'ganesh.shrestha@abcampus.edu.np',
-            phone: '+977 9856033445',
             avatarUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop&crop=face'
         },
         {
@@ -1139,7 +1089,6 @@ export const managementclub: Club = {
             role: 'President',
             department: 'BBS 4th Year',
             email: 'sita.adhikari@student.abcampus.edu.np',
-            phone: '+977 9867891234',
             avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&h=300&fit=crop&crop=face'
         }
     ],
@@ -1229,7 +1178,6 @@ export const human: Club = {
             role: 'Club Advisor',
             department: 'Department of Humanities',
             email: 'humanities@abcampus.edu.np',
-            phone: '+977 9856012345',
             avatarUrl:
                 ''
         },
@@ -1240,7 +1188,6 @@ export const human: Club = {
             role: 'President',
             department: 'Humanities, 7th Semester',
             email: '',
-            phone: '+977 9824189131',
             avatarUrl:
                 ''
         },
@@ -1251,7 +1198,6 @@ export const human: Club = {
             role: 'Vice President',
             department: 'Humanities, 5th Semester',
             email: '',
-            phone: '+977 9826600026',
             avatarUrl:
                 ''
         },
@@ -1261,7 +1207,6 @@ export const human: Club = {
             role: 'Secretary',
             department: 'Humanities, 5th Semester',
             email: '',
-            phone: '+977 9814163135',
             avatarUrl:
                 ''
         },
@@ -1271,7 +1216,6 @@ export const human: Club = {
             role: 'Joint - Secretary',
             department: 'Humanities, 5th Semester',
             email: '',
-            phone: '+977 9815161226',
             avatarUrl:
                 ''
         },
@@ -1281,7 +1225,6 @@ export const human: Club = {
             role: 'Treasurer',
             department: 'Humanities, 5th Semester',
             email: '',
-            phone: '+977 9707795101',
             avatarUrl:
                 ''
         },
@@ -1291,7 +1234,6 @@ export const human: Club = {
             role: 'Member',
             department: 'Humanities, 5th Semester',
             email: '',
-            phone: '+977 9846723968',
             avatarUrl: ''
         },
         {
@@ -1300,7 +1242,6 @@ export const human: Club = {
             role: 'Member',
             department: 'Humanities, 5th Semester',
             email: '',
-            phone: '+977 9701682017',
             avatarUrl: ''
         },
         {
@@ -1309,7 +1250,6 @@ export const human: Club = {
             role: 'Member',
             department: 'Humanities, 5th Semester',
             email: '',
-            phone: '+977 9816619897',
             avatarUrl: ''
         },
         {
@@ -1318,7 +1258,6 @@ export const human: Club = {
             role: 'Member',
             department: 'Humanities, 5th Semester',
             email: '',
-            phone: '+977 9815127704',
             avatarUrl: ''
         },
         {
@@ -1327,7 +1266,6 @@ export const human: Club = {
             role: 'Member',
             department: 'Humanities, 5th Semester',
             email: '',
-            phone: '+977 9807241144',
             avatarUrl: ''
         },
         {
@@ -1336,7 +1274,6 @@ export const human: Club = {
             role: 'Member',
             department: 'Humanities, 5th Semester',
             email: '',
-            phone: '+977 9815189739',
             avatarUrl: ''
         },
         {
@@ -1345,7 +1282,6 @@ export const human: Club = {
             role: 'Member',
             department: 'Humanities, 5th Semester',
             email: '',
-            phone: '+977 9826600545',
             avatarUrl: ''
         },
         {
@@ -1354,7 +1290,6 @@ export const human: Club = {
             role: 'Member',
             department: 'Humanities, 5th Semester',
             email: '',
-            phone: '+977 9702003110',
             avatarUrl: ''
         }
     ],
@@ -1539,7 +1474,6 @@ export const vyasABC: Club = {
             role: 'President',
             department: 'BICTE 7th Semester',
             email: 'panditpuspa000@gmail.com',
-            phone: '+977 9814151727',
             avatarUrl: '../vyas/pushpa.webp'
         },
         {
@@ -1548,7 +1482,6 @@ export const vyasABC: Club = {
             role: 'Vice-President',
             department: 'BICTE 5th Semester',
             email: 'vyasabc0123@gmail.com',
-            phone: '+977 9816684940',
             avatarUrl: '../vyas/deepika.webp'
         },
         {
@@ -1557,7 +1490,6 @@ export const vyasABC: Club = {
             role: 'Secretary',
             department: 'BICTE 4th Semester',
             email: 'vyasabc0123@gmail.com',
-            phone: '+977 9746846173',
             avatarUrl: '../vyas/anil.webp'
         },
         {
@@ -1566,7 +1498,6 @@ export const vyasABC: Club = {
             role: 'Joint-secretary',
             department: 'BICTE 7th Semester',
             email: 'vyasabc0123@gmail.com',
-            phone: '+977 9826601227',
             avatarUrl: '../vyas/sweta.webp'
         },
         {
@@ -1575,7 +1506,6 @@ export const vyasABC: Club = {
             role: 'Treasurer',
             department: 'BICTE 7th Semester',
             email: 'vyasabc0123@gmail.com',
-            phone: '+977 9806561230',
             avatarUrl: '../vyas/kamal.webp'
         }
     ],
@@ -1656,7 +1586,6 @@ export const scienceClubData: Club = {
             name: 'Rubi Khadka',
             role: 'President',
             department: 'B.Ed Science',
-            phone: '+977 9806584709',
             avatarUrl: '../science/rubi.webp',
             email: 'rubikhadka302@gmail.com'
         },
@@ -1665,7 +1594,6 @@ export const scienceClubData: Club = {
             name: 'Aadit Thapa',
             role: 'Vice - President',
             department: 'B.Ed Science',
-            phone: '+977 9828186261',
             avatarUrl: '../science/adit.webp',
             email: ''
         },
@@ -1674,7 +1602,6 @@ export const scienceClubData: Club = {
             name: 'Salina Majakoti',
             role: 'Secretary',
             department: 'B.Ed Science',
-            phone: '+977 9817164649',
             avatarUrl: '../science/salina.webp',
             email: ''
         },
@@ -1683,7 +1610,6 @@ export const scienceClubData: Club = {
             name: 'Ankita Ojha',
             role: 'Joint - Secretary',
             department: 'B.Ed Science',
-            phone: '+977 9816677580',
             avatarUrl: '../science/ankita.webp',
             email: ''
         },
@@ -1692,7 +1618,6 @@ export const scienceClubData: Club = {
             name: 'Sadikshya Thapa',
             role: 'Treasurer',
             department: 'B.Ed Science',
-            phone: '+977 9804125538',
             avatarUrl: '../science/sadikshya.webp',
             email: ''
         },
@@ -1701,7 +1626,6 @@ export const scienceClubData: Club = {
             name: 'Asmita Thapa',
             role: 'Member',
             department: 'B.Ed Science',
-            phone: '+977 9706432188',
             avatarUrl: '../science/asmita.webp',
             email: ''
         },
@@ -1710,7 +1634,6 @@ export const scienceClubData: Club = {
             name: 'Kanchan Bisural',
             role: 'Member',
             department: 'B.Ed Science',
-            phone: '+977 9709113321',
             avatarUrl: '../science/kanchan.webp',
             email: ''
         },
@@ -1719,7 +1642,6 @@ export const scienceClubData: Club = {
             name: 'Manisha Bhandari',
             role: 'Member',
             department: 'B.Ed Science',
-            phone: '+977 9827189014',
             avatarUrl: '../science/manisha.webp',
             email: ''
         },
@@ -1728,7 +1650,6 @@ export const scienceClubData: Club = {
             name: 'Roshani Adhikari',
             role: 'Member',
             department: 'B.Ed Science',
-            phone: '+977 9704149661',
             avatarUrl: '../science/roshni.webp',
             email: ''
         },
@@ -1737,30 +1658,14 @@ export const scienceClubData: Club = {
             name: 'Mandeep Malla',
             role: 'Member',
             department: 'B.Ed Science',
-            phone: 'To be updated',
             avatarUrl: '',
             email: ''
         }
     ],
     achievements: [],
-  galleryItems: [
-        
-        {
-            id: 'gal-abit-1',
-            title: 'Moment 1',
-            date: '202',
-            category: 'Graduation',
-            description: '',
-            image: '/abit/g1.webp'
-        },
-        {
-            id: 'gal-abit-2',
-            title: '',
-            date: '202',
-            category: 'Graduation',
-            description: '',
-            image: '/abit/g2.webp'
-        }
+    galleryImages: [
+        'https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1507668077129-56e32842fceb?w=800&auto=format&fit=crop&q=80'
     ]
 };
 
@@ -1774,8 +1679,8 @@ export const ALL_CLUBS: Club[] = [
     managementclub,
     human,
     vyasABC,
-    scienceClubData
-
+    scienceClubData,
+    RedCross
 ];
 
 export const UPCOMING_EVENTS: ClubEvent[] = [

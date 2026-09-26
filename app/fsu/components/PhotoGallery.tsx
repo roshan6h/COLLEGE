@@ -1,19 +1,17 @@
 import React, { useState, useMemo, useEffect, useCallback } from "react";
 import {
-    Images,
-    Expand,
+    Search,
     X,
     ChevronDown,
     ChevronUp,
-    Search,
+    MoreHorizontal,
     ChevronLeft,
     ChevronRight,
     Share2,
-    Heart,
-    ExternalLink,
-    ZoomIn,
-    MoreHorizontal,
-    Sparkles
+    Download,
+    Check,
+    Calendar,
+    Tag
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -21,12 +19,12 @@ export interface GalleryImage {
     id: string;
     titleEn: string;
     titleNp: string;
-    category: "Protest" | "Campaign" | "Interaction" | "Sports" | "Academic" | "Solidarity" | "Tribute" | "Social Service" | string;
+    category: "Protest" | "Campaign" | "Interaction" | "Sports" | "Academic" | "Solidarity" | string;
     descriptionEn: string;
     descriptionNp: string;
     placeholderBg: string;
+    symbolicEmoji: string;
     imageUrl?: string;
-    aspectRatio?: "portrait" | "landscape" | "square" | "tall";
 }
 
 export const GALLERY_IMAGES: GalleryImage[] = [
@@ -38,7 +36,8 @@ export const GALLERY_IMAGES: GalleryImage[] = [
         descriptionEn: "Justice for Inisha BK Solidarity Rally - unified student march demanding safety and student protection at Aadikavi Campus.",
         descriptionNp: "इनिसा विकको तत्काल न्यायका लागि क्याम्पस गेट बाहिर आयोजित वृहत दीप प्रज्वलन र शान्तिपूर्ण ऐक्यवद्धता प्रदर्शन।",
         placeholderBg: "from-red-900 to-slate-950",
-        imageUrl: "../fsu/img12.webp"
+        symbolicEmoji: "🕯️",
+        imageUrl: "/img12.jpeg"
     },
     {
         id: "g2",
@@ -48,7 +47,8 @@ export const GALLERY_IMAGES: GalleryImage[] = [
         descriptionEn: "Standing in solidarity during campus awareness and leadership workshops, encouraging participation.",
         descriptionNp: "विद्यार्थी सचेतना तथा व्यावहारिक नेतृत्व विकास कार्यक्रमको एक सुखद क्षण।",
         placeholderBg: "from-blue-900 to-indigo-950",
-        imageUrl: "../fsu/img4.webp"
+        symbolicEmoji: "🤝",
+        imageUrl: "/img4.jpeg"
     },
     {
         id: "g3",
@@ -58,7 +58,8 @@ export const GALLERY_IMAGES: GalleryImage[] = [
         descriptionEn: "Supporting Sports: President Anup Ale Magar presenting the official team jerseys to our campus players.",
         descriptionNp: "खेलकुद प्रवर्द्धन: स्ववियु अध्यक्ष अनुप आले मगरद्वारा क्याम्पस फुटबल टोलीलाई नयाँ जर्सी हस्तान्तरण।",
         placeholderBg: "from-rose-700 to-slate-900",
-        imageUrl: "../fsu/imag.webp"
+        symbolicEmoji: "👕",
+        imageUrl: "/imag.jpeg"
     },
     {
         id: "g4",
@@ -68,7 +69,8 @@ export const GALLERY_IMAGES: GalleryImage[] = [
         descriptionEn: "Promoting Student Athletics: Union members with the new campus sports kits preparing for the league.",
         descriptionNp: "खेलाडीहरू र स्ववियु पदाधिकारीहरू नयाँ फुटबल जर्सी तथा खेलकुद सामग्रीका साथ एकीकृत।",
         placeholderBg: "from-blue-800 to-red-800",
-        imageUrl: "../fsu/sp2.webp"
+        symbolicEmoji: "⚽",
+        imageUrl: "/sp2.jpeg"
     },
     {
         id: "g5",
@@ -78,7 +80,8 @@ export const GALLERY_IMAGES: GalleryImage[] = [
         descriptionEn: "Academic Support: Facilitating student resources and college administrative assistance.",
         descriptionNp: "विद्यार्थीहरूलाई शैक्षिक सामग्री वितरण र फारम दर्ता प्रक्रियामा सहजीकरण।",
         placeholderBg: "from-teal-800 to-slate-900",
-        imageUrl: "../fsu/img11.webp"
+        symbolicEmoji: "📚",
+        imageUrl: "/img11.jpeg"
     },
     {
         id: "g6",
@@ -88,7 +91,8 @@ export const GALLERY_IMAGES: GalleryImage[] = [
         descriptionEn: "Advocating for Student Rights: Submitting official memorandums and 15-point charter to the campus administration.",
         descriptionNp: "विद्यार्थी हकहित र शैक्षिक सुधारका विषय समेटिएको ज्ञापन पत्र क्याम्पस प्रशासनलाई बुझाउँदै स्ववियु प्रतिनिधि।",
         placeholderBg: "from-slate-800 to-sky-950",
-        imageUrl: "../fsu/img6.webp"
+        symbolicEmoji: "📄",
+        imageUrl: "/img6.jpeg"
     },
     {
         id: "g7",
@@ -98,7 +102,8 @@ export const GALLERY_IMAGES: GalleryImage[] = [
         descriptionEn: "Strengthening Communication: Official handover of student union proposals for library digitalization.",
         descriptionNp: "सुदृढ संचार तथा डिजिटल पुस्तकालय सम्बन्धी प्रस्तावहरू आधिकारिक रूपमा दर्ता गरिँदै।",
         placeholderBg: "from-emerald-800 to-slate-900",
-        imageUrl: "../fsu/imgee.webp"
+        symbolicEmoji: "🤝",
+        imageUrl: "/imgee.png"
     },
     {
         id: "g8",
@@ -108,7 +113,8 @@ export const GALLERY_IMAGES: GalleryImage[] = [
         descriptionEn: "FSU Annual Gathering: Celebrating student unity, academic excellence, and progressive leadership.",
         descriptionNp: "स्ववियु वार्षिक भेलामा विद्यार्थी एकता, सहभागिता र लोकतान्त्रिक प्रतिबद्धता प्रदर्शन।",
         placeholderBg: "from-amber-800 to-indigo-950",
-        imageUrl: "../fsu/img8.webp"
+        symbolicEmoji: "🎉",
+        imageUrl: "/img8.jpeg"
     },
     {
         id: "g9",
@@ -118,27 +124,30 @@ export const GALLERY_IMAGES: GalleryImage[] = [
         descriptionEn: "Inclusive Leadership: Engaging directly with students, faculty, and delegates at the Union office.",
         descriptionNp: "समावेशी नेतृत्व: स्ववियु कार्यालयमा विद्यार्थी र प्राध्यापकहरूसँग निरन्तर संवाद तथा सर-सल्लाह।",
         placeholderBg: "from-blue-900 to-neutral-900",
-        imageUrl: "../fsu/img10.webp"
+        symbolicEmoji: "💼",
+        imageUrl: "/img10.jpeg"
     },
     {
         id: "g10",
         titleEn: "Mourning Session for Inisha BK",
         titleNp: "इनिशा बिकको सम्झनामा श्रद्धाञ्जली सभा",
-        category: "Tribute",
+        category: "Solidarity",
         descriptionEn: "A heartfelt mourning session organized by the Free Students' Union to pay tribute to the late Inisha BK. Students, teachers, and staff gathered to offer condolences, observe a moment of silence, and honor her memory.",
-        descriptionNp: "स्वर्गीय इनिशा बिकको सम्झनामा स्वतन्त्र विद्यार्थी युनियनद्वारा आयोजित श्रद्धाञ्जली सभामा विद्यार्थी, शिक्षक तथा कर्मचारीहरूको सहभागिता। दिवंगत आत्माप्रति श्रद्धाञ्जली अर्पण गर्दै मौनधारण गरिएको क्षण।",
+        descriptionNp: "स्वर्गीय इनिशा बिकको सम्झनामा स्वतन्त्र विद्यार्थी युनियनद्वारा आयोजित श्रद्धाञ्जली सभामा विद्यार्थी, शिक्षक तथा कर्मचारीहरूको सहभागिता।",
         placeholderBg: "from-slate-800 to-gray-900",
-        imageUrl: "../fsu/img5.webp"
+        symbolicEmoji: "🕯️",
+        imageUrl: "/img5.jpeg"
     },
     {
         id: "g11",
         titleEn: "Donation Campaign",
         titleNp: "दान अभियान",
-        category: "Social Service",
-        descriptionEn: "A donation campaign organized by the Free Students' Union to support individuals and families in need. Students, teachers, and well-wishers came together to contribute generously, promoting the values of compassion, unity, and social responsibility.",
-        descriptionNp: "आवश्यकतामा परेका व्यक्ति तथा परिवारहरूको सहयोगका लागि स्वतन्त्र विद्यार्थी युनियनद्वारा आयोजित दान अभियान। विद्यार्थी, शिक्षक तथा शुभेच्छुकहरूको सक्रिय सहभागिताले सहयोग, एकता र सामाजिक उत्तरदायित्वको भावना झल्काएको कार्यक्रम।",
+        category: "Campaign",
+        descriptionEn: "A donation campaign organized by the Free Students' Union to support individuals and families in need. Students, teachers, and well-wishers came together to contribute generously.",
+        descriptionNp: "आवश्यकतामा परेका व्यक्ति तथा परिवारहरूको सहयोगका लागि स्वतन्त्र विद्यार्थी युनियनद्वारा आयोजित दान अभियान।",
         placeholderBg: "from-blue-950 to-slate-900",
-        imageUrl: "../fsu/img7.webp"
+        symbolicEmoji: "🤝",
+        imageUrl: "/img7.jpeg"
     },
     {
         id: "g12",
@@ -148,7 +157,8 @@ export const GALLERY_IMAGES: GalleryImage[] = [
         descriptionEn: "Fostering Teamwork: Supporting dynamic campus sports leagues and extracurricular participation.",
         descriptionNp: "क्याम्पसमा अतिरिक्त क्रियाकलाप र खेलकुद सहभागिताको विकासका लागि खेल आयोजना।",
         placeholderBg: "from-red-700 to-indigo-950",
-        imageUrl: "../fsu/sp3.webp"
+        symbolicEmoji: "🏆",
+        imageUrl: "/sp3.jpeg"
     }
 ];
 
@@ -156,21 +166,37 @@ interface PhotoGalleryProps {
     language: "en" | "np";
 }
 
+interface FilterCategory {
+    key: string;
+    labelEn: string;
+    labelNp: string;
+}
+
+const CATEGORIES: FilterCategory[] = [
+    { key: "all", labelEn: "All Pins", labelNp: "सबै पिन" },
+    { key: "Protest", labelEn: "Protest", labelNp: "आन्दोलन" },
+    { key: "Sports", labelEn: "Sports", labelNp: "खेलकुद" },
+    { key: "Solidarity", labelEn: "Solidarity", labelNp: "ऐक्यवद्धता" },
+    { key: "Campaign", labelEn: "Campaign", labelNp: "अभियान" },
+    { key: "Interaction", labelEn: "Interaction", labelNp: "अन्तरक्रिया" }
+];
+
 export default function PhotoGallery({ language }: PhotoGalleryProps) {
     const [activeCategory, setActiveCategory] = useState<string>("all");
     const [searchQuery, setSearchQuery] = useState<string>("");
-    const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+    const [selectedImg, setSelectedImg] = useState<GalleryImage | null>(null);
     const [showAll, setShowAll] = useState<boolean>(false);
-    const [likedIds, setLikedIds] = useState<Set<string>>(new Set());
-    const [toastMessage, setToastMessage] = useState<string>("");
+    const [copiedId, setCopiedId] = useState<string | null>(null);
 
-    const categories = ["all", "Protest", "Sports", "Solidarity", "Campaign", "Interaction"];
+    // Initial limit matching the 8 pins in the screenshot
     const INITIAL_LIMIT = 8;
 
     const filteredImages = useMemo(() => {
         return GALLERY_IMAGES.filter((img) => {
             const matchesCategory =
-                activeCategory === "all" || img.category.toLowerCase() === activeCategory.toLowerCase();
+                activeCategory === "all" ||
+                img.category.toLowerCase() === activeCategory.toLowerCase();
+
             const q = searchQuery.toLowerCase().trim();
             const matchesSearch =
                 !q ||
@@ -186,89 +212,93 @@ export default function PhotoGallery({ language }: PhotoGalleryProps) {
 
     const displayedImages = showAll ? filteredImages : filteredImages.slice(0, INITIAL_LIMIT);
 
-    const handleCategoryChange = (cat: string) => {
-        setActiveCategory(cat);
+    const handleCategoryChange = (catKey: string) => {
+        setActiveCategory(catKey);
         setShowAll(false);
     };
 
-    const getCategoryCount = (cat: string) => {
-        if (cat === "all") return GALLERY_IMAGES.length;
-        return GALLERY_IMAGES.filter((img) => img.category.toLowerCase() === cat.toLowerCase()).length;
+    const getCategoryCount = (catKey: string) => {
+        if (catKey === "all") return GALLERY_IMAGES.length;
+        return GALLERY_IMAGES.filter(
+            (img) => img.category.toLowerCase() === catKey.toLowerCase()
+        ).length;
     };
 
-    const toggleLike = (id: string, e?: React.MouseEvent) => {
-        if (e) e.stopPropagation();
-        setLikedIds((prev) => {
-            const next = new Set(prev);
-            if (next.has(id)) {
-                next.delete(id);
-            } else {
-                next.add(id);
-            }
-            return next;
-        });
-    };
-
-    const handleShare = (img: GalleryImage, e?: React.MouseEvent) => {
-        if (e) e.stopPropagation();
-        if (navigator.share) {
-            navigator.share({
-                title: language === "en" ? img.titleEn : img.titleNp,
-                text: language === "en" ? img.descriptionEn : img.descriptionNp,
-                url: window.location.href
-            }).catch(() => {});
+    // Keyboard navigation for Lightbox
+    const handleNextImage = useCallback(() => {
+        if (!selectedImg) return;
+        const currentIndex = filteredImages.findIndex((img) => img.id === selectedImg.id);
+        if (currentIndex < filteredImages.length - 1) {
+            setSelectedImg(filteredImages[currentIndex + 1]);
         } else {
-            navigator.clipboard.writeText(window.location.href);
-            setToastMessage(language === "en" ? "Link copied to clipboard!" : "लिङ्क क्लिपबोर्डमा कपी भयो!");
-            setTimeout(() => setToastMessage(""), 2500);
+            setSelectedImg(filteredImages[0]);
         }
-    };
+    }, [selectedImg, filteredImages]);
 
-    const handleKeyDown = useCallback(
-        (e: KeyboardEvent) => {
-            if (selectedIndex === null) return;
-            if (e.key === "Escape") {
-                setSelectedIndex(null);
-            } else if (e.key === "ArrowRight") {
-                setSelectedIndex((prev) => (prev !== null && prev < displayedImages.length - 1 ? prev + 1 : 0));
-            } else if (e.key === "ArrowLeft") {
-                setSelectedIndex((prev) => (prev !== null && prev > 0 ? prev - 1 : displayedImages.length - 1));
-            }
-        },
-        [selectedIndex, displayedImages.length]
-    );
+    const handlePrevImage = useCallback(() => {
+        if (!selectedImg) return;
+        const currentIndex = filteredImages.findIndex((img) => img.id === selectedImg.id);
+        if (currentIndex > 0) {
+            setSelectedImg(filteredImages[currentIndex - 1]);
+        } else {
+            setSelectedImg(filteredImages[filteredImages.length - 1]);
+        }
+    }, [selectedImg, filteredImages]);
 
     useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (!selectedImg) return;
+            if (e.key === "Escape") setSelectedImg(null);
+            if (e.key === "ArrowRight") handleNextImage();
+            if (e.key === "ArrowLeft") handlePrevImage();
+        };
+
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [handleKeyDown]);
+    }, [selectedImg, handleNextImage, handlePrevImage]);
 
-    const currentLightboxImg = selectedIndex !== null ? displayedImages[selectedIndex] : null;
+    const handleCopyLink = (img: GalleryImage) => {
+        navigator.clipboard?.writeText(window.location.origin + "#gallery-" + img.id);
+        setCopiedId(img.id);
+        setTimeout(() => setCopiedId(null), 1800);
+    };
 
     return (
-        <section id="gallery" className="py-6 w-full scroll-mt-24">
-            <div className="max-w-7xl mx-auto">
-                {/* Header with Title and Search */}
-                <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-8 gap-6 w-full min-w-0 max-w-full">
-                    <div className="min-w-0 max-w-full">
-                        <div className="flex items-center gap-2 text-[10px] sm:text-xs font-extrabold uppercase tracking-wider text-[#b91c1c] mb-1.5">
-                            <Sparkles className="w-3.5 h-3.5" />
-                            <span>{language === "en" ? "Visual Pins & Moments" : "तस्वीर तथा मिडिया ग्यालेरी"}</span>
+        <section id="gallery" className="py-8 w-full scroll-mt-24">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6">
+                {/* Header Area matching screenshot */}
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-6">
+                    <div>
+                        {/* Red Tagline with Pushpin */}
+                        <div className="flex items-center gap-1.5 mb-1.5">
+                            <svg
+                                className="w-3.5 h-3.5 text-red-600 fill-red-600 -rotate-45 shrink-0"
+                                viewBox="0 0 24 24"
+                            >
+                                <path d="M16 12V4h1V2H7v2h1v8l-2 2v2h5.2v6h1.6v-6H18v-2l-2-2z" />
+                            </svg>
+                            <span className="text-red-600 text-xs font-extrabold tracking-wider uppercase">
+                                {language === "en" ? "VISUAL PINS & MOMENTS" : "तस्वीर तथा गतिविधिहरू"}
+                            </span>
                         </div>
-                        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 font-devanagari tracking-tight">
-                            {language === "en" ? "FSU in Action" : "मैदानमा स्ववियु: झलकहरू"}
+
+                        {/* Title */}
+                        <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                            {language === "en" ? "FSU in Action" : "मैदानमा स्ववियु"}
                         </h2>
-                        <p className="mt-2 text-slate-600 max-w-xl text-xs sm:text-sm leading-relaxed">
+
+                        {/* Subtitle */}
+                        <p className="mt-1.5 text-xs sm:text-sm text-slate-500 max-w-xl leading-relaxed">
                             {language === "en"
                                 ? "Visual updates from active protest movements, football games, classroom dialogs, and petition submissions in Tanahun, Nepal."
                                 : "अनेरास्ववियु तथा स्ववियुका आन्दोलन, खेलकुद प्रतियोगिता, कक्षाकोठा छलफल र आधिकारिक अभियानका मुख्य झलकहरू।"}
                         </p>
                     </div>
 
-                    {/* Quick Search Bar */}
-                    <div className="w-full lg:w-72 shrink-0">
+                    {/* Search Bar on the Right */}
+                    <div className="w-full md:w-72 shrink-0">
                         <div className="relative">
-                            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                             <input
                                 type="text"
                                 value={searchQuery}
@@ -276,13 +306,18 @@ export default function PhotoGallery({ language }: PhotoGalleryProps) {
                                     setSearchQuery(e.target.value);
                                     setShowAll(true);
                                 }}
-                                placeholder={language === "en" ? "Search pins & photos..." : "तस्वीर खोज्नुहोस्..."}
-                                className="w-full pl-10 pr-9 py-2.5 neu-input rounded-2xl text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none"
+                                placeholder={
+                                    language === "en"
+                                        ? "Search pins & photos..."
+                                        : "पिन तथा तस्विर खोज्नुहोस्..."
+                                }
+                                className="w-full pl-9 pr-8 py-2 rounded-full bg-slate-100/70 border border-slate-200/80 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-hidden focus:bg-white focus:border-red-500/50 transition-all shadow-2xs"
                             />
                             {searchQuery && (
                                 <button
                                     onClick={() => setSearchQuery("")}
                                     className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 cursor-pointer"
+                                    title="Clear search"
                                 >
                                     <X className="w-3.5 h-3.5" />
                                 </button>
@@ -291,219 +326,130 @@ export default function PhotoGallery({ language }: PhotoGalleryProps) {
                     </div>
                 </div>
 
-                {/* Highly Accessible Filter Navigation (Wrap-friendly, no scrollbar clip) */}
-                <div className="mb-6 sm:mb-8 neu-pressed p-2 sm:p-2.5 rounded-2xl sm:rounded-3xl bg-[#eef2f7]">
-                    <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                        {categories.map((cat) => {
-                            const count = getCategoryCount(cat);
-                            const isActive = activeCategory === cat;
-                            return (
-                                <button
-                                    key={cat}
-                                    onClick={() => handleCategoryChange(cat)}
-                                    className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all capitalize cursor-pointer flex items-center gap-1.5 ${
+                {/* Elongated Neumorphic/Soft Pill Container Bar */}
+                <div className="mb-7 w-full bg-[#e8ecf2] p-1.5 rounded-full flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar shadow-inner border border-white/60">
+                    {CATEGORIES.map((cat) => {
+                        const count = getCategoryCount(cat.key);
+                        const isActive = activeCategory === cat.key;
+                        return (
+                            <button
+                                key={cat.key}
+                                onClick={() => handleCategoryChange(cat.key)}
+                                className={`px-3.5 sm:px-4 py-1.5 rounded-full text-xs transition-all shrink-0 flex items-center gap-1.5 cursor-pointer select-none ${
+                                    isActive
+                                        ? "bg-[#991b1b] text-white shadow-xs font-bold"
+                                        : "bg-white/60 hover:bg-white text-slate-700 hover:text-slate-900 border border-white/60 shadow-2xs font-semibold"
+                                }`}
+                            >
+                                <span>{language === "en" ? cat.labelEn : cat.labelNp}</span>
+                                <span
+                                    className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold leading-none ${
                                         isActive
-                                            ? "neu-button-red text-white shadow-md scale-105"
-                                            : "neu-button text-slate-700 hover:text-red-700 hover:scale-102"
+                                            ? "bg-black/25 text-white"
+                                            : "bg-slate-200/80 text-slate-600"
                                     }`}
                                 >
-                                    <span>
-                                        {cat === "all"
-                                            ? language === "en"
-                                                ? "All Pins"
-                                                : "सबै झलक"
-                                            : language === "en"
-                                            ? cat
-                                            : cat === "Protest"
-                                            ? "आन्दोलन"
-                                            : cat === "Sports"
-                                            ? "खेलकुद"
-                                            : cat === "Solidarity"
-                                            ? "ऐक्यवद्धता"
-                                            : cat === "Campaign"
-                                            ? "ज्ञापनपत्र"
-                                            : "अन्तरक्रिया"}
-                                    </span>
-                                    <span
-                                        className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold ${
-                                            isActive
-                                                ? "bg-white/25 text-white"
-                                                : "bg-slate-200/80 text-slate-600"
-                                        }`}
-                                    >
-                                        {count}
-                                    </span>
-                                </button>
-                            );
-                        })}
-                    </div>
+                                    {count}
+                                </span>
+                            </button>
+                        );
+                    })}
                 </div>
 
-                {/* Toast Notification */}
-                <AnimatePresence>
-                    {toastMessage && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            className="fixed bottom-6 right-6 z-50 bg-slate-900 text-white text-xs font-bold px-4 py-2.5 rounded-2xl shadow-xl border border-white/20 flex items-center gap-2"
-                        >
-                            <Sparkles className="w-4 h-4 text-amber-400" />
-                            <span>{toastMessage}</span>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-
-                {/* Pinterest Masonry Feed (2 columns on mobile, 3 on tablet, 4 on desktop) */}
+                {/* Pinterest Multi-column Masonry Layout */}
                 {displayedImages.length > 0 ? (
-                    <div className="columns-2 sm:columns-2 md:columns-3 lg:columns-4 gap-3.5 sm:gap-4 md:gap-5 space-y-3.5 sm:space-y-4 md:space-y-5">
-                        {displayedImages.map((img, idx) => {
-                            const isLiked = likedIds.has(img.id);
-                            return (
-                                <motion.div
-                                    key={img.id}
-                                    initial={{ opacity: 0, y: 16 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ duration: 0.3, delay: (idx % 4) * 0.04 }}
-                                    className="break-inside-avoid group relative flex flex-col cursor-pointer mb-3.5 sm:mb-4 md:mb-5"
-                                    onClick={() => setSelectedIndex(idx)}
-                                >
-                                    {/* Pinterest Pin Card Container */}
-                                    <div className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-[#eef2f7] p-1.5 sm:p-2 shadow-[4px_4px_12px_#d1d9e6,-4px_-4px_12px_#ffffff] border border-white/80 group-hover:shadow-[6px_6px_18px_#c8d2e2,-6px_-6px_18px_#ffffff] transition-all duration-300">
-                                        <div className="relative w-full rounded-xl sm:rounded-2xl overflow-hidden bg-slate-200">
-                                            {/* Image or Gradient fallback */}
-                                            {img.imageUrl ? (
-                                                <img
-                                                    src={img.imageUrl}
-                                                    alt={language === "en" ? img.titleEn : img.titleNp}
-                                                    referrerPolicy="no-referrer"
-                                                    loading="lazy"
-                                                    decoding="async"
-                                                    className="w-full h-auto object-cover block group-hover:scale-[1.03] transition-transform duration-500 will-change-transform"
-                                                />
-                                            ) : (
-                                                <div
-                                                    className={`w-full ${
-                                                        img.aspectRatio === "tall"
-                                                            ? "aspect-[3/5]"
-                                                            : img.aspectRatio === "portrait"
-                                                            ? "aspect-[3/4]"
-                                                            : img.aspectRatio === "landscape"
-                                                            ? "aspect-[4/3]"
-                                                            : "aspect-square"
-                                                    } bg-gradient-to-br ${img.placeholderBg} flex items-center justify-center`}
-                                                >
-                                        
-                                                </div>
-                                            )}
-
-                                            {/* Pinterest Hover & Tap Overlay */}
-                                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none p-2.5 sm:p-3.5 flex flex-col justify-between">
-                                                {/* Top Bar: Category tag on left, Red Pinterest Save/View pill on right */}
-                                                <div className="flex items-center justify-between w-full pointer-events-auto">
-                                                    <span className="px-2.5 py-0.5 rounded-full bg-black/60 backdrop-blur-md text-white text-[9px] sm:text-[10px] font-bold uppercase tracking-wider border border-white/20">
-                                                        {img.category}
-                                                    </span>
-                                                    <button
-                                                        type="button"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            setSelectedIndex(idx);
-                                                        }}
-                                                        className="px-3 sm:px-4 py-1 rounded-full bg-[#e60023] hover:bg-[#b91c1c] text-white text-[11px] sm:text-xs font-bold shadow-md transition-all cursor-pointer transform group-hover:scale-100 scale-95"
-                                                        title="View Pin"
-                                                    >
-                                                        {language === "en" ? "View" : "हेर्नुहोस्"}
-                                                    </button>
-                                                </div>
-
-                                                {/* Bottom Action Bar: Share, Zoom, and Like buttons */}
-                                                <div className="flex items-center justify-between w-full pointer-events-auto">
-                                                    <div className="flex items-center gap-1.5">
-                                                        <button
-                                                            type="button"
-                                                            onClick={(e) => handleShare(img, e)}
-                                                            className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 hover:bg-white text-slate-800 flex items-center justify-center shadow-md backdrop-blur-md transition-transform hover:scale-110 cursor-pointer"
-                                                            title="Share"
-                                                        >
-                                                            <Share2 className="w-3.5 h-3.5" />
-                                                        </button>
-                                                        <button
-                                                            type="button"
-                                                            onClick={(e) => toggleLike(img.id, e)}
-                                                            className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center shadow-md backdrop-blur-md transition-transform hover:scale-110 cursor-pointer ${
-                                                                isLiked
-                                                                    ? "bg-rose-500 text-white"
-                                                                    : "bg-white/90 hover:bg-white text-slate-800"
-                                                            }`}
-                                                            title="Like photo"
-                                                        >
-                                                            <Heart className={`w-3.5 h-3.5 ${isLiked ? "fill-current" : ""}`} />
-                                                        </button>
-                                                    </div>
-
-                                                    <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 text-slate-800 flex items-center justify-center shadow-md backdrop-blur-md">
-                                                        <ZoomIn className="w-3.5 h-3.5 text-red-600" />
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/* Pinterest Style Underneath Info */}
-                                        <div className="pt-2 px-1 pb-1 flex items-start justify-between gap-1.5">
-                                            <div className="min-w-0 flex-1">
-                                                <h3 className="text-xs sm:text-sm font-bold text-slate-900 line-clamp-2 leading-tight group-hover:text-red-700 transition-colors">
-                                                    {language === "en" ? img.titleEn : img.titleNp}
-                                                </h3>
-                                                <p className="text-[10px] sm:text-[11px] text-slate-500 line-clamp-1 mt-0.5 font-devanagari">
-                                                    {language === "en" ? img.descriptionEn : img.descriptionNp}
-                                                </p>
-                                            </div>
-                                            <div
-                                                onClick={(e) => handleShare(img, e)}
-                                                className="shrink-0 text-slate-400 hover:text-slate-700 p-1 rounded-full hover:bg-slate-200/60 transition-colors cursor-pointer"
-                                                title="Share options"
-                                            >
-                                                <MoreHorizontal className="w-3.5 h-3.5" />
-                                            </div>
-                                        </div>
+                    <div className="columns-2 sm:columns-2 lg:columns-4 gap-3 sm:gap-5 [column-fill:_balance]">
+                        {displayedImages.map((img) => (
+                            <div
+                                key={img.id}
+                                id={`gallery-${img.id}`}
+                                onClick={() => setSelectedImg(img)}
+                                className="break-inside-avoid mb-3 sm:mb-5 bg-white rounded-2xl sm:rounded-[22px] p-2 sm:p-2.5 shadow-[0_4px_20px_rgba(0,0,0,0.06)] border border-slate-100/90 hover:shadow-xl transition-all duration-300 group cursor-pointer"
+                            >
+                                {/* Photo Container */}
+                                <div className="relative overflow-hidden rounded-xl sm:rounded-[16px] bg-slate-100">
+                                    {img.imageUrl ? (
+                                        <img
+                                            src={img.imageUrl}
+                                            alt={language === "en" ? img.titleEn : img.titleNp}
+                                            className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                                            loading="lazy"
+                                            decoding="async"
+                                            referrerPolicy="no-referrer"
+                                            onError={(e) => {
+                                                const target = e.currentTarget;
+                                                target.style.display = "none";
+                                                const fallback = target.nextElementSibling as HTMLElement;
+                                                if (fallback) fallback.style.display = "flex";
+                                            }}
+                                        />
+                                    ) : null}
+                                    <div
+                                        style={{ display: img.imageUrl ? "none" : "flex" }}
+                                        className={`w-full min-h-[140px] sm:min-h-[180px] bg-gradient-to-br ${img.placeholderBg} flex flex-col items-center justify-center text-white p-3 sm:p-4`}
+                                    >
+                                        <span className="text-2xl sm:text-3xl mb-1">{img.symbolicEmoji}</span>
+                                        <span className="text-[10px] sm:text-[11px] font-semibold text-white/80">
+                                            {img.category}
+                                        </span>
                                     </div>
-                                </motion.div>
-                            );
-                        })}
+                                </div>
+
+                                {/* Bottom Metadata matching screenshot */}
+                                <div className="px-1 pt-1.5 pb-0.5 sm:px-1.5 sm:pt-2.5 sm:pb-1">
+                                    <div className="flex items-center justify-between gap-1 sm:gap-1.5">
+                                        <h3 className="text-[11px] sm:text-[13px] font-bold text-slate-800 leading-tight truncate">
+                                            {language === "en" ? img.titleEn : img.titleNp}
+                                        </h3>
+                                        <button
+                                            type="button"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setSelectedImg(img);
+                                            }}
+                                            className="text-slate-400 hover:text-slate-600 p-0.5 rounded-sm hover:bg-slate-100 transition-colors shrink-0 cursor-pointer"
+                                            title="View pin details"
+                                        >
+                                            <MoreHorizontal className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                                        </button>
+                                    </div>
+                                    <p className="text-[10px] sm:text-[11px] text-slate-400 mt-0.5 truncate font-normal leading-normal">
+                                        {language === "en" ? img.descriptionEn : img.descriptionNp}
+                                    </p>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 ) : (
-                    <div className="p-10 neu-pressed rounded-3xl text-center text-slate-500 bg-[#eef2f7]">
-                        <Images className="w-10 h-10 mx-auto text-slate-400 mb-2" />
-                        <p className="text-sm font-bold text-slate-700">
-                            {language === "en" ? "No media found" : "कुनै तस्विर भेटिएन"}
+                    /* Empty Search State */
+                    <div className="py-16 px-6 bg-white/70 rounded-3xl text-center border border-slate-200 shadow-xs max-w-md mx-auto">
+                        <p className="text-sm font-bold text-slate-800">
+                            {language === "en" ? "No pins found" : "कुनै पिन भेटिएन"}
                         </p>
                         <p className="text-xs text-slate-500 mt-1">
                             {language === "en"
-                                ? "Try adjusting your search term or selecting another category."
+                                ? "Try a different search keyword or category filter."
                                 : "कृपया खोज शब्द वा वर्ग परिवर्तन गर्नुहोस्।"}
                         </p>
-                        {(searchQuery || activeCategory !== "all") && (
-                            <button
-                                onClick={() => {
-                                    setActiveCategory("all");
-                                    setSearchQuery("");
-                                }}
-                                className="mt-3 neu-button px-4 py-1.5 rounded-xl text-xs font-bold text-[#052855] cursor-pointer"
-                            >
-                                {language === "en" ? "Clear Filters" : "फिल्टर हटाउनुहोस्"}
-                            </button>
-                        )}
+                        <button
+                            onClick={() => {
+                                setActiveCategory("all");
+                                setSearchQuery("");
+                            }}
+                            className="mt-4 px-4 py-1.5 rounded-full bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 cursor-pointer transition-colors"
+                        >
+                            {language === "en" ? "Reset Filters" : "फिल्टर रिसेट गर्नुहोस्"}
+                        </button>
                     </div>
                 )}
 
-                {/* Show More / Show Less Button */}
+                {/* Show All Pins Button matching screenshot */}
                 {filteredImages.length > INITIAL_LIMIT && (
-                    <div className="mt-10 flex justify-center">
+                    <div className="mt-8 flex justify-center">
                         <button
+                            type="button"
                             onClick={() => setShowAll(!showAll)}
-                            className="neu-button inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-2xl text-slate-800 font-bold text-xs transition-all cursor-pointer hover:scale-102"
+                            className="px-5 py-2 rounded-full bg-white/90 hover:bg-white text-slate-700 text-xs font-semibold shadow-xs border border-slate-200/80 hover:shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
                         >
                             <span>
                                 {showAll
@@ -512,128 +458,153 @@ export default function PhotoGallery({ language }: PhotoGalleryProps) {
                                         : "कम देखाउनुहोस्"
                                     : language === "en"
                                     ? `Show All Pins (${filteredImages.length})`
-                                    : `सबै मिडिया हेर्नुहोस् (${filteredImages.length} वटा)`}
+                                    : `सबै पिनहरू हेर्नुहोस् (${filteredImages.length})`}
                             </span>
                             {showAll ? (
-                                <ChevronUp className="w-4 h-4 text-red-700" />
+                                <ChevronUp className="w-3.5 h-3.5 text-red-600" />
                             ) : (
-                                <ChevronDown className="w-4 h-4 text-red-700" />
+                                <ChevronDown className="w-3.5 h-3.5 text-red-600" />
                             )}
                         </button>
                     </div>
                 )}
 
-                {/* Full-screen Pinterest Lightbox Modal with Index Navigation & Keyboard Controls */}
+                {/* Full-view Lightbox Modal with Details & Controls */}
                 <AnimatePresence>
-                    {currentLightboxImg && selectedIndex !== null && (
+                    {selectedImg && (
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="fixed inset-0 bg-black/90 z-50 flex flex-col items-center justify-center p-3 sm:p-6 backdrop-blur-md"
-                            onClick={() => setSelectedIndex(null)}
+                            className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-3 sm:p-6 backdrop-blur-xs"
+                            onClick={() => setSelectedImg(null)}
                         >
-                            {/* Top Control Bar */}
-                            <div
+                            <motion.div
+                                initial={{ scale: 0.94, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                exit={{ scale: 0.94, opacity: 0 }}
+                                transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                                className="bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl border border-white/20 relative max-h-[92vh] flex flex-col"
                                 onClick={(e) => e.stopPropagation()}
-                                className="w-full max-w-5xl flex items-center justify-between text-white pb-3 px-2"
                             >
-                                <div className="flex items-center gap-2">
-                                    <span className="text-xs font-semibold px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15">
-                                        Photo {selectedIndex + 1} of {displayedImages.length}
-                                    </span>
-                                    <span className="text-xs text-white/60 hidden sm:inline">
-                                        (Use ← → Arrow keys to navigate, Esc to close)
-                                    </span>
-                                </div>
+                                {/* Top Controls & Image */}
+                                <div className="relative bg-slate-950 flex items-center justify-center overflow-hidden min-h-[260px] max-h-[55vh]">
+                                    {selectedImg.imageUrl ? (
+                                        <img
+                                            src={selectedImg.imageUrl}
+                                            alt={language === "en" ? selectedImg.titleEn : selectedImg.titleNp}
+                                            className="w-full h-full object-contain max-h-[55vh]"
+                                            referrerPolicy="no-referrer"
+                                            onError={(e) => {
+                                                const target = e.currentTarget;
+                                                target.style.display = "none";
+                                                const fallback = target.nextElementSibling as HTMLElement;
+                                                if (fallback) fallback.style.display = "flex";
+                                            }}
+                                        />
+                                    ) : null}
+                                    <div
+                                        style={{ display: selectedImg.imageUrl ? "none" : "flex" }}
+                                        className={`w-full h-64 bg-gradient-to-br ${selectedImg.placeholderBg} flex flex-col items-center justify-center text-white p-6`}
+                                    >
+                                        <span className="text-5xl mb-2">{selectedImg.symbolicEmoji}</span>
+                                        <span className="text-sm font-bold text-white/90">
+                                            {selectedImg.category} Archive
+                                        </span>
+                                    </div>
 
-                                <div className="flex items-center gap-2">
+                                    {/* Prev & Next Floating Buttons */}
                                     <button
                                         type="button"
-                                        onClick={(e) => handleShare(currentLightboxImg, e)}
-                                        className="p-2 rounded-full bg-white/15 hover:bg-white/25 text-white transition-all cursor-pointer border border-white/20"
-                                        title="Share pin"
+                                        onClick={handlePrevImage}
+                                        className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/50 hover:bg-black/80 text-white flex items-center justify-center transition-all cursor-pointer border border-white/20"
+                                        title="Previous Pin"
                                     >
-                                        <Share2 className="w-4 h-4" />
+                                        <ChevronLeft className="w-5 h-5" />
                                     </button>
                                     <button
                                         type="button"
-                                        onClick={() => setSelectedIndex(null)}
-                                        className="p-2 rounded-full bg-white/15 hover:bg-white/25 text-white transition-all cursor-pointer border border-white/20"
-                                        title="Close (Esc)"
+                                        onClick={handleNextImage}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/50 hover:bg-black/80 text-white flex items-center justify-center transition-all cursor-pointer border border-white/20"
+                                        title="Next Pin"
+                                    >
+                                        <ChevronRight className="w-5 h-5" />
+                                    </button>
+
+                                    {/* Close Button */}
+                                    <button
+                                        type="button"
+                                        onClick={() => setSelectedImg(null)}
+                                        className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-all border border-white/20 cursor-pointer"
+                                        title="Close"
                                     >
                                         <X className="w-4 h-4" />
                                     </button>
                                 </div>
-                            </div>
 
-                            {/* Main Frame with Prev, Image, and Next */}
-                            <div
-                                onClick={(e) => e.stopPropagation()}
-                                className="relative max-w-5xl w-full max-h-[82vh] flex items-center justify-center"
-                            >
-                                {/* Left Prev Button */}
-                                {displayedImages.length > 1 && (
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            setSelectedIndex((prev) =>
-                                                prev !== null && prev > 0 ? prev - 1 : displayedImages.length - 1
-                                            )
-                                        }
-                                        className="absolute -left-2 sm:-left-6 z-10 p-2.5 sm:p-3 rounded-full bg-black/60 hover:bg-black/80 text-white backdrop-blur-md border border-white/20 shadow-xl transition-transform hover:scale-110 cursor-pointer"
-                                        title="Previous Photo (Left Arrow)"
-                                    >
-                                        <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
-                                    </button>
-                                )}
-
-                                <div className="flex flex-col items-center max-h-[80vh] max-w-full overflow-y-auto no-scrollbar">
-                                    <div className="rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl bg-black border border-white/20 max-h-[65vh] flex items-center justify-center">
-                                        {currentLightboxImg.imageUrl ? (
-                                            <img
-                                                src={currentLightboxImg.imageUrl}
-                                                alt={language === "en" ? currentLightboxImg.titleEn : currentLightboxImg.titleNp}
-                                                referrerPolicy="no-referrer"
-                                                className="w-full max-h-[64vh] object-contain select-none"
-                                            />
-                                        ) : (
-                                            <div
-                                                className={`w-96 h-80 bg-gradient-to-br ${currentLightboxImg.placeholderBg} flex items-center justify-center`}
-                                            >
-                                               
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="w-full max-w-2xl text-center mt-3 px-4 pb-2">
-                                        <span className="inline-block bg-red-500/20 text-red-300 border border-red-500/30 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider mb-1.5">
-                                            {currentLightboxImg.category} Archives
+                                {/* Modal Content & Actions */}
+                                <div className="p-5 sm:p-6 bg-white overflow-y-auto">
+                                    <div className="flex items-center justify-between gap-2 flex-wrap">
+                                        <span className="inline-flex items-center gap-1 bg-red-50 border border-red-200 text-red-700 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                                            <Tag className="w-3 h-3" />
+                                            {selectedImg.category}
                                         </span>
-                                        <h3 className="text-white text-base sm:text-lg font-bold font-devanagari">
-                                            {language === "en" ? currentLightboxImg.titleEn : currentLightboxImg.titleNp}
-                                        </h3>
-                                        <p className="text-white/70 text-xs sm:text-sm mt-1 max-w-xl mx-auto font-devanagari leading-relaxed">
-                                            {language === "en" ? currentLightboxImg.descriptionEn : currentLightboxImg.descriptionNp}
+
+                                        <div className="flex items-center gap-1.5">
+                                            <button
+                                                type="button"
+                                                onClick={() => handleCopyLink(selectedImg)}
+                                                className="px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold inline-flex items-center gap-1 transition-colors cursor-pointer"
+                                                title="Copy pin link"
+                                            >
+                                                {copiedId === selectedImg.id ? (
+                                                    <>
+                                                        <Check className="w-3.5 h-3.5 text-emerald-600" />
+                                                        <span className="text-emerald-700">Copied!</span>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Share2 className="w-3.5 h-3.5" />
+                                                        <span>Share</span>
+                                                    </>
+                                                )}
+                                            </button>
+                                            {selectedImg.imageUrl && (
+                                                <a
+                                                    href={selectedImg.imageUrl}
+                                                    download={`${selectedImg.id}.jpg`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold inline-flex items-center gap-1 transition-colors"
+                                                    title="View or download image"
+                                                >
+                                                    <Download className="w-3.5 h-3.5" />
+                                                    <span>Original</span>
+                                                </a>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <h3 className="text-lg sm:text-xl font-extrabold mt-2.5 text-slate-900 leading-snug">
+                                        {selectedImg.titleEn}
+                                    </h3>
+                                    <h4 className="text-sm font-semibold text-slate-600 font-devanagari mt-0.5">
+                                        {selectedImg.titleNp}
+                                    </h4>
+
+                                    <div className="mt-3.5 space-y-2.5 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                        <p>{selectedImg.descriptionEn}</p>
+                                        <p className="font-devanagari p-3 bg-slate-50 border border-slate-200/80 rounded-xl text-slate-700">
+                                            {selectedImg.descriptionNp}
                                         </p>
                                     </div>
-                                </div>
 
-                                {/* Right Next Button */}
-                                {displayedImages.length > 1 && (
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            setSelectedIndex((prev) =>
-                                                prev !== null && prev < displayedImages.length - 1 ? prev + 1 : 0
-                                            )
-                                        }
-                                        className="absolute -right-2 sm:-right-6 z-10 p-2.5 sm:p-3 rounded-full bg-black/60 hover:bg-black/80 text-white backdrop-blur-md border border-white/20 shadow-xl transition-transform hover:scale-110 cursor-pointer"
-                                        title="Next Photo (Right Arrow)"
-                                    >
-                                        <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
-                                    </button>
-                                )}
-                            </div>
+                                    <div className="mt-5 pt-3.5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
+                                        <span>Pin ID: {selectedImg.id}</span>
+                                        <span>Aadikavi Bhanubhakta Campus, Tanahun</span>
+                                    </div>
+                                </div>
+                            </motion.div>
                         </motion.div>
                     )}
                 </AnimatePresence>
@@ -641,4 +612,3 @@ export default function PhotoGallery({ language }: PhotoGalleryProps) {
         </section>
     );
 }
-

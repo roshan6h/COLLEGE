@@ -69,59 +69,59 @@ export default function FSUPage({
     }, []);
 
     useEffect(() => {
-        let ticking = false;
+        const sections = [
+            { id: "home", href: "#" },
+            { id: "about", href: "#about" },
+            { id: "notices", href: "#notices" },
+            { id: "manifesto", href: "#manifesto" },
+            { id: "committee", href: "#committee" },
+            { id: "gallery", href: "#gallery" },
+            { id: "movements", href: "#movements" },
+            { id: "grievances", href: "#grievances" }
+        ];
 
+        let rafId: number | null = null;
         const handleScroll = () => {
-            if (!ticking) {
-                window.requestAnimationFrame(() => {
-                    setScrolled(window.scrollY > 40);
+            if (rafId) return;
 
-                    // Scroll Spy Logic
-                    const sections = [
-                        { id: "home", href: "#" },
-                        { id: "about", href: "#about" },
-                        { id: "notices", href: "#notices" },
-                        { id: "manifesto", href: "#manifesto" },
-                        { id: "committee", href: "#committee" },
-                        { id: "gallery", href: "#gallery" },
-                        { id: "movements", href: "#movements" },
-                        { id: "grievances", href: "#grievances" }
-                    ];
+            rafId = window.requestAnimationFrame(() => {
+                rafId = null;
+                const scrollY = window.scrollY || window.pageYOffset || 0;
+                setScrolled(scrollY > 40);
 
-                    if (window.scrollY < 120) {
-                        setActiveLink("#");
-                        ticking = false;
-                        return;
-                    }
+                if (scrollY < 120) {
+                    setActiveLink("#");
+                    return;
+                }
 
-                    let currentSection = "#";
+                // If near bottom of page
+                if (window.innerHeight + scrollY >= document.documentElement.scrollHeight - 60) {
+                    setActiveLink("#grievances");
+                    return;
+                }
 
-                    for (const section of sections) {
-                        if (section.id === "home") continue;
-                        const element = document.getElementById(section.id);
-                        if (element) {
-                            const rect = element.getBoundingClientRect();
-                            if (rect.top <= 140 && rect.bottom > 140) {
-                                currentSection = section.href;
-                                break;
-                            }
+                const navOffset = 90;
+                let currentHref = "#";
+                for (const section of sections) {
+                    const el = document.getElementById(section.id);
+                    if (el) {
+                        const rect = el.getBoundingClientRect();
+                        if (rect.top <= navOffset + 50) {
+                            currentHref = section.href;
                         }
                     }
-
-                    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 60) {
-                        currentSection = "#grievances";
-                    }
-
-                    setActiveLink(currentSection);
-                    ticking = false;
-                });
-                ticking = true;
-            }
+                }
+                setActiveLink((prev) => (prev !== currentHref ? currentHref : prev));
+            });
         };
 
         window.addEventListener("scroll", handleScroll, { passive: true });
         handleScroll();
-        return () => window.removeEventListener("scroll", handleScroll);
+
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+            if (rafId) cancelAnimationFrame(rafId);
+        };
     }, []);
 
     const toggleLanguage = () => {
@@ -194,6 +194,8 @@ export default function FSUPage({
                                 <img
                                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_VyJwjk3U8Bmc9yTWYqUPrSDvWW3P-2s9TJKPxsRHkalC1ArG2tvmf7H5rIFRAdg-CFYudQYucNgzVVGxJkEAX7sHVZL3AA-f-pjeFXvxATKHZscjXuanNdBg63VU9RsNK-exGjH2L2lWjxkmE9ehLvin4HlaHU3srNjkMp_s8velzwMBLPfOJvvvaJEiJ1-WnvIWOgJ5FNFq5fQa3wiyWLNNu4tIlPJOXyTBdbt4fjCBJRgl6JTH22Vc0qB2YYNWGukAg6G4Ehc"
                                     alt="ANNFSU Logo"
+                                    loading="lazy"
+                                    decoding="async"
                                     className="w-full h-full object-contain rounded-full"
                                     referrerPolicy="no-referrer"
                                 />
@@ -306,8 +308,10 @@ export default function FSUPage({
                                                         <img
                                                             src={club.logo}
                                                             alt={club.name}
-                                                            referrerPolicy="no-referrer"
+                                                            loading="lazy"
+                                                            decoding="async"
                                                             className="w-8 h-8 rounded-full object-cover border border-slate-200 shrink-0 group-hover:border-blue-500"
+                                                            referrerPolicy="no-referrer"
                                                         />
                                                         <div className="flex flex-col min-w-0 flex-1">
                                                             <span className="text-xs font-bold text-slate-800 group-hover:text-blue-900 truncate">
@@ -421,8 +425,10 @@ export default function FSUPage({
                                                 <img
                                                     src={club.logo}
                                                     alt={club.name}
-                                                    referrerPolicy="no-referrer"
+                                                    loading="lazy"
+                                                    decoding="async"
                                                     className="w-7 h-7 rounded-full object-cover shrink-0"
+                                                    referrerPolicy="no-referrer"
                                                 />
                                                 <div className="flex flex-col min-w-0 flex-1">
                                                     <span className="text-xs font-bold text-slate-800 truncate">
@@ -475,8 +481,10 @@ export default function FSUPage({
                     <img
                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWW5sJJ_cYRhwOjpLtMuP3mNQ7ynEqagVJnI1OeHoVEoHbdjG50CLbyajjeAq0hfeh41ob9CesPNaUnmhXDCGYcrdUb1SvnGaEBG5QOBmHuTwoRZlqHSk4Kc2dMNr4BAwCwi0OrUWADdehuwZW9Hkm12Fsb_Ohi8Nusuw9DRIy4u2pMbvgrcTxSgbyoGpbvARoJWsbHBBUu9DnW6ddKkkSorZV9yvU3Uy9aBz_crXZGAdJvqgTet816AVUDBApeTdG7HF7dk4A-5c"
                         alt="ANNFSU Students Gathering"
-                        referrerPolicy="no-referrer"
+                        loading="eager"
+                        decoding="async"
                         className="w-full h-full object-cover object-center"
+                        referrerPolicy="no-referrer"
                     />
                     {/* Clean dark overlay without glowing edge mix-blend or vignetting */}
                     <div className="absolute inset-0 bg-[#051c36]/80"></div>
@@ -771,6 +779,8 @@ export default function FSUPage({
                                     <img
                                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_VyJwjk3U8Bmc9yTWYqUPrSDvWW3P-2s9TJKPxsRHkalC1ArG2tvmf7H5rIFRAdg-CFYudQYucNgzVVGxJkEAX7sHVZL3AA-f-pjeFXvxATKHZscjXuanNdBg63VU9RsNK-exGjH2L2lWjxkmE9ehLvin4HlaHU3srNjkMp_s8velzwMBLPfOJvvvaJEiJ1-WnvIWOgJ5FNFq5fQa3wiyWLNNu4tIlPJOXyTBdbt4fjCBJRgl6JTH22Vc0qB2YYNWGukAg6G4Ehc"
                                         alt="FSU Logo"
+                                        loading="lazy"
+                                        decoding="async"
                                         className="w-full h-full object-contain"
                                         referrerPolicy="no-referrer"
                                     />

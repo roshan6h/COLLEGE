@@ -1,6 +1,7 @@
-import { useState, ChangeEvent, useRef, useCallback, useEffect } from "react";
-import { Search, Phone, Shield, Users, ArrowUpRight, ChevronDown, ChevronUp, MoveHorizontal, ChevronLeft, ChevronRight } from "lucide-react";
+import React, { useState, ChangeEvent, useRef, useCallback, useEffect } from "react";
+import { Search, Shield, Users, ArrowUpRight, ChevronDown, ChevronUp, MoveHorizontal, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "motion/react";
+import { MemberContactActions } from "@/components/MemberContactActions";
 
 // Inline type definition to make this component completely self-contained and independent
 export interface CommitteeMember {
@@ -9,10 +10,30 @@ export interface CommitteeMember {
     nameNp: string;
     roleEn: string;
     roleNp: string;
-    phone: string;
+
     isExecutive: boolean;
     order: number;
     photoUrl?: string;
+    socials?: {
+        facebook?: string;
+        linkedin?: string;
+        twitter?: string;
+        x?: string;
+        instagram?: string;
+        github?: string;
+        whatsapp?: string;
+        website?: string;
+        email?: string;
+    };
+    socialLinks?: Array<{ platform: string; url: string; label?: string }>;
+    facebook?: string;
+    linkedin?: string;
+    instagram?: string;
+    twitter?: string;
+    x?: string;
+    github?: string;
+    whatsapp?: string;
+    website?: string;
 }
 
 // You can manually add image/photo paths here in the 'photoUrl' attribute.
@@ -24,7 +45,9 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         nameNp: "अनुप आले मगर",
         roleEn: "President",
         roleNp: "अध्यक्ष",
-        phone: "9804141296",
+
+        facebook: "https://facebook.com/anup.alemagar",
+        linkedin: "https://linkedin.com/in/anup-ale-magar",
         isExecutive: true,
         order: 1,
         photoUrl: "/anup1.png"
@@ -35,7 +58,8 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         nameNp: "सुमन खड्का",
         roleEn: "Vice President",
         roleNp: "उपाध्यक्ष",
-        phone: "9826101579",
+
+        facebook: "https://facebook.com/suman.khadka",
         isExecutive: true,
         order: 2,
         photoUrl: "/suman2.png"
@@ -46,7 +70,9 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         nameNp: "सागर पाण्डे",
         roleEn: "Secretary",
         roleNp: "सचिव",
-        phone: "9804153425",
+
+        facebook: "https://facebook.com/sagar.pandey",
+        linkedin: "https://linkedin.com/in/sagar-pandey",
         isExecutive: true,
         order: 3,
         photoUrl: "/sagar.png"
@@ -57,7 +83,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         nameNp: "अंकित तिवारी",
         roleEn: "Joint Secretary",
         roleNp: "सह-सचिव",
-        phone: "9827133759",
+
         isExecutive: true,
         order: 4,
         photoUrl: "/ankit.png"
@@ -68,7 +94,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         nameNp: "रोशन ओझा",
         roleEn: "Treasurer",
         roleNp: "कोषाध्यक्ष",
-        phone: "9806722586",
+
         isExecutive: true,
         order: 5,
         photoUrl: "/roshan.png"
@@ -79,7 +105,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         nameNp: "असीम भण्डारी",
         roleEn: "Member",
         roleNp: "सदस्य",
-        phone: "9766602575",
+
         isExecutive: false,
         order: 6,
         photoUrl: "/asim.png"
@@ -90,7 +116,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         nameNp: "शिशिर सुनार",
         roleEn: "Member",
         roleNp: "सदस्य",
-        phone: "9824112635",
+
         isExecutive: false,
         order: 7,
         photoUrl: "/sisir.png"
@@ -101,7 +127,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         nameNp: "इमान मल्ल ठकुरी",
         roleEn: "Member",
         roleNp: "सदस्य",
-        phone: "9806559252",
+
         isExecutive: false,
         order: 8,
         photoUrl: "/iman.png"
@@ -112,7 +138,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         nameNp: "रोशनी कुँवर",
         roleEn: "Member",
         roleNp: "सदस्य",
-        phone: "9828185669",
+
         isExecutive: false,
         order: 9,
         photoUrl: "/roshani.png"
@@ -123,7 +149,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         nameNp: "प्रमिश न्यौपाने",
         roleEn: "Member",
         roleNp: "सदस्य",
-        phone: "9767279339",
+
         isExecutive: false,
         order: 10,
         photoUrl: "/pramish.png"
@@ -134,7 +160,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         nameNp: "अनिशा परियार",
         roleEn: "Member",
         roleNp: "सदस्य",
-        phone: "9817140789",
+
         isExecutive: false,
         order: 11,
         photoUrl: "/anisha.png"
@@ -145,7 +171,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         nameNp: "सदिक्षा अधिकारी",
         roleEn: "Member",
         roleNp: "सदस्य",
-        phone: "9815105797",
+
         isExecutive: false,
         order: 12,
         photoUrl: "/sadix.png"
@@ -156,7 +182,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         nameNp: "प्रमिला श्रेष्ठ",
         roleEn: "Member",
         roleNp: "सदस्य",
-        phone: "9825496647",
+
         isExecutive: false,
         order: 13,
         photoUrl: "/prami.png"
@@ -167,7 +193,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         nameNp: "अमृत बानिया",
         roleEn: "Member",
         roleNp: "सदस्य",
-        phone: "9745456596",
+
         isExecutive: false,
         order: 14,
         photoUrl: "/amrit.png"
@@ -178,7 +204,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         nameNp: "कृष्ण राना",
         roleEn: "Member",
         roleNp: "सदस्य",
-        phone: "9707528635",
+
         isExecutive: false,
         order: 15,
         photoUrl: "/krish.png"
@@ -189,7 +215,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         nameNp: "सरिता सार्की",
         roleEn: "Member",
         roleNp: "सदस्य",
-        phone: "9826651749",
+
         isExecutive: false,
         order: 16,
         photoUrl: "/sarita.png"
@@ -200,7 +226,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         nameNp: "सुगम श्रेष्ठ",
         roleEn: "Member",
         roleNp: "सदस्य",
-        phone: "9826164208",
+
         isExecutive: false,
         order: 17,
         photoUrl: "/sugam.png"
@@ -211,7 +237,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         nameNp: "एडिना रुचाल",
         roleEn: "Member",
         roleNp: "सदस्य",
-        phone: "9804192736",
+
         isExecutive: false,
         order: 18,
         photoUrl: "/adina.png"
@@ -222,7 +248,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         nameNp: "ओमकला श्रेष्ठ",
         roleEn: "Member",
         roleNp: "सदस्य",
-        phone: "9815182475",
+
         isExecutive: false,
         order: 19,
         photoUrl: "/om.png"
@@ -233,7 +259,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         nameNp: "विवश रानाभाट",
         roleEn: "Member",
         roleNp: "सदस्य",
-        phone: "9821517591",
+
         isExecutive: false,
         order: 20,
         photoUrl: "/biwash.png"
@@ -244,7 +270,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         nameNp: "विष्णा आले",
         roleEn: "Member",
         roleNp: "सदस्य",
-        phone: "9828367332",
+
         isExecutive: false,
         order: 21,
         photoUrl: "/f1/bis.png"
@@ -255,7 +281,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         nameNp: "विपिन अधिकारी",
         roleEn: "Member",
         roleNp: "सदस्य",
-        phone: "9762861361",
+
         isExecutive: false,
         order: 22,
         photoUrl: "/bipin.png"
@@ -327,25 +353,21 @@ function CommitteeMemberCard({ member, language, getInitials }: MemberCardProps)
                     <p className={`text-xs font-semibold ${member.isExecutive ? "text-blue-900 font-extrabold" : "text-slate-500"}`}>
                         {language === "en" ? member.roleEn : member.roleNp}
                     </p>
-                    <div className="mt-2 flex items-center gap-1.5 text-xs text-slate-600 font-mono">
-                        <Phone className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                        <a href={`tel:${member.phone}`} className="hover:text-blue-900 hover:underline inline-flex items-center gap-0.5 font-medium">
-                            {member.phone}
-                            <ArrowUpRight className="w-2.5 h-2.5 text-slate-400 group-hover:text-blue-900 transition-colors" />
-                        </a>
-                    </div>
                 </div>
             </div>
 
-            {/* Call Action Banner */}
-            <div className="mt-4 pt-3 border-t border-slate-200/80 flex justify-end">
-                <a
-                    href={`tel:${member.phone}`}
-                    className="neu-button px-3.5 py-1.5 rounded-xl text-xs text-[#052855] font-bold inline-flex items-center gap-1.5 group/btn cursor-pointer"
-                >
-                    {language === "en" ? "Call Directly" : "फोन सम्पर्क"}
-                    <Phone className="w-3 h-3 text-red-600 group-hover/btn:scale-110 transition-transform" />
-                </a>
+            {/* Contact Action Banner: Social Media Connect Profiles */}
+            <div className="mt-3 pt-3 border-t border-slate-200/80">
+                <MemberContactActions
+                    member={{
+                        ...member,
+                        name: language === "en" ? member.nameEn : member.nameNp,
+                        role: language === "en" ? member.roleEn : member.roleNp,
+                        department: 'Free Student Union (FSU)'
+                    }}
+                    clubName="FSU"
+                    language={language}
+                />
             </div>
         </motion.div>
     );
@@ -365,58 +387,174 @@ function FSUMobileMembersCarousel({
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(true);
 
+    // Dynamic side padding so the active card is always mathematically centered
+    // Initialized to fixed 24px to prevent SSR / client hydration mismatches
+    const [sidePadding, setSidePadding] = useState<number>(24);
+
+    const activeIndexRef = useRef(0);
+    const isScrollingRef = useRef(false);
+
+    const updateMeasurements = useCallback(() => {
+        if (!scrollContainerRef.current) return;
+        const container = scrollContainerRef.current;
+        const firstCard = container.firstElementChild as HTMLElement | null;
+        if (firstCard) {
+            const cardWidth = firstCard.offsetWidth;
+            const containerWidth = container.clientWidth;
+            const calculatedPadding = Math.max(16, Math.floor((containerWidth - cardWidth) / 2));
+            setSidePadding(calculatedPadding);
+        }
+    }, []);
+
     const updateScrollState = useCallback(() => {
         if (!scrollContainerRef.current) return;
         const container = scrollContainerRef.current;
         const scrollLeft = container.scrollLeft;
-        const cardWidth = container.firstElementChild
-            ? (container.firstElementChild as HTMLElement).offsetWidth + 16
-            : 280;
-
-        const newIndex = Math.round(scrollLeft / cardWidth);
-        const clampedIndex = Math.max(0, Math.min(newIndex, members.length - 1));
-        setActiveIndex(clampedIndex);
 
         setCanScrollLeft(scrollLeft > 10);
         setCanScrollRight(scrollLeft < container.scrollWidth - container.clientWidth - 10);
+
+        // Find which card is closest to the horizontal center of the container
+        const containerCenter = scrollLeft + container.clientWidth / 2;
+        let closestIndex = 0;
+        let minDistance = Infinity;
+
+        for (let i = 0; i < container.children.length; i++) {
+            const child = container.children[i] as HTMLElement;
+            const childCenter = child.offsetLeft + child.offsetWidth / 2;
+            const distance = Math.abs(containerCenter - childCenter);
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestIndex = i;
+            }
+        }
+
+        const clampedIndex = Math.max(0, Math.min(closestIndex, members.length - 1));
+        if (clampedIndex !== activeIndexRef.current) {
+            activeIndexRef.current = clampedIndex;
+            setActiveIndex(clampedIndex);
+        }
     }, [members.length]);
+
+    const handleScroll = useCallback(() => {
+        if (!isScrollingRef.current) {
+            isScrollingRef.current = true;
+            requestAnimationFrame(() => {
+                updateScrollState();
+                isScrollingRef.current = false;
+            });
+        }
+    }, [updateScrollState]);
 
     useEffect(() => {
         const container = scrollContainerRef.current;
         if (!container) return;
 
+        updateMeasurements();
         updateScrollState();
-        container.addEventListener('scroll', updateScrollState, { passive: true });
+        window.addEventListener('resize', updateMeasurements);
         window.addEventListener('resize', updateScrollState);
 
         return () => {
-            container.removeEventListener('scroll', updateScrollState);
+            window.removeEventListener('resize', updateMeasurements);
             window.removeEventListener('resize', updateScrollState);
         };
-    }, [updateScrollState]);
+    }, [updateMeasurements, updateScrollState]);
 
-    const scrollToIndex = (index: number) => {
+    const scrollToIndex = useCallback((index: number) => {
         if (!scrollContainerRef.current) return;
         const container = scrollContainerRef.current;
-        const targetCard = container.children[index] as HTMLElement;
+        const targetCard = container.children[index] as HTMLElement | undefined;
         if (targetCard) {
             targetCard.scrollIntoView({
                 behavior: 'smooth',
-                block: 'nearest',
-                inline: 'center'
+                inline: 'center',
+                block: 'nearest'
             });
+            activeIndexRef.current = index;
+            setActiveIndex(index);
         }
-    };
+    }, []);
 
     const handlePrev = () => {
-        if (activeIndex > 0) {
-            scrollToIndex(activeIndex - 1);
+        if (activeIndexRef.current > 0) {
+            scrollToIndex(activeIndexRef.current - 1);
         }
     };
 
     const handleNext = () => {
-        if (activeIndex < members.length - 1) {
-            scrollToIndex(activeIndex + 1);
+        if (activeIndexRef.current < members.length - 1) {
+            scrollToIndex(activeIndexRef.current + 1);
+        }
+    };
+
+    // Mouse pointer drag for desktop testing / previews (Touch screens use native 120fps snap)
+    const isDraggingRef = useRef(false);
+    const startXRef = useRef(0);
+    const startScrollLeftRef = useRef(0);
+    const hasDraggedRef = useRef(false);
+
+    const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+        if (e.pointerType !== 'mouse' || e.button !== 0) return;
+        if (!scrollContainerRef.current) return;
+
+        isDraggingRef.current = true;
+        startXRef.current = e.clientX;
+        startScrollLeftRef.current = scrollContainerRef.current.scrollLeft;
+        hasDraggedRef.current = false;
+
+        // Temporarily disable scroll-snap during mouse drag so it tracks 1:1 without resistance
+        scrollContainerRef.current.style.scrollSnapType = 'none';
+        scrollContainerRef.current.style.scrollBehavior = 'auto';
+
+        try {
+            (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+        } catch {}
+    };
+
+    const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+        if (!isDraggingRef.current || !scrollContainerRef.current) return;
+        const deltaX = e.clientX - startXRef.current;
+        if (Math.abs(deltaX) > 4) {
+            hasDraggedRef.current = true;
+        }
+        if (hasDraggedRef.current) {
+            scrollContainerRef.current.scrollLeft = startScrollLeftRef.current - deltaX;
+        }
+    };
+
+    const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+        if (!isDraggingRef.current || !scrollContainerRef.current) return;
+        isDraggingRef.current = false;
+        const container = scrollContainerRef.current;
+
+        try {
+            (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+        } catch {}
+
+        // Restore snap type and smooth scrolling
+        container.style.scrollSnapType = 'x mandatory';
+        container.style.scrollBehavior = 'smooth';
+
+        if (hasDraggedRef.current) {
+            const deltaX = e.clientX - startXRef.current;
+            if (deltaX < -35 && activeIndexRef.current < members.length - 1) {
+                scrollToIndex(activeIndexRef.current + 1);
+            } else if (deltaX > 35 && activeIndexRef.current > 0) {
+                scrollToIndex(activeIndexRef.current - 1);
+            } else {
+                scrollToIndex(activeIndexRef.current);
+            }
+        }
+    };
+
+    const handleClickCapture = (e: React.MouseEvent) => {
+        if (hasDraggedRef.current) {
+            e.stopPropagation();
+            e.preventDefault();
+            setTimeout(() => {
+                hasDraggedRef.current = false;
+            }, 50);
         }
     };
 
@@ -425,7 +563,7 @@ function FSUMobileMembersCarousel({
     return (
         <div className="relative w-full">
             {/* Helper Indicator & Counter */}
-            <div className="flex items-center justify-between px-1 mb-3 text-xs text-slate-500">
+            <div className="flex items-center justify-between px-2 mb-3 text-xs text-slate-500">
                 <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-200/60 font-medium text-slate-600">
                     <MoveHorizontal className="w-3.5 h-3.5 text-red-600 animate-pulse" />
                     <span>
@@ -441,8 +579,19 @@ function FSUMobileMembersCarousel({
             {/* Horizontal Scroll Track */}
             <div
                 ref={scrollContainerRef}
-                className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 px-4 -mx-4 scrollbar-none overscroll-x-contain"
+                suppressHydrationWarning
+                onScroll={handleScroll}
+                onPointerDown={handlePointerDown}
+                onPointerMove={handlePointerMove}
+                onPointerUp={handlePointerUp}
+                onPointerCancel={handlePointerUp}
+                onClickCapture={handleClickCapture}
+                className="flex gap-4 overflow-x-auto overflow-y-hidden snap-x snap-mandatory py-5 -mx-4 scrollbar-none cursor-grab active:cursor-grabbing select-none"
                 style={{
+                    paddingLeft: `${sidePadding}px`,
+                    paddingRight: `${sidePadding}px`,
+                    scrollPaddingLeft: `${sidePadding}px`,
+                    scrollPaddingRight: `${sidePadding}px`,
                     scrollbarWidth: 'none',
                     msOverflowStyle: 'none',
                     touchAction: 'pan-x pan-y',
@@ -452,7 +601,7 @@ function FSUMobileMembersCarousel({
                 {members.map((member) => (
                     <div
                         key={member.id}
-                        className="w-[84vw] max-w-[320px] shrink-0 snap-center transition-opacity duration-300"
+                        className="w-[84vw] max-w-[328px] shrink-0 snap-center transition-opacity duration-300"
                     >
                         <CommitteeMemberCard
                             member={member}
@@ -527,8 +676,7 @@ export default function CommitteeSection({ language }: CommitteeSectionProps) {
             member.nameEn.toLowerCase().includes(query) ||
             member.nameNp.includes(query) ||
             member.roleEn.toLowerCase().includes(query) ||
-            member.roleNp.includes(query) ||
-            member.phone.includes(query);
+            member.roleNp.includes(query);
 
         const matchesTab =
             activeTab === "all" ||
@@ -586,7 +734,7 @@ export default function CommitteeSection({ language }: CommitteeSectionProps) {
                         <input
                             type="text"
                             className="block w-full pl-10 pr-4 py-2.5 rounded-2xl neu-flat text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#052855]/30 bg-[#eef2f7]"
-                            placeholder={language === "en" ? "Search by name, role or phone..." : "नाम, पद वा फोनबाट खोज्नुहोस्..."}
+                            placeholder={language === "en" ? "Search by name or role..." : "नाम, पद वा फोनबाट खोज्नुहोस्..."}
                             value={searchQuery}
                             onChange={handleSearchChange}
                         />

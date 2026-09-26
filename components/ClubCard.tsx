@@ -41,14 +41,14 @@ export const ClubCard: React.FC<ClubCardProps> = ({
 }) => {
     return (
         <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 24, scale: 0.97 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: true, amount: 0.05 }}
-            whileHover={{ y: -4, scale: 1.01, transition: { duration: 0.2 } }}
-            whileTap={{ scale: 0.99 }}
-            transition={{ duration: 0.35, ease: "easeOut" }}
+            whileHover={{ y: -6, scale: 1.02 }}
+            whileTap={{ scale: 0.96 }}
+            transition={{ type: "spring", stiffness: 380, damping: 22, mass: 0.8 }}
             onClick={() => onSelect(club)}
-            className="group neu-card p-5 sm:p-6 flex flex-col justify-between relative overflow-hidden cursor-pointer h-full"
+            className="group bg-[#eef2f7] neu-card p-5 sm:p-6 flex flex-col justify-between relative overflow-hidden cursor-pointer h-full border border-white/60 select-none"
         >
             <div>
                 {/* Category Badge & Optional Featured Badge */}
@@ -57,16 +57,30 @@ export const ClubCard: React.FC<ClubCardProps> = ({
                         {club.category}
                     </span>
                     {club.featured && (
-                        <span className="neu-pressed text-[#0c72b8] text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shrink-0">
+                        <motion.span
+                            animate={{ y: [0, -2, 0] }}
+                            transition={{ repeat: Infinity, duration: 2.4, ease: "easeInOut" }}
+                            className="neu-pressed text-[#0c72b8] text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shrink-0"
+                        >
                             <Sparkles className="w-3 h-3 text-[#0c72b8]" />
                             <span>{language === 'en' ? 'Featured' : 'विशेष'}</span>
-                        </span>
+                        </motion.span>
                     )}
                 </div>
 
                 {/* Logo Avatar & Title */}
                 <div className="flex items-center gap-3.5 mb-3.5">
-                    <div className="w-14 h-14 rounded-full neu-pressed flex items-center justify-center overflow-hidden p-1 shrink-0 group-hover:scale-105 transition-transform duration-300">
+                    <motion.div
+                        whileHover={{
+                            rotate: [0, -6, 6, -3, 0],
+                            scale: 1.08,
+                            transition: {
+                                rotate: { duration: 0.5, ease: "easeInOut" },
+                                scale: { type: "spring", stiffness: 350, damping: 12 }
+                            }
+                        }}
+                        className="w-14 h-14 rounded-full neu-pressed flex items-center justify-center overflow-hidden p-1 shrink-0"
+                    >
                         <img
                             src={club.logo}
                             alt={club.name}
@@ -75,7 +89,7 @@ export const ClubCard: React.FC<ClubCardProps> = ({
                             decoding="async"
                             className="w-full h-full object-cover rounded-full"
                         />
-                    </div>
+                    </motion.div>
                     <div className="min-w-0 flex-1">
                         <h3 className="text-base sm:text-lg font-bold text-slate-900 group-hover:text-[#0c72b8] transition-colors leading-snug truncate">
                             {language === 'np' && club.nepaliName ? club.nepaliName : club.name}
@@ -113,7 +127,10 @@ export const ClubCard: React.FC<ClubCardProps> = ({
                 </div>
 
                 {/* Primary Action Button */}
-                <button
+                <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={{ type: "spring", stiffness: 450, damping: 20 }}
                     onClick={(e) => {
                         e.stopPropagation();
                         onSelect(club);
@@ -121,8 +138,8 @@ export const ClubCard: React.FC<ClubCardProps> = ({
                     className="w-full py-2.5 px-4 neu-button-primary text-white font-bold text-xs sm:text-sm rounded-xl cursor-pointer flex items-center justify-center gap-2 group/btn"
                 >
                     <span>{language === 'en' ? 'View Committee' : 'समिति हेर्नुहोस्'}</span>
-                    <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
-                </button>
+                    <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                </motion.button>
             </div>
         </motion.div>
     );

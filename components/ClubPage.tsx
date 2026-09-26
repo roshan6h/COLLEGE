@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
+    ArrowLeft,
     Users,
     MapPin,
     Award,
@@ -25,6 +26,7 @@ import {
     Send,
     ChevronRight,
     Image as ImageIcon,
+    Expand,
     Trophy,
     ZoomIn,
     Check,
@@ -50,8 +52,11 @@ import {
     Flag,
     BarChart3,
     Box,
+    QrCode,
     Printer,
-    
+    FileCheck2,
+    Sparkle,
+    CheckCheck
 } from 'lucide-react';
 
 import {
@@ -71,6 +76,7 @@ import {
     MobileMembersCarousel,
     MobileAchievementsCarousel
 } from './MobileCarousels';
+import { MemberContactActions } from './MemberContactActions';
 
 // Safe Date Parser that avoids UTC timezone offset bugs
 const parseSafeDate = (dateStr: string) => {
@@ -222,47 +228,45 @@ export const ClubPage: React.FC<ClubPageProps> = ({
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(false);
 
-    // Check scroll position to show/hide left/right indicators and gradient masks
+    // Check scroll position to show/hide left/right indicators
     const checkScrollability = () => {
         if (tabsContainerRef.current) {
             const { scrollLeft, scrollWidth, clientWidth } = tabsContainerRef.current;
-            setCanScrollLeft(scrollLeft > 6);
-            setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 6);
+            setCanScrollLeft(scrollLeft > 8);
+            setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 8);
         }
     };
-
-    // Dynamic CSS Mask for smooth fade on overflow sides
-    const maskStyle = useMemo(() => {
-        if (canScrollLeft && canScrollRight) {
-            return {
-                maskImage: 'linear-gradient(to right, transparent 0px, black 32px, black calc(100% - 32px), transparent 100%)',
-                WebkitMaskImage: 'linear-gradient(to right, transparent 0px, black 32px, black calc(100% - 32px), transparent 100%)',
-                transition: 'mask-image 0.25s ease, -webkit-mask-image 0.25s ease'
-            };
-        } else if (canScrollLeft && !canScrollRight) {
-            return {
-                maskImage: 'linear-gradient(to right, transparent 0px, black 32px, black 100%)',
-                WebkitMaskImage: 'linear-gradient(to right, transparent 0px, black 32px, black 100%)',
-                transition: 'mask-image 0.25s ease, -webkit-mask-image 0.25s ease'
-            };
-        } else if (!canScrollLeft && canScrollRight) {
-            return {
-                maskImage: 'linear-gradient(to right, black 0%, black calc(100% - 32px), transparent 100%)',
-                WebkitMaskImage: 'linear-gradient(to right, black 0%, black calc(100% - 32px), transparent 100%)',
-                transition: 'mask-image 0.25s ease, -webkit-mask-image 0.25s ease'
-            };
-        }
-        return {};
-    }, [canScrollLeft, canScrollRight]);
 
     const isProgrammaticScrollRef = React.useRef(false);
     const scrollTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
     const scrollTabs = (direction: 'left' | 'right') => {
         if (tabsContainerRef.current) {
-            const scrollAmount = direction === 'left' ? -200 : 200;
+            const scrollAmount = direction === 'left' ? -220 : 220;
             tabsContainerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
         }
+    };
+
+    const scrollTabIntoViewIfNeeded = (tabId: string) => {
+        const btn = tabButtonRefs.current[tabId];
+        const container = tabsContainerRef.current;
+        if (!btn || !container) return;
+
+        const btnLeft = btn.offsetLeft;
+        const btnRight = btnLeft + btn.offsetWidth;
+        const scrollLeft = container.scrollLeft;
+        const clientWidth = container.clientWidth;
+        const threshold = 40;
+
+        // If the tab is comfortably visible inside the container, don't move horizontal scroll
+        const isComfortablyVisible = btnLeft >= scrollLeft + threshold && btnRight <= scrollLeft + clientWidth - threshold;
+        if (isComfortablyVisible) return;
+
+        const targetScroll = btnLeft - clientWidth / 2 + btn.offsetWidth / 2;
+        container.scrollTo({
+            left: Math.max(0, targetScroll),
+            behavior: 'smooth'
+        });
     };
 
     const scrollToSection = (sectionId: string) => {
@@ -271,7 +275,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
         if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
         scrollTimeoutRef.current = setTimeout(() => {
             isProgrammaticScrollRef.current = false;
-        }, 850);
+        }, 750);
 
         if (sectionId === 'home') {
             window.scrollTo({
@@ -281,8 +285,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
         } else {
             const element = document.getElementById(sectionId);
             if (element) {
-                // Calculate document position: element.getBoundingClientRect().top + window.scrollY
-                const navOffset = 140; // Total height of sticky Header (80px) + Sticky Tab Bar (56px) + breathing space
+                const navOffset = 138;
                 const elementPosition = element.getBoundingClientRect().top;
                 const currentScroll = window.scrollY || window.pageYOffset || 0;
                 const offsetPosition = elementPosition + currentScroll - navOffset;
@@ -294,23 +297,8 @@ export const ClubPage: React.FC<ClubPageProps> = ({
             }
         }
 
-        // Auto-scroll tab button into view in the horizontal container
-        setTimeout(() => {
-            const btn = tabButtonRefs.current[sectionId];
-            const container = tabsContainerRef.current;
-            if (btn && container) {
-                const targetScroll = btn.offsetLeft - container.offsetWidth / 2 + btn.offsetWidth / 2;
-                container.scrollTo({
-                    left: Math.max(0, targetScroll),
-                    behavior: 'smooth'
-                });
-            }
-        }, 50);
-    };
-
-    // Auto-scroll active tab into view when activeTab updates
-    useEffect(() => {
-        const btn = tabButtonRefs.current[activeTab];
+        // Center clicked tab in horizontal container
+        const btn = tabButtonRefs.current[sectionId];
         const container = tabsContainerRef.current;
         if (btn && container) {
             const targetScroll = btn.offsetLeft - container.offsetWidth / 2 + btn.offsetWidth / 2;
@@ -319,6 +307,11 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                 behavior: 'smooth'
             });
         }
+    };
+
+    // Auto-scroll active tab into view when activeTab updates if it is out of frame
+    useEffect(() => {
+        scrollTabIntoViewIfNeeded(activeTab);
     }, [activeTab]);
 
     useEffect(() => {
@@ -327,7 +320,6 @@ export const ClubPage: React.FC<ClubPageProps> = ({
             container.addEventListener('scroll', checkScrollability, { passive: true });
             window.addEventListener('resize', checkScrollability, { passive: true });
             checkScrollability();
-            // Also run after a brief delay to ensure layout metrics are settled
             const t = setTimeout(checkScrollability, 100);
             return () => {
                 container.removeEventListener('scroll', checkScrollability);
@@ -337,48 +329,68 @@ export const ClubPage: React.FC<ClubPageProps> = ({
         }
     }, []);
 
+    // Deterministic, jitter-free scroll spy for active section
     useEffect(() => {
-        let ticking = false;
+        const sectionIds: TabType[] = ['home', 'about', 'vision', 'events', 'manifesto', 'history', 'committee', 'gallery', 'message', 'certificate'];
 
+        let rafId: number | null = null;
         const handleScroll = () => {
             if (isProgrammaticScrollRef.current) return;
+            if (rafId) return;
 
-            if (!ticking) {
-                window.requestAnimationFrame(() => {
-                    const currentScrollY = window.scrollY || window.pageYOffset || 0;
-                    if (currentScrollY < 120) {
-                        setActiveTab('home');
-                        ticking = false;
-                        return;
-                    }
+            rafId = requestAnimationFrame(() => {
+                rafId = null;
+                const scrollY = window.scrollY || window.pageYOffset || 0;
 
-                    const sectionIds: TabType[] = ['home', 'about', 'vision', 'events', 'manifesto', 'history', 'committee', 'gallery', 'message', 'certificate'];
+                // Near top of document
+                if (scrollY < 100) {
+                    setActiveTab((prev) => (prev !== 'home' ? 'home' : prev));
+                    return;
+                }
 
+                // If scrolled to very bottom of document, activate last existing section
+                if (window.innerHeight + scrollY >= document.documentElement.scrollHeight - 60) {
                     for (let i = sectionIds.length - 1; i >= 0; i--) {
-                        const id = sectionIds[i];
-                        const el = document.getElementById(id);
-                        if (el) {
-                            const rect = el.getBoundingClientRect();
-                            // If the section top has reached or scrolled past the sticky navigation bar area (<= 160px)
-                            if (rect.top <= 160) {
-                                setActiveTab(id);
-                                break;
-                            }
+                        if (document.getElementById(sectionIds[i])) {
+                            setActiveTab((prev) => (prev !== sectionIds[i] ? sectionIds[i] : prev));
+                            return;
                         }
                     }
-                    ticking = false;
-                });
-                ticking = true;
-            }
+                }
+
+                // Normal scroll spy: find the section currently in view
+                const navOffset = 145;
+                let currentActive: TabType = 'home';
+
+                for (const id of sectionIds) {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        const rect = el.getBoundingClientRect();
+                        if (rect.top <= navOffset + 60) {
+                            currentActive = id;
+                        }
+                    }
+                }
+
+                setActiveTab((prev) => (prev !== currentActive ? currentActive : prev));
+            });
         };
 
         window.addEventListener('scroll', handleScroll, { passive: true });
-        return () => window.removeEventListener('scroll', handleScroll);
+        handleScroll();
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            if (rafId) cancelAnimationFrame(rafId);
+        };
     }, []);
 
     const leadershipList = club.leadership || [];
     
-    // Distinct About Section Images (configured via aboutImages or aboutUsImages)
+    // Normalize gallery images/items to structured items with image, title, date, category, description
+    const rawGallery = club.galleryItems || club.gallery || club.galleryImages || [];
+
+    // Distinct About Section Images (configured via aboutImages or aboutUsImages only - no defaults)
     const aboutImageList = useMemo(() => {
         const customAbout = club.aboutImages || club.aboutUsImages;
         if (customAbout && Array.isArray(customAbout) && customAbout.length > 0) {
@@ -387,8 +399,22 @@ export const ClubPage: React.FC<ClubPageProps> = ({
         return [];
     }, [club.aboutImages, club.aboutUsImages]);
 
-    // Normalize gallery images/items to structured items with image, title, date, category, description
-    const rawGallery = club.galleryItems || club.gallery || club.galleryImages || [];
+    // Split aboutImages into staggered 2-column layout (as in reference picture)
+    const { leftAboutImages, rightAboutImages } = useMemo(() => {
+        if (aboutImageList.length <= 1) {
+            return { leftAboutImages: aboutImageList, rightAboutImages: [] };
+        }
+        const left: string[] = [];
+        const right: string[] = [];
+        aboutImageList.forEach((img, idx) => {
+            if (idx % 2 === 0) {
+                left.push(img);
+            } else {
+                right.push(img);
+            }
+        });
+        return { leftAboutImages: left, rightAboutImages: right };
+    }, [aboutImageList]);
     const galleryItems: { id: string; image: string; title?: string; date?: string; category?: string; description?: string }[] = useMemo(() => {
         return rawGallery
             .map((item, idx) => {
@@ -412,7 +438,91 @@ export const ClubPage: React.FC<ClubPageProps> = ({
             .filter((item) => typeof item.image === 'string' && item.image.length > 0);
     }, [rawGallery]);
 
-    const galleryList = useMemo(() => galleryItems.map(g => g.image), [galleryItems]);
+    // -------------------------------------------------------------
+    // PHOTO GALLERY CONTROLS (CATEGORY FILTER, SEARCH, SHOW MORE/LESS)
+    // Reference pattern from FSU PhotoGallery component
+    // -------------------------------------------------------------
+    const [gallerySearchQuery, setGallerySearchQuery] = useState('');
+    const [galleryActiveCategory, setGalleryActiveCategory] = useState<string>('all');
+    const [showAllGallery, setShowAllGallery] = useState(false);
+    const INITIAL_GALLERY_LIMIT = 6;
+
+    const galleryCategories = useMemo(() => {
+        const cats = new Set<string>();
+        galleryItems.forEach((item) => {
+            if (item.category && item.category.trim()) {
+                cats.add(item.category.trim());
+            }
+        });
+        const catList = Array.from(cats);
+        return catList.length > 0 ? ['all', ...catList] : ['all'];
+    }, [galleryItems]);
+
+    const getGalleryCategoryCount = (cat: string) => {
+        if (cat === 'all') return galleryItems.length;
+        return galleryItems.filter((item) => item.category?.toLowerCase() === cat.toLowerCase()).length;
+    };
+
+    const filteredGalleryItems = useMemo(() => {
+        return galleryItems.filter((item) => {
+            const matchesCategory =
+                galleryActiveCategory === 'all' ||
+                (item.category && item.category.toLowerCase() === galleryActiveCategory.toLowerCase());
+            const q = gallerySearchQuery.toLowerCase().trim();
+            const matchesSearch =
+                !q ||
+                (item.title && item.title.toLowerCase().includes(q)) ||
+                (item.description && item.description.toLowerCase().includes(q)) ||
+                (item.category && item.category.toLowerCase().includes(q)) ||
+                (item.date && item.date.toLowerCase().includes(q));
+
+            return matchesCategory && matchesSearch;
+        });
+    }, [galleryItems, galleryActiveCategory, gallerySearchQuery]);
+
+    const displayedGalleryItems = showAllGallery
+        ? filteredGalleryItems
+        : filteredGalleryItems.slice(0, INITIAL_GALLERY_LIMIT);
+
+    const [galleryColumnCount, setGalleryColumnCount] = useState<number>(() => {
+        if (typeof window !== 'undefined') {
+            const w = window.innerWidth;
+            if (w >= 1280) return 4;
+            if (w >= 1024) return 3;
+            if (w >= 640) return 3;
+            return 2;
+        }
+        return 2;
+    });
+
+    useEffect(() => {
+        const updateColumns = () => {
+            const w = window.innerWidth;
+            if (w >= 1280) setGalleryColumnCount(4);
+            else if (w >= 1024) setGalleryColumnCount(3);
+            else if (w >= 640) setGalleryColumnCount(3);
+            else setGalleryColumnCount(2);
+        };
+        updateColumns();
+        window.addEventListener('resize', updateColumns);
+        return () => window.removeEventListener('resize', updateColumns);
+    }, []);
+
+    const galleryColumns = useMemo(() => {
+        const cols: typeof displayedGalleryItems[] = Array.from({ length: galleryColumnCount }, () => []);
+        displayedGalleryItems.forEach((item, index) => {
+            cols[index % galleryColumnCount].push(item);
+        });
+        return cols;
+    }, [displayedGalleryItems, galleryColumnCount]);
+
+    const galleryPool = filteredGalleryItems.length > 0 ? filteredGalleryItems : galleryItems;
+    const galleryList = useMemo(() => galleryPool.map((g) => g.image), [galleryPool]);
+
+    const activeLightboxItem =
+        selectedGalleryIndex !== null && galleryPool[selectedGalleryIndex]
+            ? galleryPool[selectedGalleryIndex]
+            : null;
 
     // Keyboard navigation for Gallery Lightbox
     useEffect(() => {
@@ -602,7 +712,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
         { id: 'history', labelEn: 'History', labelNp: 'इतिहास', icon: <History className="w-4 h-4" /> },
         { id: 'committee', labelEn: 'Committee', labelNp: 'कार्यसमिति', icon: <Users className="w-4 h-4" /> },
         { id: 'gallery', labelEn: 'Gallery', labelNp: 'ग्यालेरी', icon: <ImageIcon className="w-4 h-4" /> },
-        { id: 'message', labelEn: 'Message & Contact', labelNp: 'सन्देश तथा सम्पर्क', icon: <Quote className="w-4 h-4" /> },
+        { id: 'message', labelEn: 'Messages', labelNp: 'सन्देश तथा सम्पर्क', icon: <Quote className="w-4 h-4" /> },
         { id: 'certificate', labelEn: 'Certificate', labelNp: 'दर्ता प्रमाणपत्र', icon: <Award className="w-4 h-4" /> }
     ];
 
@@ -714,12 +824,23 @@ export const ClubPage: React.FC<ClubPageProps> = ({
             // Search Match
             if (memberSearchQuery.trim()) {
                 const q = memberSearchQuery.toLowerCase().trim();
+                const mem = m as Record<string, any>;
                 const matches =
-                    (m.name || '').toLowerCase().includes(q) ||
-                    (m.role || '').toLowerCase().includes(q) ||
-                    (m.department || '').toLowerCase().includes(q) ||
-                    (m.phone || '').toLowerCase().includes(q) ||
-                    (m.email || '').toLowerCase().includes(q);
+                    (mem.name || '').toLowerCase().includes(q) ||
+                    (mem.role || '').toLowerCase().includes(q) ||
+                    (mem.department || '').toLowerCase().includes(q) ||
+                    (mem.email || '').toLowerCase().includes(q) ||
+                    (mem.linkedin || '').toLowerCase().includes(q) ||
+                    (mem.github || '').toLowerCase().includes(q) ||
+                    (mem.facebook || '').toLowerCase().includes(q) ||
+                    (mem.instagram || '').toLowerCase().includes(q) ||
+                    (mem.twitter || '').toLowerCase().includes(q) ||
+                    (mem.x || '').toLowerCase().includes(q) ||
+                    (mem.socials?.instagram || '').toLowerCase().includes(q) ||
+                    (mem.socials?.twitter || '').toLowerCase().includes(q) ||
+                    (mem.socials?.linkedin || '').toLowerCase().includes(q) ||
+                    (mem.socials?.facebook || '').toLowerCase().includes(q) ||
+                    (mem.socials?.github || '').toLowerCase().includes(q);
                 if (!matches) return false;
             }
 
@@ -775,6 +896,8 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                             src={club.logo}
                                             alt={club.name}
                                             referrerPolicy="no-referrer"
+                                            loading="eager"
+                                            decoding="async"
                                             className="w-full h-full object-contain rounded-full group-hover:scale-105 transition-transform duration-300"
                                         />
                                     ) : (
@@ -841,27 +964,34 @@ export const ClubPage: React.FC<ClubPageProps> = ({
             </section>
 
             {/* Sticky Quick-Navigation Bar - Smooth Anchor Navigation */}
-            <div className="bg-[#eef2f7]/95 border-b border-slate-200/70 sticky top-20 z-30 shadow-[0_4px_12px_rgba(209,217,230,0.5)] backdrop-blur-md">
-                <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-1.5 sm:py-2">
+            <div className="bg-[#eef2f7]/95 backdrop-blur-md border-b border-slate-200/80 sticky top-20 z-30 shadow-[0_2px_8px_rgba(209,217,230,0.5)]">
+                <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-1.5 sm:py-2 relative">
 
-                    {/* Horizontal Scroll Bar with Left/Right Chevrons & Smooth Mask Fade */}
+                    {/* Horizontal Scroll Bar with Left/Right Chevrons & Clean Fade Overlays */}
                     <div className="relative flex items-center">
                         {/* Left Scroll Chevron (Shows if scrolled) */}
                         {canScrollLeft && (
                             <button
                                 onClick={() => scrollTabs('left')}
-                                className="hidden sm:flex absolute left-0 z-20 w-7 h-7 rounded-full bg-white/95 hover:bg-white text-slate-700 shadow-[0_2px_8px_rgba(0,0,0,0.12)] items-center justify-center -ml-1 border border-slate-200 transition-transform active:scale-95 cursor-pointer"
+                                className="hidden sm:flex absolute left-0 z-20 w-8 h-8 rounded-full bg-white/95 hover:bg-white text-slate-700 shadow-md items-center justify-center border border-slate-200/90 transition-transform active:scale-95 cursor-pointer"
                                 aria-label="Scroll tabs left"
                             >
-                                <ChevronLeft className="w-4 h-4" />
+                                <ChevronLeft className="w-4 h-4 text-slate-700" />
                             </button>
                         )}
 
-                        {/* Tab Buttons Container with dynamic CSS edge mask */}
+                        {/* Subtle edge fades (pointer-events-none so buttons underneath remain interactive) */}
+                        {canScrollLeft && (
+                            <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-[#eef2f7] to-transparent z-10 hidden sm:block" />
+                        )}
+                        {canScrollRight && (
+                            <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#eef2f7] to-transparent z-10 hidden sm:block" />
+                        )}
+
+                        {/* Tab Buttons Container */}
                         <div
                             ref={tabsContainerRef}
-                            style={maskStyle}
-                            className="flex items-center gap-2 sm:gap-2.5 overflow-x-auto no-scrollbar py-1.5 sm:py-2 px-3 sm:px-4 scroll-smooth w-full"
+                            className="flex items-center gap-2 sm:gap-2.5 overflow-x-auto no-scrollbar py-1 px-1 sm:px-2 scroll-smooth w-full"
                         >
                             {tabs.map((tab) => {
                                 const isActive = activeTab === tab.id;
@@ -872,9 +1002,9 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                             tabButtonRefs.current[tab.id] = el;
                                         }}
                                         onClick={() => scrollToSection(tab.id)}
-                                        className={`flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 border ${isActive
+                                        className={`flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-4.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 border select-none ${isActive
                                             ? 'bg-[#0c72b8] text-white shadow-[0_4px_12px_rgba(12,114,184,0.35)] border-[#0c72b8]'
-                                            : 'bg-[#eef2f7] text-slate-700 hover:text-slate-900 shadow-[3px_3px_7px_#d1d9e6,-3px_-3px_7px_#ffffff] hover:shadow-[4px_4px_10px_#c8d2e2,-4px_-4px_10px_#ffffff] active:shadow-[inset_2px_2px_5px_#d1d9e6,inset_-2px_-2px_5px_#ffffff] border-white/80'
+                                            : 'bg-[#eef2f7] text-slate-700 hover:text-slate-900 shadow-[2px_2px_5px_#d1d9e6,-2px_-2px_5px_#ffffff] hover:shadow-[3px_3px_8px_#c8d2e2,-3px_-3px_8px_#ffffff] active:shadow-[inset_2px_2px_4px_#d1d9e6,inset_-2px_-2px_4px_#ffffff] border-white/80'
                                             }`}
                                     >
                                         {tab.icon}
@@ -888,10 +1018,10 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                         {canScrollRight && (
                             <button
                                 onClick={() => scrollTabs('right')}
-                                className="hidden sm:flex absolute right-0 z-20 w-7 h-7 rounded-full bg-white/95 hover:bg-white text-slate-700 shadow-[0_2px_8px_rgba(0,0,0,0.12)] items-center justify-center -mr-1 border border-slate-200 transition-transform active:scale-95 cursor-pointer"
+                                className="hidden sm:flex absolute right-0 z-20 w-8 h-8 rounded-full bg-white/95 hover:bg-white text-slate-700 shadow-md items-center justify-center border border-slate-200/90 transition-transform active:scale-95 cursor-pointer"
                                 aria-label="Scroll tabs right"
                             >
-                                <ChevronRight className="w-4 h-4" />
+                                <ChevronRight className="w-4 h-4 text-slate-700" />
                             </button>
                         )}
                     </div>
@@ -1029,6 +1159,8 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                             src={defaultPresidentMessage.avatarUrl}
                                             alt={defaultPresidentMessage.senderName}
                                             referrerPolicy="no-referrer"
+                                            loading="lazy"
+                                            decoding="async"
                                             className="w-11 h-11 rounded-full object-cover border-2 border-[#0c72b8] shadow-xs shrink-0"
                                         />
                                     ) : (
@@ -1220,6 +1352,8 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                                                 src={ach.image}
                                                                 alt={ach.title}
                                                                 referrerPolicy="no-referrer"
+                                                                loading="lazy"
+                                                                decoding="async"
                                                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                                             />
                                                             <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
@@ -1333,48 +1467,70 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: '-40px' }}
                     transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                    className="bg-[#eef2f7] rounded-3xl p-6 sm:p-9 lg:p-10 shadow-[7px_7px_20px_#d1d9e6,-7px_-7px_20px_#ffffff] border border-white/90 scroll-mt-36 relative overflow-hidden"
+                    className="scroll-mt-36 relative py-4"
                 >
                     <div className={aboutImageList.length > 0 ? "grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center" : "max-w-4xl mx-auto space-y-6"}>
-                        {/* LEFT: Curated Photo Showcase (only if aboutImageList has items) */}
+                        {/* LEFT: Curated Photo Showcase - 2-Column Staggered Grid as in reference picture */}
                         {aboutImageList.length > 0 && (
-                            <div className="lg:col-span-5 space-y-3.5">
-                                {/* Main Feature Campus Photo */}
-                                <motion.div
-                                    whileHover={{ scale: 1.01 }}
-                                    transition={{ duration: 0.25 }}
-                                    className="relative rounded-3xl p-2.5 bg-[#eef2f7] shadow-[inset_3px_3px_6px_#d1d9e6,inset_-3px_-3px_6px_#ffffff] group overflow-hidden"
-                                >
-                                    <div className="relative w-full h-56 sm:h-64 rounded-2xl overflow-hidden shadow-xs bg-slate-200">
+                            <div className="lg:col-span-5 relative">
+                                {aboutImageList.length === 1 ? (
+                                    <motion.div
+                                        whileHover={{ scale: 1.02, y: -2 }}
+                                        transition={{ duration: 0.25 }}
+                                        className="w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md group"
+                                    >
                                         <img
                                             src={aboutImageList[0]}
-                                            alt={`${club.name} About Feature`}
+                                            alt={`${club.name} About Photo`}
                                             referrerPolicy="no-referrer"
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                                            loading="lazy"
+                                            decoding="async"
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                                         />
-                                    </div>
-                                </motion.div>
-
-                                {/* Additional Photos if present */}
-                                {aboutImageList.length > 1 && (
-                                    <div className={`grid grid-cols-${Math.min(aboutImageList.length - 1, 2)} gap-3.5`}>
-                                        {aboutImageList.slice(1, 3).map((img, idx) => (
-                                            <motion.div
-                                                key={idx}
-                                                whileHover={{ scale: 1.02 }}
-                                                transition={{ duration: 0.25 }}
-                                                className="rounded-2xl p-2 bg-[#eef2f7] shadow-[inset_2.5px_2.5px_5px_#d1d9e6,inset_-2.5px_-2.5px_5px_#ffffff] group"
-                                            >
-                                                <div className="w-full h-24 sm:h-28 rounded-xl overflow-hidden bg-slate-200 shadow-2xs">
+                                    </motion.div>
+                                ) : (
+                                    <div className="grid grid-cols-2 gap-3.5 sm:gap-4 items-start">
+                                        {/* Left Column - Offset / Shifted downwards */}
+                                        <div className="space-y-3.5 sm:space-y-4 pt-8 sm:pt-12">
+                                            {leftAboutImages.map((img, idx) => (
+                                                <motion.div
+                                                    key={`about-left-${idx}`}
+                                                    whileHover={{ scale: 1.02, y: -2 }}
+                                                    transition={{ duration: 0.25 }}
+                                                    className="w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md group"
+                                                >
                                                     <img
                                                         src={img}
-                                                        alt={`${club.name} About Photo ${idx + 2}`}
+                                                        alt={`${club.name} About Photo ${idx * 2 + 1}`}
                                                         referrerPolicy="no-referrer"
-                                                        className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
+                                                        loading="lazy"
+                                                        decoding="async"
+                                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                                                     />
-                                                </div>
-                                            </motion.div>
-                                        ))}
+                                                </motion.div>
+                                            ))}
+                                        </div>
+
+                                        {/* Right Column - Starts at top, ends higher */}
+                                        <div className="space-y-3.5 sm:space-y-4">
+                                            {rightAboutImages.map((img, idx) => (
+                                                <motion.div
+                                                    key={`about-right-${idx}`}
+                                                    whileHover={{ scale: 1.02, y: -2 }}
+                                                    transition={{ duration: 0.25 }}
+                                                    className="w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-md group"
+                                                >
+                                                    <img
+                                                        src={img}
+                                                        alt={`${club.name} About Photo ${idx * 2 + 2}`}
+                                                        referrerPolicy="no-referrer"
+                                                        loading="lazy"
+                                                        decoding="async"
+                                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                                                    />
+                                                </motion.div>
+                                            ))}
+                                        </div>
                                     </div>
                                 )}
                             </div>
@@ -2116,6 +2272,8 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                                             src={item.image}
                                                             alt={item.title || `${club.name} Milestone`}
                                                             referrerPolicy="no-referrer"
+                                                            loading="lazy"
+                                                            decoding="async"
                                                             className="w-full h-full object-cover grayscale-[10%] group-hover/card:grayscale-0 group-hover/card:scale-105 transition-all duration-700 ease-out"
                                                         />
                                                         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-black/10 pointer-events-none" />
@@ -2237,7 +2395,7 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                             setMemberSearchQuery(e.target.value);
                                             setShowAllMembers(false);
                                         }}
-                                        placeholder="Search by name, role, department or phone..."
+                                        placeholder="Search by name, role, department or social media..."
                                         className="w-full pl-10 pr-10 py-2.5 bg-white/80 focus:bg-white text-xs sm:text-sm text-slate-800 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0c72b8]/30 transition-all placeholder:text-slate-400 shadow-sm"
                                     />
                                     {memberSearchQuery && (
@@ -2522,14 +2680,15 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                                         {member.avatarUrl ? (
                                                             <img
                                                                 src={member.avatarUrl}
-                                                                alt={member.name || 'Leadership Member'}
+                                                                alt={member.name || "Leadership Member"}
                                                                 referrerPolicy="no-referrer"
+                                                                loading="lazy"
+                                                                decoding="async"
                                                                 className="w-full h-full rounded-full object-cover"
                                                                 onError={(e) => {
-                                                                    // Fallback to initials avatar on load error
-                                                                    (e.target as HTMLImageElement).style.display = 'none';
+                                                                    (e.target as HTMLImageElement).style.display = "none";
                                                                     const fallbackEl = (e.target as HTMLElement).nextElementSibling as HTMLElement;
-                                                                    if (fallbackEl) fallbackEl.style.display = 'flex';
+                                                                    if (fallbackEl) fallbackEl.style.display = "flex";
                                                                 }}
                                                             />
                                                         ) : null}
@@ -2560,31 +2719,12 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                                 </div>
                                             </div>
 
-                                            <div className="pt-3 border-t border-slate-300/40 space-y-2">
-                                                {member.phone ? (
-                                                    <a
-                                                        href={`tel:${member.phone.replace(/\s+/g, '')}`}
-                                                        className="w-full flex items-center justify-between px-3 py-2 bg-white/70 hover:bg-white text-slate-700 hover:text-[#0c72b8] rounded-xl text-xs font-bold transition-all border border-white/80 shadow-[2px_2px_5px_#d1d9e6,-2px_-2px_5px_#ffffff] hover:shadow-[3px_3px_8px_#c8d2e2,-3px_-3px_8px_#ffffff] group/call cursor-pointer"
-                                                        title={`Call ${member.name} (${member.phone})`}
-                                                    >
-                                                        <div className="flex items-center gap-2 truncate">
-                                                            <div className="w-6 h-6 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 group-hover/call:bg-blue-50 group-hover/call:text-[#0c72b8] transition-colors">
-                                                                <Phone className="w-3.5 h-3.5" />
-                                                            </div>
-                                                            <span className="font-semibold text-slate-800 group-hover/call:text-[#0c72b8] transition-colors truncate">
-                                                                {member.phone}
-                                                            </span>
-                                                        </div>
-                                                        <span className="text-[10px] text-emerald-600 font-extrabold uppercase tracking-wide bg-emerald-50 px-2 py-0.5 rounded-full group-hover/call:bg-blue-50 group-hover/call:text-[#0c72b8] transition-colors shrink-0 ml-1">
-                                                            Call
-                                                        </span>
-                                                    </a>
-                                                ) : (
-                                                    <div className="flex items-center gap-2 text-xs text-slate-400 py-1 px-1">
-                                                        <Phone className="w-3.5 h-3.5 text-slate-400" />
-                                                        <span>Direct line via Campus Desk</span>
-                                                    </div>
-                                                )}
+                                            <div className="pt-3 border-t border-slate-300/40">
+                                                <MemberContactActions
+                                                    member={member}
+                                                    clubName={club.name}
+                                                    language={language}
+                                                />
                                             </div>
                                         </motion.div>
                                     );
@@ -2622,255 +2762,362 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: '-40px' }}
                     transition={{ duration: 0.5, ease: 'easeOut' }}
-                    className="space-y-6 sm:space-y-8 scroll-mt-36 pt-4"
+                    className="py-4 w-full scroll-mt-36"
                 >
-                    {/* Pinterest Style Header */}
-                    <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-slate-300/40 gap-3">
-                        <div>
-                            <h3 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900 font-poppins tracking-tight">
-                                Moments & Pins
-                            </h3>
-                        </div>
-                        {galleryItems.length > 0 && (
-                            <button
-                                type="button"
-                                onClick={() => setSelectedGalleryIndex(0)}
-                                className="inline-flex items-center gap-1.5 sm:gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-[#eef2f7] text-[11px] sm:text-xs font-bold text-slate-800 hover:text-[#0c72b8] shadow-[3px_3px_8px_#d1d9e6,-3px_-3px_8px_#ffffff] active:shadow-[inset_2px_2px_5px_#d1d9e6,inset_-2px_-2px_5px_#ffffff] border border-white/80 transition-all cursor-pointer whitespace-nowrap shrink-0"
-                            >
-                                <span>Open Fullscreen ({galleryItems.length} photos)</span>
-                            </button>
-                        )}
-                    </div>
+                    <div className="w-full">
+                        {/* Header with Title and Search (Reference from FSU PhotoGallery) */}
+                        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-6 sm:mb-8 gap-5 w-full min-w-0 max-w-full">
+                            <div className="min-w-0 max-w-full">
+                                <span className="neu-flat-sm text-[#0c72b8] px-4 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase inline-flex items-center gap-1.5 mb-3">
+                                    <ImageIcon className="w-3.5 h-3.5" />
+                                    {language === 'en' ? 'Media Archive' : 'तस्वीर तथा मिडिया ग्यालेरी'}
+                                </span>
+                                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 font-poppins tracking-tight">
+                                    {language === 'en' ? `${club.name} in Action` : `${club.nameNp || club.name}: मुख्य झलकहरू`}
+                                </h2>
+                                <p className="mt-2 text-slate-600 max-w-xl text-xs sm:text-sm leading-relaxed">
+                                    {language === 'en'
+                                        ? `Visual highlights from campus events, technical workshops, seminars, and activities organized by ${club.name}.`
+                                        : `${club.name} द्वारा आयोजित विभिन्न कार्यक्रम, कार्यशाला तथा शैक्षिक गतिविधिहरूका प्रतिनिधि झलकहरू।`}
+                                </p>
+                            </div>
 
-                    {galleryItems.length === 0 ? (
-                        <div className="bg-[#eef2f7] rounded-3xl p-12 text-center shadow-[inset_3px_3px_7px_#d1d9e6,inset_-3px_-3px_7px_#ffffff] border border-slate-200/50">
-                            <ImageIcon className="w-10 h-10 text-slate-400 mx-auto mb-2" />
-                            <p className="text-sm text-slate-500 font-medium">No activity photo collection available yet for this committee.</p>
-                        </div>
-                    ) : (
-                        /* Pinterest Masonry Columns Grid (2-column on mobile, responsive up to 4 columns) */
-                        <div className="columns-2 sm:columns-2 md:columns-3 lg:columns-4 gap-2.5 sm:gap-4 md:gap-5 space-y-2.5 sm:space-y-4 md:space-y-5">
-                            {galleryItems.map((item, idx) => (
-                                <motion.div
-                                    key={item.id || idx}
-                                    initial={{ opacity: 0, y: 12 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ duration: 0.35, delay: (idx % 4) * 0.04 }}
-                                    className="break-inside-avoid group relative flex flex-col cursor-pointer mb-2.5 sm:mb-4 md:mb-5"
-                                    onClick={() => setSelectedGalleryIndex(idx)}
-                                >
-                                    {/* Pinterest Pin Card Container */}
-                                    <div className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-100 shadow-[3px_3px_10px_#d1d9e6,-3px_-3px_10px_#ffffff] border border-white/80 group-hover:shadow-[5px_5px_16px_#c8d2e2,-5px_-5px_16px_#ffffff] transition-all duration-300">
-                                        {/* Image */}
-                                        <img
-                                            src={item.image}
-                                            alt={item.title || `Moment ${idx + 1}`}
-                                            loading="lazy"
-                                            referrerPolicy="no-referrer"
-                                            className="w-full h-auto object-cover block group-hover:scale-[1.02] transition-transform duration-500 will-change-transform rounded-2xl sm:rounded-3xl"
-                                        />
-
-                                        {/* Pinterest Hover Overlay (Desktop/Tablets) */}
-                                        <div className="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none p-2.5 sm:p-3 md:p-4 flex flex-col justify-between">
-                                            {/* Top Bar: Category pill / Save or View red pill */}
-                                            <div className="flex items-center justify-between w-full pointer-events-auto">
-                                                {item.category ? (
-                                                    <span className="px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-[9px] sm:text-[10px] font-bold uppercase tracking-wider border border-white/20 truncate max-w-[65%]">
-                                                        {item.category}
-                                                    </span>
-                                                ) : (
-                                                    <span />
-                                                )}
-                                                <button
-                                                    type="button"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        setSelectedGalleryIndex(idx);
-                                                    }}
-                                                    className="px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-[#e60023] hover:bg-[#ad081b] text-white text-[11px] sm:text-xs font-bold shadow-md transition-all cursor-pointer transform group-hover:scale-100 scale-95"
-                                                    title="View Pin"
-                                                >
-                                                    View
-                                                </button>
-                                            </div>
-
-                                            {/* Bottom Action Bar */}
-                                            <div className="flex items-center justify-between w-full pointer-events-auto">
-                                                <div className="flex items-center gap-1.5">
-                                                    <button
-                                                        type="button"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            if (navigator.share) {
-                                                                navigator.share({ title: item.title || 'Photo', url: window.location.href });
-                                                            } else {
-                                                                navigator.clipboard.writeText(item.image);
-                                                                alert('Photo link copied!');
-                                                            }
-                                                        }}
-                                                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 hover:bg-white text-slate-800 flex items-center justify-center shadow-md backdrop-blur-md transition-transform hover:scale-110 cursor-pointer"
-                                                        title="Share photo"
-                                                    >
-                                                        <Share2 className="w-3.5 h-3.5" />
-                                                    </button>
-                                                    <a
-                                                        href={item.image}
-                                                        download
-                                                        target="_blank"
-                                                        rel="noreferrer"
-                                                        onClick={(e) => e.stopPropagation()}
-                                                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 hover:bg-white text-slate-800 flex items-center justify-center shadow-md backdrop-blur-md transition-transform hover:scale-110 cursor-pointer"
-                                                        title="Open in new tab"
-                                                    >
-                                                        <ExternalLink className="w-3.5 h-3.5" />
-                                                    </a>
-                                                </div>
-
-                                                <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 text-slate-800 flex items-center justify-center shadow-md backdrop-blur-md">
-                                                    <ZoomIn className="w-3.5 h-3.5 text-[#0c72b8]" />
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Pinterest Style Bottom Title & 3-dots Menu */}
-                                    <div className="pt-1.5 sm:pt-2 px-0.5 sm:px-1 flex items-start justify-between gap-1 sm:gap-2">
-                                        <div className="min-w-0 flex-1">
-                                            {item.title ? (
-                                                <h4 className="text-xs sm:text-sm font-bold text-slate-800 font-poppins line-clamp-2 leading-tight group-hover:text-[#0c72b8] transition-colors">
-                                                    {item.title}
-                                                </h4>
-                                            ) : null}
-                                            {item.date ? (
-                                                <p className={`text-[10px] sm:text-[11px] text-slate-500 font-medium line-clamp-1 ${item.title ? 'mt-0.5' : 'text-xs font-semibold text-slate-600'}`}>
-                                                    {item.date}
-                                                </p>
-                                            ) : item.description ? (
-                                                <p className="text-[10px] sm:text-[11px] text-slate-500 line-clamp-1 mt-0.5 font-normal">
-                                                    {item.description}
-                                                </p>
-                                            ) : !item.title ? (
-                                                <h4 className="text-xs sm:text-sm font-bold text-slate-800 font-poppins line-clamp-2 leading-tight group-hover:text-[#0c72b8] transition-colors">
-                                                    Moment {idx + 1}
-                                                </h4>
-                                            ) : null}
-                                        </div>
-                                        <div
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                setSelectedGalleryIndex(idx);
+                            {/* Quick Search Bar */}
+                            {galleryItems.length > 0 && (
+                                <div className="w-full lg:w-72 shrink-0">
+                                    <div className="relative">
+                                        <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                                        <input
+                                            type="text"
+                                            value={gallerySearchQuery}
+                                            onChange={(e) => {
+                                                setGallerySearchQuery(e.target.value);
+                                                setShowAllGallery(true);
                                             }}
-                                            className="shrink-0 text-slate-400 hover:text-slate-600 p-0.5 rounded-full hover:bg-slate-200/60 transition-colors"
-                                            title="Photo options"
-                                        >
-                                            <MoreHorizontal className="w-4 h-4" />
-                                        </div>
+                                            placeholder={language === 'en' ? 'Search gallery photos...' : 'तस्वीर खोज्नुहोस्...'}
+                                            className="w-full pl-10 pr-9 py-2.5 neu-input rounded-2xl text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none"
+                                        />
+                                        {gallerySearchQuery && (
+                                            <button
+                                                type="button"
+                                                onClick={() => setGallerySearchQuery('')}
+                                                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 cursor-pointer p-1"
+                                                title="Clear search"
+                                            >
+                                                <X className="w-3.5 h-3.5" />
+                                            </button>
+                                        )}
                                     </div>
-                                </motion.div>
-                            ))}
-                        </div>
-                    )}
-
-                    {/* Lightbox Modal with Index Navigation & Keyboard Controls */}
-                    {selectedGalleryIndex !== null && galleryItems[selectedGalleryIndex] && (
-                        <div
-                            onClick={() => setSelectedGalleryIndex(null)}
-                            className="fixed inset-0 z-50 bg-black/90 flex flex-col items-center justify-center p-4 sm:p-6 backdrop-blur-md animate-in fade-in"
-                        >
-                            {/* Top Control Bar */}
-                            <div
-                                onClick={(e) => e.stopPropagation()}
-                                className="w-full max-w-5xl flex items-center justify-between text-white pb-3"
-                            >
-                                <div className="flex items-center gap-2">
-                                    <span className="text-xs font-semibold px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15">
-                                        Photo {selectedGalleryIndex + 1} of {galleryItems.length}
-                                    </span>
-                                    <span className="text-xs text-white/60 hidden sm:inline">
-                                        (Use ← → Arrow keys or swipe to navigate, Esc to close)
-                                    </span>
                                 </div>
+                            )}
+                        </div>
 
+                        {/* Highly Accessible Filter Navigation (Wrap-friendly, no scrollbar clip) */}
+                        {galleryCategories.length > 1 && (
+                            <div className="mb-6 sm:mb-8 flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+                                {galleryCategories.map((cat) => {
+                                    const count = getGalleryCategoryCount(cat);
+                                    const isActive = galleryActiveCategory === cat;
+                                    return (
+                                        <button
+                                            key={cat}
+                                            type="button"
+                                            onClick={() => {
+                                                setGalleryActiveCategory(cat);
+                                                setShowAllGallery(false);
+                                            }}
+                                            className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all capitalize cursor-pointer shrink-0 flex items-center gap-2 select-none ${
+                                                isActive
+                                                    ? 'bg-slate-950 text-white shadow-sm font-bold'
+                                                    : 'bg-slate-200/80 hover:bg-slate-300/80 text-slate-800'
+                                            }`}
+                                        >
+                                            <span>
+                                                {cat === 'all'
+                                                    ? language === 'en'
+                                                        ? 'All Media'
+                                                        : 'सबै झलक'
+                                                    : cat}
+                                            </span>
+                                            <span
+                                                className={`text-[10px] sm:text-[11px] px-2 py-0.5 rounded-full font-mono font-bold ${
+                                                    isActive
+                                                        ? 'bg-white/20 text-white'
+                                                        : 'bg-black/10 text-slate-700'
+                                                }`}
+                                            >
+                                                {count}
+                                            </span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        )}
+
+                        {/* Media Bento / Grid */}
+                        {galleryItems.length === 0 ? (
+                            <div className="bg-[#eef2f7] rounded-3xl p-12 text-center shadow-[inset_3px_3px_7px_#d1d9e6,inset_-3px_-3px_7px_#ffffff] border border-slate-200/50">
+                                <ImageIcon className="w-10 h-10 text-slate-400 mx-auto mb-2" />
+                                <p className="text-sm text-slate-500 font-medium">
+                                    {language === 'en'
+                                        ? 'No activity photo collection available yet for this committee.'
+                                        : 'यस समितिका लागि कुनै तस्वीर सङ्ग्रह हाल उपलब्ध छैन।'}
+                                </p>
+                            </div>
+                        ) : displayedGalleryItems.length > 0 ? (
+                            <div className="flex gap-3 sm:gap-4 md:gap-5 w-full items-start">
+                                {galleryColumns.map((col, colIdx) => (
+                                    <div key={colIdx} className="flex flex-col gap-4 sm:gap-5 flex-1 min-w-0">
+                                        {col.map((img) => {
+                                            const globalIdx = filteredGalleryItems.findIndex((g) => g.id === img.id);
+                                            const activeIndex = globalIdx !== -1 ? globalIdx : 0;
+                                            return (
+                                                <div
+                                                    key={img.id}
+                                                    onClick={() => setSelectedGalleryIndex(activeIndex)}
+                                                    className="w-full group cursor-pointer"
+                                                >
+                                                    {/* Pin Photo Container */}
+                                                    <div className="relative overflow-hidden rounded-2xl bg-slate-200/80 shadow-[0_2px_12px_rgba(0,0,0,0.06)] hover:shadow-xl transition-all duration-300">
+                                                        <img
+                                                            src={img.image}
+                                                            alt={img.title || `Moment ${activeIndex + 1}`}
+                                                            referrerPolicy="no-referrer"
+                                                            loading="lazy"
+                                                            decoding="async"
+                                                            onError={(e) => {
+                                                                const target = e.currentTarget;
+                                                                if (!target.dataset.tried) {
+                                                                    target.dataset.tried = 'true';
+                                                                    target.src = '/campus_building.jpg';
+                                                                }
+                                                            }}
+                                                            className="w-full h-auto object-cover block transition-transform duration-500 group-hover:scale-[1.03]"
+                                                        />
+
+                                                        {/* Dark Hover Dimmer Overlay */}
+                                                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
+
+                                                        {/* Pinterest Red Save / View Button */}
+                                                        <div className="absolute top-2.5 right-2.5 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                                            <span className="bg-[#e60023] hover:bg-[#b6001c] active:scale-95 text-white text-[11px] font-bold px-3 py-1.5 rounded-full shadow-md inline-block">
+                                                                View
+                                                            </span>
+                                                        </div>
+
+                                                        {/* Floating Expand Icon on Bottom Right */}
+                                                        <div className="absolute bottom-2.5 right-2.5 z-10 w-7 h-7 rounded-full bg-white/90 hover:bg-white text-slate-800 shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                                            <Expand className="w-3.5 h-3.5" />
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Pinterest Pin Details (Underneath Image) */}
+                                                    <div className="pt-2 pb-1 px-1">
+                                                        <div className="flex items-start justify-between gap-1.5">
+                                                            <h3 className="text-xs sm:text-[14px] font-semibold text-slate-900 leading-snug line-clamp-2 group-hover:underline">
+                                                                {img.title || `Moment ${activeIndex + 1}`}
+                                                            </h3>
+                                                            <button
+                                                                type="button"
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    setSelectedGalleryIndex(activeIndex);
+                                                                }}
+                                                                className="text-slate-400 hover:text-slate-800 p-0.5 rounded-full hover:bg-slate-200/50 transition-colors shrink-0 cursor-pointer"
+                                                                title="Pin details"
+                                                            >
+                                                                <MoreHorizontal className="w-4 h-4" />
+                                                            </button>
+                                                        </div>
+
+                                                        {/* Author / Community row with avatar icon */}
+                                                        <div className="flex items-center gap-1.5 mt-1 text-[11px] text-slate-500">
+                                                            <div className="w-4 h-4 rounded-full bg-[#052855] text-white flex items-center justify-center text-[8px] font-bold shrink-0">
+                                                                {(club.name || 'C')[0]}
+                                                            </div>
+                                                            <span className="truncate font-medium text-slate-600">
+                                                                {club.name || 'Campus Activity'}
+                                                            </span>
+                                                            {img.date && (
+                                                                <>
+                                                                    <span className="text-slate-300">•</span>
+                                                                    <span className="shrink-0 text-slate-400 font-mono text-[10px]">
+                                                                        {img.date}
+                                                                    </span>
+                                                                </>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="p-10 neu-pressed rounded-3xl text-center text-slate-500 bg-[#eef2f7]">
+                                <ImageIcon className="w-10 h-10 mx-auto text-slate-400 mb-2" />
+                                <p className="text-sm font-bold text-slate-700">
+                                    {language === 'en' ? 'No media found' : 'कुनै तस्विर भेटिएन'}
+                                </p>
+                                <p className="text-xs text-slate-500 mt-1">
+                                    {language === 'en'
+                                        ? 'Try adjusting your search term or selecting another category.'
+                                        : 'कृपया खोज शब्द वा वर्ग परिवर्तन गर्नुहोस्।'}
+                                </p>
+                                {(gallerySearchQuery || galleryActiveCategory !== 'all') && (
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setGalleryActiveCategory('all');
+                                            setGallerySearchQuery('');
+                                        }}
+                                        className="mt-3 neu-button px-4 py-1.5 rounded-xl text-xs font-bold text-[#0c72b8] cursor-pointer"
+                                    >
+                                        {language === 'en' ? 'Clear Filters' : 'फिल्टर हटाउनुहोस्'}
+                                    </button>
+                                )}
+                            </div>
+                        )}
+
+                        {/* Show More / Show Less Button */}
+                        {filteredGalleryItems.length > INITIAL_GALLERY_LIMIT && (
+                            <div className="mt-8 sm:mt-10 flex justify-center">
                                 <button
                                     type="button"
-                                    onClick={() => setSelectedGalleryIndex(null)}
-                                    className="p-2.5 rounded-full bg-white/15 hover:bg-white/25 text-white transition-all cursor-pointer border border-white/20"
-                                    title="Close Lightbox (Esc)"
+                                    onClick={() => setShowAllGallery(!showAllGallery)}
+                                    className="neu-button inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-2xl text-slate-800 font-bold text-xs transition-all cursor-pointer hover:scale-102 hover:text-[#0c72b8]"
                                 >
-                                    <X className="w-5 h-5" />
+                                    <span>
+                                        {showAllGallery
+                                            ? language === 'en'
+                                                ? 'Show Less'
+                                                : 'कम देखाउनुहोस्'
+                                            : language === 'en'
+                                            ? `Show All Media (${filteredGalleryItems.length})`
+                                            : `सबै मिडिया हेर्नुहोस् (${filteredGalleryItems.length} वटा)`}
+                                    </span>
+                                    {showAllGallery ? (
+                                        <ChevronUp className="w-4 h-4 text-[#0c72b8]" />
+                                    ) : (
+                                        <ChevronDown className="w-4 h-4 text-[#0c72b8]" />
+                                    )}
                                 </button>
                             </div>
+                        )}
 
-                            {/* Main Frame with Prev & Next and Swipe Support */}
+                        {/* Lightbox Modal with Index Navigation & Keyboard Controls */}
+                        {activeLightboxItem && (
                             <div
-                                onClick={(e) => e.stopPropagation()}
-                                onTouchStart={handleGalleryTouchStart}
-                                onTouchEnd={handleGalleryTouchEnd}
-                                className="relative max-w-5xl w-full max-h-[80vh] flex items-center justify-center touch-pan-y select-none"
+                                onClick={() => setSelectedGalleryIndex(null)}
+                                className="fixed inset-0 z-50 bg-black/90 flex flex-col items-center justify-center p-4 sm:p-6 backdrop-blur-md animate-in fade-in"
                             >
-                                {/* Left Prev Button */}
-                                {galleryItems.length > 1 && (
+                                {/* Top Control Bar */}
+                                <div
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="w-full max-w-5xl flex items-center justify-between text-white pb-3"
+                                >
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-xs font-semibold px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15">
+                                            Photo {(selectedGalleryIndex ?? 0) + 1} of {galleryList.length}
+                                        </span>
+                                        <span className="text-xs text-white/60 hidden sm:inline">
+                                            (Use ← → Arrow keys or swipe to navigate, Esc to close)
+                                        </span>
+                                    </div>
+
                                     <button
                                         type="button"
-                                        onClick={() =>
-                                            setSelectedGalleryIndex((prev) =>
-                                                prev !== null && prev > 0 ? prev - 1 : galleryItems.length - 1
-                                            )
-                                        }
-                                        className="absolute -left-2 sm:-left-6 z-10 p-2.5 sm:p-3 rounded-full bg-black/60 hover:bg-black/80 text-white backdrop-blur-md border border-white/20 shadow-xl transition-transform hover:scale-110 cursor-pointer"
-                                        title="Previous Photo (Left Arrow)"
+                                        onClick={() => setSelectedGalleryIndex(null)}
+                                        className="p-2.5 rounded-full bg-white/15 hover:bg-white/25 text-white transition-all cursor-pointer border border-white/20"
+                                        title="Close Lightbox (Esc)"
                                     >
-                                        <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+                                        <X className="w-5 h-5" />
                                     </button>
-                                )}
-
-                                <div className="flex flex-col items-center max-h-[80vh] max-w-full">
-                                    <div className="rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl bg-black border border-white/20 max-h-[70vh] flex items-center justify-center">
-                                        <img
-                                            src={galleryItems[selectedGalleryIndex].image}
-                                            alt={galleryItems[selectedGalleryIndex].title || 'Club Gallery Photo'}
-                                            referrerPolicy="no-referrer"
-                                            className="w-full max-h-[68vh] object-contain select-none"
-                                        />
-                                    </div>
-                                    <div className="w-full max-w-2xl text-center mt-3 px-4">
-                                        {galleryItems[selectedGalleryIndex].title ? (
-                                            <h3 className="text-white text-base sm:text-lg font-bold font-poppins">
-                                                {galleryItems[selectedGalleryIndex].title}
-                                            </h3>
-                                        ) : null}
-                                        {galleryItems[selectedGalleryIndex].description && (
-                                            <p className="text-white/70 text-xs sm:text-sm mt-1">
-                                                {galleryItems[selectedGalleryIndex].description}
-                                            </p>
-                                        )}
-                                        {galleryItems[selectedGalleryIndex].date && (
-                                            <span className="inline-block text-white/50 text-xs mt-1">
-                                                {galleryItems[selectedGalleryIndex].date}
-                                            </span>
-                                        )}
-                                    </div>
                                 </div>
 
-                                {/* Right Next Button */}
-                                {galleryItems.length > 1 && (
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            setSelectedGalleryIndex((prev) =>
-                                                prev !== null && prev < galleryItems.length - 1 ? prev + 1 : 0
-                                            )
-                                        }
-                                        className="absolute -right-2 sm:-right-6 z-10 p-2.5 sm:p-3 rounded-full bg-black/60 hover:bg-black/80 text-white backdrop-blur-md border border-white/20 shadow-xl transition-transform hover:scale-110 cursor-pointer"
-                                        title="Next Photo (Right Arrow)"
-                                    >
-                                        <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
-                                    </button>
-                                )}
+                                {/* Main Frame with Prev & Next and Swipe Support */}
+                                <div
+                                    onClick={(e) => e.stopPropagation()}
+                                    onTouchStart={handleGalleryTouchStart}
+                                    onTouchEnd={handleGalleryTouchEnd}
+                                    className="relative max-w-5xl w-full max-h-[80vh] flex items-center justify-center touch-pan-y select-none"
+                                >
+                                    {/* Left Prev Button */}
+                                    {galleryList.length > 1 && (
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                setSelectedGalleryIndex((prev) =>
+                                                    prev !== null && prev > 0 ? prev - 1 : galleryList.length - 1
+                                                )
+                                            }
+                                            className="absolute -left-2 sm:-left-6 z-10 p-2.5 sm:p-3 rounded-full bg-black/60 hover:bg-black/80 text-white backdrop-blur-md border border-white/20 shadow-xl transition-transform hover:scale-110 cursor-pointer"
+                                            title="Previous Photo (Left Arrow)"
+                                        >
+                                            <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+                                        </button>
+                                    )}
+
+                                    <div className="flex flex-col items-center max-h-[80vh] max-w-full">
+                                        <div className="rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl bg-black border border-white/20 max-h-[70vh] flex items-center justify-center">
+                                            <img
+                                                src={activeLightboxItem.image}
+                                                alt={activeLightboxItem.title || 'Club Gallery Photo'}
+                                                referrerPolicy="no-referrer"
+                                                onError={(e) => {
+                                                    const target = e.currentTarget;
+                                                    if (!target.dataset.tried) {
+                                                        target.dataset.tried = 'true';
+                                                        target.src = '/campus_building.jpg';
+                                                    }
+                                                }}
+                                                className="w-full max-h-[68vh] object-contain select-none"
+                                            />
+                                        </div>
+                                        <div className="w-full max-w-2xl text-center mt-3 px-4">
+                                            {activeLightboxItem.category && (
+                                                <span className="inline-block bg-white/10 text-white text-[10px] font-extrabold px-3 py-0.5 rounded-full uppercase tracking-wider border border-white/20 mb-1.5">
+                                                    {activeLightboxItem.category}
+                                                </span>
+                                            )}
+                                            {activeLightboxItem.title ? (
+                                                <h3 className="text-white text-base sm:text-lg font-bold font-poppins">
+                                                    {activeLightboxItem.title}
+                                                </h3>
+                                            ) : null}
+                                            {activeLightboxItem.description && (
+                                                <p className="text-white/70 text-xs sm:text-sm mt-1">
+                                                    {activeLightboxItem.description}
+                                                </p>
+                                            )}
+                                            {activeLightboxItem.date && (
+                                                <span className="inline-block text-white/50 text-xs mt-1">
+                                                    {activeLightboxItem.date}
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Right Next Button */}
+                                    {galleryList.length > 1 && (
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                setSelectedGalleryIndex((prev) =>
+                                                    prev !== null && prev < galleryList.length - 1 ? prev + 1 : 0
+                                                )
+                                            }
+                                            className="absolute -right-2 sm:-right-6 z-10 p-2.5 sm:p-3 rounded-full bg-black/60 hover:bg-black/80 text-white backdrop-blur-md border border-white/20 shadow-xl transition-transform hover:scale-110 cursor-pointer"
+                                            title="Next Photo (Right Arrow)"
+                                        >
+                                            <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+                                        </button>
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </motion.section>
 
                 {/* 10. MESSAGES FROM LEADERSHIP & COMPOSE DISPATCH SECTION (END OF PAGE) */}
@@ -2921,6 +3168,8 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                                     src={defaultPresidentMessage.avatarUrl}
                                                     alt={defaultPresidentMessage.senderName}
                                                     referrerPolicy="no-referrer"
+                                                    loading="lazy"
+                                                    decoding="async"
                                                     className="w-full h-full rounded-full object-cover"
                                                 />
                                             ) : (
@@ -2992,6 +3241,8 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                                     src={defaultAdvisorMessage.avatarUrl}
                                                     alt={defaultAdvisorMessage.senderName}
                                                     referrerPolicy="no-referrer"
+                                                    loading="lazy"
+                                                    decoding="async"
                                                     className="w-full h-full rounded-full object-cover"
                                                 />
                                             ) : (
@@ -3327,13 +3578,13 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                     </div>
 
                                     <div>
-                                        <label className="block text-xs font-bold text-slate-700 mb-1">Phone Number</label>
+                                        <label className="block text-xs font-bold text-slate-700 mb-1">Contact / Social Handle</label>
                                         <input
                                             type="tel"
                                             required
                                             value={joinFormData.phone}
                                             onChange={(e) => setJoinFormData({ ...joinFormData, phone: e.target.value })}
-                                            placeholder="98XXXXXXXX"
+                                            placeholder="Contact or social handle"
                                             className="w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2 text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0c72b8]"
                                         />
                                     </div>
@@ -3386,6 +3637,8 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                             <img
                                 src={activeAchievementPreview.image}
                                 alt={activeAchievementPreview.title}
+                                loading="lazy"
+                                decoding="async"
                                 className="w-full h-full object-contain"
                             />
                             <button
@@ -3429,6 +3682,8 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                 <img
                                     src={selectedEventForModal.image}
                                     alt={selectedEventForModal.title}
+                                    loading="lazy"
+                                    decoding="async"
                                     className="w-full h-full object-cover"
                                 />
                                 <button
@@ -3529,7 +3784,8 @@ export const ClubPage: React.FC<ClubPageProps> = ({
                                 <img
                                     src={activeAchievementPreview.image}
                                     alt={activeAchievementPreview.title}
-                                    referrerPolicy="no-referrer"
+                                    loading="lazy"
+                                    decoding="async"
                                     className="w-full h-full object-cover"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />

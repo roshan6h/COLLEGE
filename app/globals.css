@@ -10,7 +10,7 @@
 
   html {
     scroll-behavior: smooth;
-    text-rendering: optimizeLegibility;
+    text-rendering: optimizeSpeed;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -24,11 +24,13 @@
     min-height: 100vh;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: none;
   }
 
   img {
     content-visibility: auto;
     image-rendering: -webkit-optimize-contrast;
+    direction: async;
   }
 }
 
@@ -39,8 +41,8 @@
   will-change: transform, opacity;
 }
 
-/* Hardware accelerated transition defaults */
-button, a, input, select {
+/* Eliminate 300ms mobile tap delay & optimize touch gestures */
+button, a, input, select, textarea, [role="button"] {
   touch-action: manipulation;
 }
 
@@ -60,16 +62,16 @@ button, a, input, select {
   font-family: 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-/* Off-screen section rendering optimization for low-end devices */
+/* Off-screen section rendering optimization for all devices */
 .cv-auto {
   content-visibility: auto;
-  contain-intrinsic-size: 1px 600px;
+  contain-intrinsic-size: 1px 500px;
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
@@ -102,156 +104,177 @@ button, a, input, select {
 
 .neu-flat {
   background-color: #eef2f7;
-  box-shadow: 6px 6px 14px #d1d9e6, -6px -6px 14px #ffffff;
+  box-shadow: 4px 4px 10px #d1d9e6, -3px -3px 8px rgba(255, 255, 255, 0.85);
   transform: translateZ(0);
   backface-visibility: hidden;
 }
 
 .neu-flat-sm {
   background-color: #eef2f7;
-  box-shadow: 3px 3px 8px #d1d9e6, -3px -3px 8px #ffffff;
+  box-shadow: 2px 2px 6px #d1d9e6, -2px -2px 5px rgba(255, 255, 255, 0.85);
   transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .neu-flat-lg {
   background-color: #eef2f7;
-  box-shadow: 10px 10px 24px #c2cddc, -10px -10px 24px #ffffff;
+  box-shadow: 6px 6px 15px #c2cddc, -5px -5px 12px rgba(255, 255, 255, 0.85);
   transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .neu-pressed {
   background-color: #eef2f7;
-  box-shadow: inset 4px 4px 8px #d1d9e6, inset -4px -4px 8px #ffffff;
+  box-shadow: inset 3px 3px 6px #d1d9e6, inset -3px -3px 6px #ffffff;
 }
 
 .neu-pressed-sm {
   background-color: #eef2f7;
-  box-shadow: inset 2px 2px 5px #d1d9e6, inset -2px -2px 5px #ffffff;
+  box-shadow: inset 2px 2px 4px #d1d9e6, inset -2px -2px 4px #ffffff;
 }
 
 .neu-button {
   background-color: #eef2f7;
-  box-shadow: 4px 4px 10px #d1d9e6, -4px -4px 10px #ffffff;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 3px 3px 8px #d1d9e6, -3px -3px 8px #ffffff;
+  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
   transform: translateZ(0);
+  backface-visibility: hidden;
   will-change: transform;
 }
 
 .neu-button:hover {
   background-color: #eef2f7;
-  box-shadow: 6px 6px 14px #c2cddc, -6px -6px 14px #ffffff;
+  box-shadow: 5px 5px 12px #c2cddc, -5px -5px 12px #ffffff;
   transform: translateY(-1px) translateZ(0);
 }
 
 .neu-button:active,
 .neu-button-active {
   background-color: #eef2f7;
-  box-shadow: inset 3px 3px 7px #c2cddc, inset -3px -3px 7px #ffffff;
+  box-shadow: inset 3px 3px 6px #c2cddc, inset -3px -3px 6px #ffffff;
   transform: translateY(0) translateZ(0);
 }
 
 .neu-button-primary {
   background-color: #0c72b8 !important;
   color: #ffffff !important;
-  box-shadow: 4px 4px 10px #c2cddc, -3px -3px 8px #ffffff;
-  transition: all 0.2s ease-in-out;
+  box-shadow: 3px 3px 8px #c2cddc, -2px -2px 6px #ffffff;
+  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
   transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .neu-button-primary:hover {
   background-color: #0a63a1 !important;
-  box-shadow: 6px 6px 14px #b8c4d6, -4px -4px 10px #ffffff;
+  box-shadow: 5px 5px 12px #b8c4d6, -3px -3px 8px #ffffff;
   transform: translateY(-1px) translateZ(0);
 }
 
 .neu-button-red {
   background-color: #b91c1c !important;
   color: #ffffff !important;
-  box-shadow: 4px 4px 10px #c2cddc, -3px -3px 8px #ffffff;
-  transition: all 0.2s ease-in-out;
+  box-shadow: 3px 3px 8px #c2cddc, -2px -2px 6px #ffffff;
+  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
   transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .neu-button-red:hover {
   background-color: #991b1b !important;
-  box-shadow: 6px 6px 14px #b8c4d6, -4px -4px 10px #ffffff;
+  box-shadow: 5px 5px 12px #b8c4d6, -3px -3px 8px #ffffff;
   transform: translateY(-1px) translateZ(0);
 }
 
 .neu-button-navy {
   background-color: #052855 !important;
   color: #ffffff !important;
-  box-shadow: 4px 4px 10px #c2cddc, -3px -3px 8px #ffffff;
-  transition: all 0.2s ease-in-out;
+  box-shadow: 3px 3px 8px #c2cddc, -2px -2px 6px #ffffff;
+  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
   transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .neu-button-navy:hover {
   background-color: #073674 !important;
-  box-shadow: 6px 6px 14px #b8c4d6, -4px -4px 10px #ffffff;
+  box-shadow: 5px 5px 12px #b8c4d6, -3px -3px 8px #ffffff;
   transform: translateY(-1px) translateZ(0);
 }
 
 .neu-input {
   background-color: #eef2f7;
-  box-shadow: inset 3px 3px 6px #d1d9e6, inset -3px -3px 6px #ffffff;
+  box-shadow: inset 2px 2px 5px #d1d9e6, inset -2px -2px 5px #ffffff;
   border: 1px solid rgba(209, 217, 230, 0.6);
-  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  transition: border-color 0.15s ease-out, box-shadow 0.15s ease-out;
 }
 
 .neu-input:focus {
-  box-shadow: inset 4px 4px 8px #c2cddc, inset -4px -4px 8px #ffffff, 0 0 0 2px rgba(5, 40, 85, 0.2);
+  box-shadow: inset 3px 3px 6px #c2cddc, inset -3px -3px 6px #ffffff, 0 0 0 2px rgba(5, 40, 85, 0.2);
   outline: none;
 }
 
 .neu-card {
   background-color: #eef2f7;
-  box-shadow: 8px 8px 18px #d1d9e6, -8px -8px 18px #ffffff;
+  box-shadow: 5px 5px 12px #d1d9e6, -3px -3px 9px rgba(255, 255, 255, 0.85);
   border-radius: 1.5rem;
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
   transform: translateZ(0);
   backface-visibility: hidden;
 }
 
 .neu-card:hover {
-  box-shadow: 12px 12px 24px #c2cddc, -12px -12px 24px #ffffff;
+  box-shadow: 7px 7px 16px #c2cddc, -4px -4px 12px rgba(255, 255, 255, 0.9);
 }
 
 .neu-card-sm {
   background-color: #eef2f7;
-  box-shadow: 5px 5px 12px #d1d9e6, -5px -5px 12px #ffffff;
+  box-shadow: 3px 3px 8px #d1d9e6, -2px -2px 6px rgba(255, 255, 255, 0.85);
   border-radius: 1rem;
   transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .neu-pill {
   background-color: #eef2f7;
-  box-shadow: 3px 3px 7px #d1d9e6, -3px -3px 7px #ffffff;
+  box-shadow: 2px 2px 5px #d1d9e6, -2px -2px 5px #ffffff;
+  transform: translateZ(0);
 }
 
 .neu-pill-pressed {
   background-color: #eef2f7;
-  box-shadow: inset 2px 2px 5px #d1d9e6, inset -2px -2px 5px #ffffff;
+  box-shadow: inset 2px 2px 4px #d1d9e6, inset -2px -2px 4px #ffffff;
 }
 
 .neu-avatar {
   background-color: #eef2f7;
-  box-shadow: 4px 4px 10px #d1d9e6, -4px -4px 10px #ffffff;
+  box-shadow: 3px 3px 8px #d1d9e6, -3px -3px 8px #ffffff;
   transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .neu-avatar-inset {
   background-color: #eef2f7;
-  box-shadow: inset 3px 3px 6px #d1d9e6, inset -3px -3px 6px #ffffff;
+  box-shadow: inset 2px 2px 5px #d1d9e6, inset -2px -2px 5px #ffffff;
 }
 
 .neu-dark-card {
   background-color: #0f172a;
-  box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.4), -4px -4px 14px rgba(255, 255, 255, 0.05);
+  box-shadow: 6px 6px 16px rgba(0, 0, 0, 0.35), -3px -3px 10px rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(51, 65, 85, 0.4);
   transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
+/* Lighten backdrop-blur intensity to keep 60/120fps scrolling on budget devices */
+@supports (backdrop-filter: blur(1px)) {
+  .backdrop-blur-md,
+  .backdrop-blur-lg,
+  .backdrop-blur-xl {
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+  }
+}
+
+/* Respect user preferences and low-power modes */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
