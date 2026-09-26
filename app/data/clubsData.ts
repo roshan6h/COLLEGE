@@ -185,7 +185,7 @@ export const abitClubData: Club = {
     memberCount: 120,
     facultyAdvisor: 'Er. Ghan Bahadur Thapa',
     president: 'Biwash Ranabhat',
-    meetingSchedule: 'Every Friday at 3:30 PM',
+    meetingSchedule: '',
     roomLocation: 'IT Building',
     contactEmail: 'abit.club@abcampus.edu.np',
     aboutImages: [
@@ -196,7 +196,7 @@ export const abitClubData: Club = {
     featured: true,
     vision: 'To make Aadikavi Bhanubhakta Campus the leading force in technology across Tanahun District by helping students learn practical skills and inspiring the wider community through innovation.',
     certificate: {
-        isRegistered: true,
+        isRegistered: false,
         certificateNumber: 'ABC-IT-REG-2075/018',
         registeredDate: 'July 28, 2018 (2075-04-12)',
         registeredDateNp: '२०७५/०४/१२',
@@ -577,7 +577,7 @@ export const bbaClubData: Club = {
     featured: true,
     vision: 'To be a leading student platform that empowers BBA students through diverse academic, professional, and leadership opportunities, fostering a skilled and collaborative student community.',
     certificate: {
-        isRegistered: true,
+        isRegistered: false,
         certificateNumber: 'ABC-BBA-REG-2076/009',
         registeredDate: 'September 4, 2019 (2076-05-18)',
         registeredDateNp: '२०७६/०५/१८',
@@ -762,9 +762,8 @@ export const bbaClubData: Club = {
     ],
     achievements: [],
     achievementItems: [],
-    galleryImages: [
-        'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=800&auto=format&fit=crop&q=80'
+    galleryItems: [
+
     ]
 };
 
@@ -786,7 +785,7 @@ export const abccricket: Club = {
     contactEmail: 'npramish1@gmail.com',
     vision: 'To be a leading sports club on campus that nurtures cricketing talent and builds a strong sporting culture among students.',
     certificate: {
-        isRegistered: true,
+        isRegistered:false,
         certificateNumber: 'ABC-SPT-REG-2081/031',
         registeredDate: 'May 14, 2024 (2081-02-01)',
         registeredDateNp: '२०८१/०२/०१',
@@ -1522,7 +1521,7 @@ export const scienceClubData: Club = {
     name: 'ABC Science Club',
     nepaliName: 'एबीसी विज्ञान क्लब',
     category: 'Science & Technology',
-    logo: 'https://images.unsplash.com/photo-1507668077129-56e32842fceb?w=800&auto=format&fit=crop&q=80',
+    logo: '/logo2.jpg',
     accentColor: '#059669',
     description: 'ABC Science Club is dedicated to developing scientific thinking, creativity, curiosity, and innovation among students by providing opportunities to explore, experiment, and learn beyond the classroom.',
     establishedYear: 2080,
@@ -1536,15 +1535,14 @@ export const scienceClubData: Club = {
     vision: 'To create a vibrant learning environment where students can discover their potential, develop practical and research-oriented skills, and use science and technology for the betterment of society and the community.',
     certificate: {
         isRegistered: true,
-        certificateNumber: 'ABC-SCI-REG-2080/012',
-        registeredDate: 'September 17, 2023 (2080-05-31)',
-        registeredDateNp: '२०८०/०५/३१',
-        issuingAuthority: 'Aadikavi Bhanubhakta Campus - Department of Science & Student Affairs',
-        issuingAuthorityNp: 'आदिकवि भानुभक्त क्याम्पस - विज्ञान संकाय तथा विद्यार्थी कल्याण शाखा',
-        registrationType: 'Accredited Departmental Student Organization',
-        validUntil: 'Academic Year 2084/85 (Active & Renewed)',
-        certificateImage: 'https://images.unsplash.com/photo-1589330694653-ded6df03f754?w=1200&auto=format&fit=crop&q=80',
-        remarks: 'Certified departmental club promoting scientific exploration, experimentation, and research among undergraduate scholars.'
+        certificateNumber: 'pending',
+        registeredDate: 'pending',
+        registeredDateNp: 'pending',
+        issuingAuthority: 'pending',
+        issuingAuthorityNp: 'pending',
+        registrationType: 'pending',
+        certificateImage: '../vyas/',
+        remarks: ''
     },
     mission: [
         'The ABC Science Club is dedicated to developing scientific thinking, creativity, curiosity, and innovation among students by providing opportunities to explore, experiment, and learn beyond the classroom. Our motive is to encourage students to ask questions, solve real-life problems through scientific methods, share knowledge, and work collaboratively on innovative ideas and projects.'
@@ -1572,7 +1570,8 @@ export const scienceClubData: Club = {
             role: 'President',
             department: 'B.Ed Science',
             avatarUrl: '../science/rubi.webp',
-            email: 'rubikhadka302@gmail.com'
+            email: '',
+            facebook: ''
         },
         {
             id: 'sci2',
@@ -1580,7 +1579,8 @@ export const scienceClubData: Club = {
             role: 'Vice - President',
             department: 'B.Ed Science',
             avatarUrl: '../science/adit.webp',
-            email: ''
+            email: '',
+            facebook: ''
         },
         {
             id: 'sci3',
@@ -1648,9 +1648,8 @@ export const scienceClubData: Club = {
         }
     ],
     achievements: [],
-    galleryImages: [
-        'https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1507668077129-56e32842fceb?w=800&auto=format&fit=crop&q=80'
+   galleryItems: [
+    
     ]
 };
 
