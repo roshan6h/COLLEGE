@@ -45,9 +45,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         nameNp: "अनुप आले मगर",
         roleEn: "President",
         roleNp: "अध्यक्ष",
-
         facebook: "https://facebook.com/anup.alemagar",
-        linkedin: "https://linkedin.com/in/anup-ale-magar",
         isExecutive: true,
         order: 1,
         photoUrl: "/anup1.png"
@@ -58,7 +56,6 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         nameNp: "सुमन खड्का",
         roleEn: "Vice President",
         roleNp: "उपाध्यक्ष",
-
         facebook: "https://facebook.com/suman.khadka",
         isExecutive: true,
         order: 2,
@@ -70,9 +67,7 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         nameNp: "सागर पाण्डे",
         roleEn: "Secretary",
         roleNp: "सचिव",
-
         facebook: "https://facebook.com/sagar.pandey",
-        linkedin: "https://linkedin.com/in/sagar-pandey",
         isExecutive: true,
         order: 3,
         photoUrl: "/sagar.png"
@@ -193,7 +188,6 @@ export const FSU_COMMITTEE: CommitteeMember[] = [
         nameNp: "अमृत बानिया",
         roleEn: "Member",
         roleNp: "सदस्य",
-
         isExecutive: false,
         order: 14,
         photoUrl: "/amrit.png"

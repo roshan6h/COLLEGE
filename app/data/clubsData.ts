@@ -250,10 +250,8 @@ export const abitClubData: Club = {
             name: 'Biwash Ranabhat',
             role: 'President',
             department: 'BICTE 8th Semester',
-            email: 'biwash.ranabhat@student.abcampus.edu.np',
-            linkedin: 'https://www.linkedin.com/in/biwash-ranabhat',
-            github: 'https://github.com/biwash-ranabhat',
-            facebook: 'https://www.facebook.com/biwash.ranabhat',
+            email: '',
+            facebook: 'https://www.facebook.com/ranabhat.biwash.0',
             avatarUrl: '../abit/bibash.webp'
         },
         {
@@ -262,8 +260,7 @@ export const abitClubData: Club = {
             role: 'Vice President',
             department: 'BICTE 6th Semester',
             email: '',
-            linkedin: 'https://www.linkedin.com/in/rajib-ranabhat',
-            facebook: 'https://www.facebook.com/rajib.ranabhat',
+            facebook: 'https://www.facebook.com/rajib.ranabhat.39',
             avatarUrl: '/abit/rajip.webp'
         },
         {
@@ -272,8 +269,7 @@ export const abitClubData: Club = {
             role: 'Secretary',
             department: 'BICTE 6th Semester',
             email: '',
-            github: 'https://github.com/suraj-tech',
-            linkedin: 'https://www.linkedin.com/in/suraj-bishwakarma',
+            facebook: 'https://www.facebook.com/suraj.sadashankar.18',
             avatarUrl: '/abit/suraj.webp',
         },
         {
@@ -281,9 +277,8 @@ export const abitClubData: Club = {
             name: 'Prerana Thapa',
             role: 'Treasurer',
             department: 'BICTE 6th Semester',
-            email: 'prerana.thapa@student.abcampus.edu.np',
-            linkedin: 'https://www.linkedin.com/in/prerana-thapa',
-            facebook: 'https://www.facebook.com/prerana.thapa',
+            email: '',
+            facebook: 'https://www.facebook.com/prerana.24.07',
             avatarUrl: '/abit/prerna.webp',
         },
         {
@@ -291,9 +286,8 @@ export const abitClubData: Club = {
             name: 'Ashim Chhetri',
             role: 'Joint Secretary',
             department: 'BICTE 5th Semester',
-            email: 'ashim.chhetri@student.abcampus.edu.np',
-            linkedin: 'https://www.linkedin.com/in/ashim-chhetri',
-            facebook: 'https://www.facebook.com/ashim.chhetri',
+            email: '',
+            facebook: 'https://www.facebook.com/profile.php?id=61592186128037',
             avatarUrl: '/abit/ashim.webp'
         },
         {
@@ -301,9 +295,8 @@ export const abitClubData: Club = {
             name: 'Rohit Thapa',
             role: 'Spokesperson',
             department: 'BICTE 8th Semester',
-            email: 'rohit.thapa@student.abcampus.edu.np',
-            facebook: 'https://www.facebook.com/rohit.thapa',
-            linkedin: 'https://www.linkedin.com/in/rohit-thapa',
+            email: '',
+            facebook: 'https://www.facebook.com/rohit.jung.137609',
             avatarUrl: '/abit/rohit.webp'
         },
         {
@@ -311,9 +304,8 @@ export const abitClubData: Club = {
             name: 'Samikshya Shrestha',
             role: 'Member',
             department: 'BICTE 5th Semester',
-            email: 'samikshya.shrestha@student.abcampus.edu.np',
-            linkedin: 'https://www.linkedin.com/in/samikshya-shrestha',
-            facebook: 'https://www.facebook.com/samikshya.shrestha',
+            email: '',
+            facebook: 'https://www.facebook.com/samikshya.shrestha.369658',
             avatarUrl: '/abit/samikshya.webp'
         },
         {
@@ -321,9 +313,8 @@ export const abitClubData: Club = {
             name: 'Diwash Bastola',
             role: 'Member',
             department: 'BICTE 5th Semester',
-            email: 'diwash.bastola@student.abcampus.edu.np',
-            linkedin: 'https://www.linkedin.com/in/diwash-bastola',
-            facebook: 'https://www.facebook.com/diwash.bastola',
+            email: '',
+            facebook: 'https://www.facebook.com/dibash.banstola.5',
             avatarUrl: '/abit/dibash.webp'
         },
         {
@@ -331,9 +322,8 @@ export const abitClubData: Club = {
             name: 'Nisha Giri',
             role: 'Member',
             department: 'BICTE 6th Semester',
-            email: 'nisha.giri@student.abcampus.edu.np',
-            facebook: 'https://www.facebook.com/nisha.giri',
-            linkedin: 'https://www.linkedin.com/in/nisha-giri',
+            email: '',
+            facebook: 'https://www.facebook.com/profile.php?id=61577742166264',
             avatarUrl: '/abit/nisha.webp'
         },
         {
@@ -341,9 +331,8 @@ export const abitClubData: Club = {
             name: 'Diwash Ranabhat',
             role: 'Member',
             department: 'BICTE 6th Semester',
-            email: 'diwash.ranabhat@student.abcampus.edu.np',
-            linkedin: 'https://www.linkedin.com/in/diwash-ranabhat',
-            facebook: 'https://www.facebook.com/diwash.ranabhat',
+            email: '',
+            facebook: 'https://www.facebook.com/',
             avatarUrl: '/abit/diwash.webp'
         },
         {
@@ -351,9 +340,8 @@ export const abitClubData: Club = {
             name: 'Biwash Ranabhat',
             role: 'Member',
             department: 'BICTE 8th Semester',
-            email: 'biwash.member@student.abcampus.edu.np',
-            facebook: 'https://www.facebook.com/biwash.ranabhat.member',
-            linkedin: 'https://www.linkedin.com/in/biwash-ranabhat',
+            email: '',
+            facebook: 'https://www.facebook.com/',
             avatarUrl: '/abit/bibmem.webp'
         },
         {
@@ -361,10 +349,8 @@ export const abitClubData: Club = {
             name: 'Er. Ghan Bahadur Thapa',
             role: 'Club Advisor',
             department: 'Department of Computer Science & IT',
-            email: 'ghanbahadur@abcampus.edu.np',
-            linkedin: 'https://www.linkedin.com/in/ghan-bahadur-thapa',
-            facebook: 'https://www.facebook.com/ghanbahadur.thapa',
-            github: 'https://github.com/ghanbahadur',
+            email: '',
+            facebook: 'https://www.facebook.com/aonjand.thapa',
             avatarUrl: '/abit/ghan.webp'
         },
         {
@@ -372,9 +358,8 @@ export const abitClubData: Club = {
             name: 'Mahaprashad Hadkhale',
             role: 'Club Advisor',
             department: 'Department of Computer Science & IT',
-            email: 'mahaprashad@abcampus.edu.np',
-            linkedin: 'https://www.linkedin.com/in/mahaprashad-hadkhale',
-            facebook: 'https://www.facebook.com/mahaprashad.hadkhale',
+            email: '',
+            facebook: 'https://www.facebook.com/maha.prasad.hadkhale.2025',
             avatarUrl: '/abit/maha.webp'
         },
     ],

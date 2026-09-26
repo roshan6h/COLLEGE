@@ -11,7 +11,8 @@ import {
     Download,
     Check,
     Calendar,
-    Tag
+    Tag,
+    Expand
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -23,7 +24,7 @@ export interface GalleryImage {
     descriptionEn: string;
     descriptionNp: string;
     placeholderBg: string;
-    symbolicEmoji: string;
+    pinHeightClass: string;
     imageUrl?: string;
 }
 
@@ -35,9 +36,9 @@ export const GALLERY_IMAGES: GalleryImage[] = [
         category: "Solidarity",
         descriptionEn: "Justice for Inisha BK Solidarity Rally - unified student march demanding safety and student protection at Aadikavi Campus.",
         descriptionNp: "इनिसा विकको तत्काल न्यायका लागि क्याम्पस गेट बाहिर आयोजित वृहत दीप प्रज्वलन र शान्तिपूर्ण ऐक्यवद्धता प्रदर्शन।",
-        placeholderBg: "from-red-900 to-slate-950",
-        symbolicEmoji: "🕯️",
-        imageUrl: "/img12.jpeg"
+        placeholderBg: "from-red-950 via-slate-900 to-black",
+        pinHeightClass: "min-h-[280px] sm:min-h-[320px]",
+        imageUrl: "../fsu/img12.webp"
     },
     {
         id: "g2",
@@ -46,9 +47,9 @@ export const GALLERY_IMAGES: GalleryImage[] = [
         category: "Interaction",
         descriptionEn: "Standing in solidarity during campus awareness and leadership workshops, encouraging participation.",
         descriptionNp: "विद्यार्थी सचेतना तथा व्यावहारिक नेतृत्व विकास कार्यक्रमको एक सुखद क्षण।",
-        placeholderBg: "from-blue-900 to-indigo-950",
-        symbolicEmoji: "🤝",
-        imageUrl: "/img4.jpeg"
+        placeholderBg: "from-blue-950 via-indigo-950 to-slate-950",
+        pinHeightClass: "min-h-[190px] sm:min-h-[210px]",
+        imageUrl: "../fsu/img4.webp"
     },
     {
         id: "g3",
@@ -57,9 +58,9 @@ export const GALLERY_IMAGES: GalleryImage[] = [
         category: "Sports",
         descriptionEn: "Supporting Sports: President Anup Ale Magar presenting the official team jerseys to our campus players.",
         descriptionNp: "खेलकुद प्रवर्द्धन: स्ववियु अध्यक्ष अनुप आले मगरद्वारा क्याम्पस फुटबल टोलीलाई नयाँ जर्सी हस्तान्तरण।",
-        placeholderBg: "from-rose-700 to-slate-900",
-        symbolicEmoji: "👕",
-        imageUrl: "/imag.jpeg"
+        placeholderBg: "from-rose-950 via-slate-900 to-slate-950",
+        pinHeightClass: "min-h-[310px] sm:min-h-[350px]",
+        imageUrl: "../fsu/imag.webp"
     },
     {
         id: "g4",
@@ -68,9 +69,9 @@ export const GALLERY_IMAGES: GalleryImage[] = [
         category: "Sports",
         descriptionEn: "Promoting Student Athletics: Union members with the new campus sports kits preparing for the league.",
         descriptionNp: "खेलाडीहरू र स्ववियु पदाधिकारीहरू नयाँ फुटबल जर्सी तथा खेलकुद सामग्रीका साथ एकीकृत।",
-        placeholderBg: "from-blue-800 to-red-800",
-        symbolicEmoji: "⚽",
-        imageUrl: "/sp2.jpeg"
+        placeholderBg: "from-indigo-950 via-blue-950 to-slate-950",
+        pinHeightClass: "min-h-[220px] sm:min-h-[240px]",
+        imageUrl: "../fsu/sp2.webp"
     },
     {
         id: "g5",
@@ -79,9 +80,9 @@ export const GALLERY_IMAGES: GalleryImage[] = [
         category: "Academic",
         descriptionEn: "Academic Support: Facilitating student resources and college administrative assistance.",
         descriptionNp: "विद्यार्थीहरूलाई शैक्षिक सामग्री वितरण र फारम दर्ता प्रक्रियामा सहजीकरण।",
-        placeholderBg: "from-teal-800 to-slate-900",
-        symbolicEmoji: "📚",
-        imageUrl: "/img11.jpeg"
+        placeholderBg: "from-teal-950 via-slate-900 to-slate-950",
+        pinHeightClass: "min-h-[270px] sm:min-h-[310px]",
+        imageUrl: "../fsu/img11.webp"
     },
     {
         id: "g6",
@@ -90,9 +91,9 @@ export const GALLERY_IMAGES: GalleryImage[] = [
         category: "Campaign",
         descriptionEn: "Advocating for Student Rights: Submitting official memorandums and 15-point charter to the campus administration.",
         descriptionNp: "विद्यार्थी हकहित र शैक्षिक सुधारका विषय समेटिएको ज्ञापन पत्र क्याम्पस प्रशासनलाई बुझाउँदै स्ववियु प्रतिनिधि।",
-        placeholderBg: "from-slate-800 to-sky-950",
-        symbolicEmoji: "📄",
-        imageUrl: "/img6.jpeg"
+        placeholderBg: "from-slate-900 via-sky-950 to-black",
+        pinHeightClass: "min-h-[180px] sm:min-h-[200px]",
+        imageUrl: "../fsu/img6.webp"
     },
     {
         id: "g7",
@@ -101,9 +102,9 @@ export const GALLERY_IMAGES: GalleryImage[] = [
         category: "Campaign",
         descriptionEn: "Strengthening Communication: Official handover of student union proposals for library digitalization.",
         descriptionNp: "सुदृढ संचार तथा डिजिटल पुस्तकालय सम्बन्धी प्रस्तावहरू आधिकारिक रूपमा दर्ता गरिँदै।",
-        placeholderBg: "from-emerald-800 to-slate-900",
-        symbolicEmoji: "🤝",
-        imageUrl: "/imgee.png"
+        placeholderBg: "from-emerald-950 via-slate-900 to-slate-950",
+        pinHeightClass: "min-h-[300px] sm:min-h-[340px]",
+        imageUrl: "../fsu/imgee.webp"
     },
     {
         id: "g8",
@@ -112,9 +113,9 @@ export const GALLERY_IMAGES: GalleryImage[] = [
         category: "Solidarity",
         descriptionEn: "FSU Annual Gathering: Celebrating student unity, academic excellence, and progressive leadership.",
         descriptionNp: "स्ववियु वार्षिक भेलामा विद्यार्थी एकता, सहभागिता र लोकतान्त्रिक प्रतिबद्धता प्रदर्शन।",
-        placeholderBg: "from-amber-800 to-indigo-950",
-        symbolicEmoji: "🎉",
-        imageUrl: "/img8.jpeg"
+        placeholderBg: "from-amber-950 via-indigo-950 to-black",
+        pinHeightClass: "min-h-[220px] sm:min-h-[240px]",
+        imageUrl: "../fsu/img8.webp"
     },
     {
         id: "g9",
@@ -123,9 +124,9 @@ export const GALLERY_IMAGES: GalleryImage[] = [
         category: "Interaction",
         descriptionEn: "Inclusive Leadership: Engaging directly with students, faculty, and delegates at the Union office.",
         descriptionNp: "समावेशी नेतृत्व: स्ववियु कार्यालयमा विद्यार्थी र प्राध्यापकहरूसँग निरन्तर संवाद तथा सर-सल्लाह।",
-        placeholderBg: "from-blue-900 to-neutral-900",
-        symbolicEmoji: "💼",
-        imageUrl: "/img10.jpeg"
+        placeholderBg: "from-blue-950 via-neutral-900 to-black",
+        pinHeightClass: "min-h-[290px] sm:min-h-[330px]",
+        imageUrl: "../fsu/img10.webp"
     },
     {
         id: "g10",
@@ -134,9 +135,9 @@ export const GALLERY_IMAGES: GalleryImage[] = [
         category: "Solidarity",
         descriptionEn: "A heartfelt mourning session organized by the Free Students' Union to pay tribute to the late Inisha BK. Students, teachers, and staff gathered to offer condolences, observe a moment of silence, and honor her memory.",
         descriptionNp: "स्वर्गीय इनिशा बिकको सम्झनामा स्वतन्त्र विद्यार्थी युनियनद्वारा आयोजित श्रद्धाञ्जली सभामा विद्यार्थी, शिक्षक तथा कर्मचारीहरूको सहभागिता।",
-        placeholderBg: "from-slate-800 to-gray-900",
-        symbolicEmoji: "🕯️",
-        imageUrl: "/img5.jpeg"
+        placeholderBg: "from-slate-900 via-gray-900 to-black",
+        pinHeightClass: "min-h-[200px] sm:min-h-[220px]",
+        imageUrl: "../fsu/img5.webp"
     },
     {
         id: "g11",
@@ -145,9 +146,9 @@ export const GALLERY_IMAGES: GalleryImage[] = [
         category: "Campaign",
         descriptionEn: "A donation campaign organized by the Free Students' Union to support individuals and families in need. Students, teachers, and well-wishers came together to contribute generously.",
         descriptionNp: "आवश्यकतामा परेका व्यक्ति तथा परिवारहरूको सहयोगका लागि स्वतन्त्र विद्यार्थी युनियनद्वारा आयोजित दान अभियान।",
-        placeholderBg: "from-blue-950 to-slate-900",
-        symbolicEmoji: "🤝",
-        imageUrl: "/img7.jpeg"
+        placeholderBg: "from-blue-950 via-slate-950 to-black",
+        pinHeightClass: "min-h-[270px] sm:min-h-[300px]",
+        imageUrl: "../fsu/img7.webp"
     },
     {
         id: "g12",
@@ -156,9 +157,9 @@ export const GALLERY_IMAGES: GalleryImage[] = [
         category: "Sports",
         descriptionEn: "Fostering Teamwork: Supporting dynamic campus sports leagues and extracurricular participation.",
         descriptionNp: "क्याम्पसमा अतिरिक्त क्रियाकलाप र खेलकुद सहभागिताको विकासका लागि खेल आयोजना।",
-        placeholderBg: "from-red-700 to-indigo-950",
-        symbolicEmoji: "🏆",
-        imageUrl: "/sp3.jpeg"
+        placeholderBg: "from-red-950 via-indigo-950 to-black",
+        pinHeightClass: "min-h-[240px] sm:min-h-[260px]",
+        imageUrl: "../fsu/sp3.webp"
     }
 ];
 
@@ -211,6 +212,38 @@ export default function PhotoGallery({ language }: PhotoGalleryProps) {
     }, [activeCategory, searchQuery]);
 
     const displayedImages = showAll ? filteredImages : filteredImages.slice(0, INITIAL_LIMIT);
+
+    const [columnCount, setColumnCount] = useState<number>(() => {
+        if (typeof window !== "undefined") {
+            const w = window.innerWidth;
+            if (w >= 1280) return 4;
+            if (w >= 1024) return 3;
+            if (w >= 640) return 3;
+            return 2;
+        }
+        return 2;
+    });
+
+    useEffect(() => {
+        const updateColumns = () => {
+            const w = window.innerWidth;
+            if (w >= 1280) setColumnCount(4);
+            else if (w >= 1024) setColumnCount(3);
+            else if (w >= 640) setColumnCount(3);
+            else setColumnCount(2);
+        };
+        updateColumns();
+        window.addEventListener("resize", updateColumns);
+        return () => window.removeEventListener("resize", updateColumns);
+    }, []);
+
+    const galleryColumns = useMemo(() => {
+        const cols: typeof displayedImages[] = Array.from({ length: columnCount }, () => []);
+        displayedImages.forEach((item, index) => {
+            cols[index % columnCount].push(item);
+        });
+        return cols;
+    }, [displayedImages, columnCount]);
 
     const handleCategoryChange = (catKey: string) => {
         setActiveCategory(catKey);
@@ -358,65 +391,91 @@ export default function PhotoGallery({ language }: PhotoGalleryProps) {
 
                 {/* Pinterest Multi-column Masonry Layout */}
                 {displayedImages.length > 0 ? (
-                    <div className="columns-2 sm:columns-2 lg:columns-4 gap-3 sm:gap-5 [column-fill:_balance]">
-                        {displayedImages.map((img) => (
-                            <div
-                                key={img.id}
-                                id={`gallery-${img.id}`}
-                                onClick={() => setSelectedImg(img)}
-                                className="break-inside-avoid mb-3 sm:mb-5 bg-white rounded-2xl sm:rounded-[22px] p-2 sm:p-2.5 shadow-[0_4px_20px_rgba(0,0,0,0.06)] border border-slate-100/90 hover:shadow-xl transition-all duration-300 group cursor-pointer"
-                            >
-                                {/* Photo Container */}
-                                <div className="relative overflow-hidden rounded-xl sm:rounded-[16px] bg-slate-100">
-                                    {img.imageUrl ? (
-                                        <img
-                                            src={img.imageUrl}
-                                            alt={language === "en" ? img.titleEn : img.titleNp}
-                                            className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                                            loading="lazy"
-                                            decoding="async"
-                                            referrerPolicy="no-referrer"
-                                            onError={(e) => {
-                                                const target = e.currentTarget;
-                                                target.style.display = "none";
-                                                const fallback = target.nextElementSibling as HTMLElement;
-                                                if (fallback) fallback.style.display = "flex";
-                                            }}
-                                        />
-                                    ) : null}
+                    <div className="flex gap-3 sm:gap-4 md:gap-5 w-full items-start">
+                        {galleryColumns.map((col, colIdx) => (
+                            <div key={colIdx} className="flex flex-col gap-4 sm:gap-5 flex-1 min-w-0">
+                                {col.map((img) => (
                                     <div
-                                        style={{ display: img.imageUrl ? "none" : "flex" }}
-                                        className={`w-full min-h-[140px] sm:min-h-[180px] bg-gradient-to-br ${img.placeholderBg} flex flex-col items-center justify-center text-white p-3 sm:p-4`}
+                                        key={img.id}
+                                        id={`gallery-${img.id}`}
+                                        onClick={() => setSelectedImg(img)}
+                                        className="w-full group cursor-pointer"
                                     >
-                                        <span className="text-2xl sm:text-3xl mb-1">{img.symbolicEmoji}</span>
-                                        <span className="text-[10px] sm:text-[11px] font-semibold text-white/80">
-                                            {img.category}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                {/* Bottom Metadata matching screenshot */}
-                                <div className="px-1 pt-1.5 pb-0.5 sm:px-1.5 sm:pt-2.5 sm:pb-1">
-                                    <div className="flex items-center justify-between gap-1 sm:gap-1.5">
-                                        <h3 className="text-[11px] sm:text-[13px] font-bold text-slate-800 leading-tight truncate">
-                                            {language === "en" ? img.titleEn : img.titleNp}
-                                        </h3>
-                                        <button
-                                            type="button"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                setSelectedImg(img);
-                                            }}
-                                            className="text-slate-400 hover:text-slate-600 p-0.5 rounded-sm hover:bg-slate-100 transition-colors shrink-0 cursor-pointer"
-                                            title="View pin details"
+                                        {/* Pin Media Container */}
+                                        <div
+                                            className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${img.placeholderBg} shadow-[0_2px_12px_rgba(0,0,0,0.06)] hover:shadow-xl transition-all duration-300 w-full ${img.pinHeightClass} flex flex-col justify-between p-3.5`}
                                         >
-                                            <MoreHorizontal className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                                        </button>
+                                            {img.imageUrl ? (
+                                                <img
+                                                    src={img.imageUrl}
+                                                    alt={language === "en" ? img.titleEn : img.titleNp}
+                                                    className="absolute inset-0 w-full h-full object-cover block transition-transform duration-500 group-hover:scale-[1.03]"
+                                                    loading="lazy"
+                                                    decoding="async"
+                                                    referrerPolicy="no-referrer"
+                                                    onError={(e) => {
+                                                        e.currentTarget.style.display = "none";
+                                                    }}
+                                                />
+                                            ) : null}
+
+                                            {/* Dark Dimmer on Hover */}
+                                            <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
+
+                                            {/* Top Bar: Category Pill & Pinterest Red Save / View Button */}
+                                            <div className="relative z-10 flex items-center justify-between w-full">
+                                                <span className="bg-black/50 backdrop-blur-md text-white/90 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider border border-white/10 shadow-xs">
+                                                    {img.category}
+                                                </span>
+                                                <span className="bg-[#e60023] hover:bg-[#b6001c] active:scale-95 text-white text-[11px] font-bold px-3 py-1.5 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                                    View
+                                                </span>
+                                            </div>
+
+                                            {/* Center Graphic Accent: Clean subtle typography watermark (NO EMOJIS) */}
+                                            <div className="relative z-10 flex flex-col items-center justify-center my-auto py-2 text-center pointer-events-none">
+                                                <span className="text-white/20 font-black text-xl tracking-widest uppercase select-none">
+                                                    {img.category}
+                                                </span>
+                                            </div>
+
+                                            {/* Bottom Bar: Action Icon */}
+                                            <div className="relative z-10 flex items-center justify-end w-full">
+                                                <div className="w-7 h-7 rounded-full bg-white/90 hover:bg-white text-slate-800 shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                                    <Expand className="w-3.5 h-3.5" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Bottom Metadata (Pinterest Style) */}
+                                        <div className="pt-2 pb-1 px-1">
+                                            <div className="flex items-start justify-between gap-1.5">
+                                                <h3 className="text-xs sm:text-[14px] font-semibold text-slate-900 leading-snug line-clamp-2 group-hover:underline">
+                                                    {language === "en" ? img.titleEn : img.titleNp}
+                                                </h3>
+                                                <button
+                                                    type="button"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setSelectedImg(img);
+                                                    }}
+                                                    className="text-slate-400 hover:text-slate-800 p-0.5 rounded-full hover:bg-slate-200/50 transition-colors shrink-0 cursor-pointer"
+                                                    title="Pin details"
+                                                >
+                                                    <MoreHorizontal className="w-4 h-4" />
+                                                </button>
+                                            </div>
+                                            <div className="flex items-center gap-1.5 mt-1 text-[11px] text-slate-500">
+                                                <div className="w-4 h-4 rounded-full bg-[#991b1b] text-white flex items-center justify-center text-[8px] font-bold shrink-0">
+                                                    FSU
+                                                </div>
+                                                <span className="truncate font-medium text-slate-600">
+                                                    {img.category}
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <p className="text-[10px] sm:text-[11px] text-slate-400 mt-0.5 truncate font-normal leading-normal">
-                                        {language === "en" ? img.descriptionEn : img.descriptionNp}
-                                    </p>
-                                </div>
+                                ))}
                             </div>
                         ))}
                     </div>
@@ -496,9 +555,8 @@ export default function PhotoGallery({ language }: PhotoGalleryProps) {
                                             className="w-full h-full object-contain max-h-[55vh]"
                                             referrerPolicy="no-referrer"
                                             onError={(e) => {
-                                                const target = e.currentTarget;
-                                                target.style.display = "none";
-                                                const fallback = target.nextElementSibling as HTMLElement;
+                                                e.currentTarget.style.display = "none";
+                                                const fallback = e.currentTarget.nextElementSibling as HTMLElement;
                                                 if (fallback) fallback.style.display = "flex";
                                             }}
                                         />
@@ -507,9 +565,11 @@ export default function PhotoGallery({ language }: PhotoGalleryProps) {
                                         style={{ display: selectedImg.imageUrl ? "none" : "flex" }}
                                         className={`w-full h-64 bg-gradient-to-br ${selectedImg.placeholderBg} flex flex-col items-center justify-center text-white p-6`}
                                     >
-                                        <span className="text-5xl mb-2">{selectedImg.symbolicEmoji}</span>
-                                        <span className="text-sm font-bold text-white/90">
-                                            {selectedImg.category} Archive
+                                        <span className="text-xl font-bold tracking-wider uppercase text-white/90">
+                                            {selectedImg.category}
+                                        </span>
+                                        <span className="text-xs text-white/60 mt-1 text-center max-w-md">
+                                            {language === "en" ? selectedImg.titleEn : selectedImg.titleNp}
                                         </span>
                                     </div>
 
