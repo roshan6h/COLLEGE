@@ -161,16 +161,544 @@ export interface Club {
     [key: string]: any;
 }
 export const RedCross: Club = {
-    id: 'red-cross',
-    name: 'Red Cross',
-    nepaliName: 'रेड क्रस',
-    category: 'Student Welfare',
-    logo: '/fsu/logo1.webp',
-    accentColor: '#991b1b',
-    shortDescription: 'The central student union guarding student rights, campus welfare and institutional growth.',
-    memberCount: 2400,
-    president: 'Anup Aale Magar',
+    id: 'yrcs-club',
+    name: 'Youth Red Cross Circle',
+    nepaliName: 'युवा रेडक्रस सर्कल',
+    category: 'Social Service',
+    logo: '../red/redLogo.webp',
+    accentColor: '#dc2626',
+
+    description:
+        'Nepal Youth Red Cross Circle, Aadikavi Bhanubhakta Campus is a student organization dedicated to humanity, impartiality, social responsibility, humanitarian service, leadership development, and community welfare.',
+
+    shortDescription:
+        'Dedicated to humanitarian service, social responsibility, leadership, health awareness, disaster preparedness, and community welfare.',
+
+    establishedYear: 1996,
+    memberCount: 0,
+    facultyAdvisor: 'Maha Prasad Hadkhale',
+    president: 'Mausami Thapa',
+
+    meetingSchedule: '',
+    roomLocation: 'Aadikavi Bhanubhakta Campus',
+
+    contactEmail: 'aadikaviyouthcrosscircle@gmail.com',
+
+    aboutImages: [
+        '../yrcs/group.webp',
+        '../yrcs/023.webp',
+        '../yrcs/024.webp'
+    ],
+
     featured: true,
+
+    vision:
+        'To build a generation of socially responsible, humane youth dedicated to service, impartiality, and community welfare.',
+
+    certificate: {
+        isRegistered: false,
+        certificateNumber: '',
+        registeredDate: 'B.S. 2053',
+        registeredDateNp: 'वि.सं. २०५३',
+        issuingAuthority: 'Nepal Youth Red Cross Circle, Aadikavi Bhanubhakta Campus',
+        issuingAuthorityNp:
+            'नेपाल युवा रेडक्रस सर्कल, आदिकवि भानुभक्त क्याम्पस',
+        registrationType: 'Youth Red Cross Circle',
+        validUntil: '',
+        certificateImage: '',
+        remarks: 'This information has not been updated yet.'
+    },
+
+    mission: [
+        'Engage students in humanitarian and social service activities.',
+        'Uphold the principles of the Red Cross through meaningful community service.',
+        'Develop leadership and community responsibility among students.',
+        'Promote humanity, impartiality, courage, and social responsibility.'
+    ],
+
+    presidentMessage: {
+        senderName: 'Safal Paudel',
+        senderRole: 'Acting President, YRCS Aadikavi Bhanubhakta Campus',
+        message:
+            'Youth Red Cross Circle is not merely an ordinary student organization but an institution founded on the principles of humanity, impartiality, and social responsibility. Since its establishment, it has guided youth toward service-oriented leadership, social awareness, and human sensitivity. Through blood donation campaigns, health awareness programs, disaster risk reduction training, environmental conservation campaigns, and climate change awareness programs, the Circle continues to serve students and the wider community.',
+        avatarUrl: '/yrcs/safal.webp'
+    },
+
+    advisorMessage: {
+        senderName: 'Maha Prasad Hadkhale',
+        senderRole: 'Patron & Campus Chief',
+        message:
+            'The Youth Red Cross Circle continues to contribute to humanitarian service, student leadership, social responsibility, and community welfare through meaningful activities and collective commitment.',
+        avatarUrl: '/yrcs/maha.webp'
+    },
+
+    manifesto: {
+        title: 'Youth Red Cross Circle Manifesto',
+        points: [
+            'Humanity: Promote humanity, impartiality, and a spirit of service among students.',
+            'Leadership: Build leadership, courage, and self-confidence through humanitarian action.',
+            'Community Support: Support communities in times of hardship and suffering.',
+            'Values: Instill good values in youth for their all-round development.'
+        ]
+    },
+
+    history:
+        'Nepal Youth Red Cross Circle, Aadikavi Bhanubhakta Campus was established in B.S. 2053. It is a shared institution formed and run by students of the campus. Formed with representation from students of various faculties, the organization embraces the international principles of the Red Cross and connects the campus and its students with various associations, institutions, schools, and communities while remaining dedicated to humanitarian service.',
+
+    historyMilestones: [
+        {
+            category: 'WHEN IT ALL BEGAN',
+            year: '2053 B.S.',
+            title: 'Establishment of Youth Red Cross Circle',
+            desc:
+                'Nepal Youth Red Cross Circle, Aadikavi Bhanubhakta Campus was established in B.S. 2053 by students of the campus.',
+            image: ''
+        }
+    ],
+
+    leadership: [
+        {
+            id: 'l1',
+            name: 'Mausami Thapa',
+            role: 'President',
+            department: '',
+            email: '',
+            phone: '9702002665',
+            facebook: '',
+            avatarUrl: '../red/mausami.webp'
+        },
+        {
+            id: 'l2',
+            name: 'Safal Poudel',
+            role: 'Vice President',
+            department: '',
+            email: 'safalpoudel471@gmail.com',
+            phone: '9806580089',
+            facebook: '',
+            avatarUrl: '../red/safal.webp'
+        },
+        {
+            id: 'l3',
+            name: 'Sanjip Gurung',
+            role: 'Secretary',
+            department: '',
+            email: '',
+            phone: '9762865228',
+            facebook: '',
+            avatarUrl: '../red/sanjip.webp'
+        },
+        {
+            id: 'l4',
+            name: 'Dhananjaya Pandit',
+            role: 'Treasurer',
+            department: '',
+            email: '',
+            phone: '9767859730',
+            facebook: '',
+            avatarUrl: '../red/dhananjaya.webp'
+        },
+        {
+            id: 'l5',
+            name: 'Sadikshya Poudel',
+            role: 'Joint Secretary',
+            department: '',
+            email: '',
+            phone: '9742501450',
+            facebook: '',
+            avatarUrl: '../red/sadix.webp'
+        },
+        {
+            id: 'l6',
+            name: 'Sudip Basnet',
+            role: 'Joint Treasurer',
+            department: '',
+            email: '',
+            phone: '9829191303',
+            facebook: '',
+            avatarUrl: '../red/sudip.webp'
+        },
+        {
+            id: 'l7',
+            name: 'Dilip Karki',
+            role: 'Member',
+            department: '',
+            email: '',
+            phone: '9824189131',
+            facebook: '',
+            avatarUrl: '../red/dilip.webp'
+        },
+        {
+            id: 'l8',
+            name: 'Anisha Thapa',
+            role: 'Member',
+            department: '',
+            email: '',
+            phone: '9815180042',
+            facebook: '',
+            avatarUrl: '../red/anisha.webp'
+        },
+        {
+            id: 'l9',
+            name: 'Basanta Khanal',
+            role: 'Member',
+            department: '',
+            email: '',
+            phone: '9702618612',
+            facebook: '',
+            avatarUrl: '../red/basanta.webp'
+        },
+        {
+            id: 'l10',
+            name: 'Adit Thapa',
+            role: 'Member',
+            department: '',
+            email: '',
+            phone: '9828186261',
+            facebook: '',
+            avatarUrl: '../red/aadit.webp'
+        },
+        {
+            id: 'l11',
+            name: 'Aayusha Khawas',
+            role: 'Member',
+            department: '',
+            email: '',
+            phone: '984659291',
+            facebook: '',
+            avatarUrl: '../red/aayusha.webp'
+        },
+
+        // Sub-Committee Coordinators
+
+        {
+            id: 'sc1',
+            name: 'Sadiksha Adhikari',
+            role: 'Sub-Committee Coordinator - First Aid',
+            department: '',
+            email: '',
+            phone: '9763249565',
+            facebook: '',
+            avatarUrl: '../red/sadikhya.webp'
+        },
+        {
+            id: 'sc2',
+            name: 'Biwas Ranabhat',
+            role: 'Sub-Committee Coordinator - Information & Technology',
+            department: '',
+            email: '',
+            phone: '9815178591',
+            facebook: '',
+            avatarUrl: '../red/biwash.webp'
+        },
+        {
+            id: 'sc3',
+            name: 'Shulav Shrestha',
+            role: 'Sub-Committee Coordinator - Finance & Organization Coordination',
+            department: '',
+            email: '',
+            phone: '9826600845',
+            facebook: '',
+            avatarUrl: '../red/shulav.webp'
+        },
+        {
+            id: 'sc4',
+            name: 'Arpana Pantha',
+            role: 'Sub-Committee Coordinator - 11 & 12 Youth Red Cross',
+            department: '',
+            email: '',
+            phone: '9702655245',
+            facebook: '',
+            avatarUrl: '../red/arpana.webp'
+        },
+
+        // Advisors and Officials
+
+        {
+            id: 'a1',
+            name: 'Maha Prasad Hadkhale',
+            role: 'Patron & Campus Chief',
+            department: '',
+            email: '',
+            phone: '',
+            facebook: '',
+            avatarUrl: '../red/maha.webp'
+        },
+        {
+            id: 'a2',
+            name: 'Suman Khadka',
+            role: 'Immediate Past President',
+            department: '',
+            email: '',
+            phone: '',
+            facebook: '',
+            avatarUrl: '../red/suman.webp'
+        },
+        {
+            id: 'a3',
+            name: 'Narayani Adhikari',
+            role: 'Focal Person',
+            department: '',
+            email: '',
+            phone: '+9779856060469',
+            facebook: '',
+            avatarUrl: '../red/narayani.webp'
+        },
+        {
+            id: 'a4',
+            name: 'Buddha Kumar Shrestha',
+            role: 'Assistant Focal Person',
+            department: '',
+            email: '',
+            phone: '+977 984-6499209',
+            facebook: '',
+            avatarUrl: '../red/buddha.webp'
+        }
+    ],
+
+    achievements: [],
+
+    achievementItems: [
+        {
+            id: 'ach-1',
+            title: 'Honored for Blood Donation Record',
+            description:
+                'Youth Red Cross Circle, Aadikavi Bhanubhakta Campus was honored by Nepal Red Cross Society, Kaski District Branch, Pokhara after donating 104 units of blood in FY 2080/81 and inspiring other institutions to contribute.',
+            date: '12 Saun 2081',
+            category: 'Blood Donation',
+            badge: 'Major Achievement',
+            image: '/yrcs/achievement1.webp'
+        },
+        {
+            id: 'ach-2',
+            title: '2nd Best Club of the Year 2080',
+            description:
+                'Among 11 clubs formed at the campus, Youth Red Cross Circle was declared the 2nd Best Club of the Year 2080 during the campus Annual General Assembly.',
+            date: '19 Bhadra 2081',
+            category: 'Best Club',
+            badge: 'Major Achievement',
+            image: '/yrcs/achievement2.webp'
+        },
+        {
+            id: 'ach-3',
+            title: 'Best Club of the Year 2081',
+            description:
+                'Among 11 clubs formed at the campus, Youth Red Cross Circle was declared the Best Club of the Year 2081 during the campus Annual General Assembly.',
+            date: '18 Bhadra 2082',
+            category: 'Best Club',
+            badge: 'Major Achievement',
+            image: '/yrcs/achievement3.webp'
+        },
+        {
+            id: 'ach-4',
+            title: 'District Excellent Circle - 4th Time',
+            description:
+                'Youth Red Cross Circle was declared Excellent for the fourth time based on performance evaluation at the 40th Youth Junior Red Cross Seminar organized by NRCS Tanahun.',
+            date: '7 Asar 2082',
+            category: 'District Achievement',
+            badge: '4th Time',
+            image: '/yrcs/achievement4.webp'
+        },
+        {
+            id: 'ach-5',
+            title: 'District Excellent Circle - 5th Time',
+            description:
+                'Youth Red Cross Circle was declared Excellent for the fifth time based on performance evaluation at the 41st Youth Junior Red Cross Seminar organized by NRCS Tanahun.',
+            date: '6 Asar 2083',
+            category: 'District Achievement',
+            badge: '5th Time',
+            image: '/yrcs/achievement5.webp'
+        }
+    ],
+
+    activities: [
+        {
+            id: 'act-1',
+            title: 'Y-ADAPT (TOT) Participation - Maldives',
+            description:
+                'Then-President Sunita Tiwari represented Aadikavi Bhanubhakta Campus Youth Red Cross Circle in the international climate change Y-ADAPT Training of Trainers program held in Malé, Maldives.',
+            date: '11-18 July 2023',
+            category: 'International',
+            image: '/yrcs/activity1.webp'
+        },
+        {
+            id: 'act-2',
+            title: 'Mass Blood Donation Campaign',
+            description:
+                'A blood donation program organized on the occasion of the 59th Junior Youth Red Cross Day collected 104 pints of blood.',
+            date: '22 Falgun 2080',
+            category: 'Humanitarian Service',
+            image: '/yrcs/activity2.webp'
+        },
+        {
+            id: 'act-3',
+            title: 'Community Health Checkup & Counseling Camp',
+            description:
+                'A large-scale community health checkup and counseling camp was organized at Gajure Health Post, Vyas-9, where more than 500 local residents received health checkups and counseling services.',
+            date: '16 Bhadra 2080',
+            category: 'Health Service',
+            image: '/yrcs/activity3.webp'
+        },
+        {
+            id: 'act-4',
+            title: 'Educational Materials Distribution Program',
+            description:
+                'Educational materials were distributed to 30 students of Siddhabeni Basic School, Vyas-13, as part of a wider educational materials collection campaign.',
+            date: '26 Baishakh 2081 / 8 May 2024',
+            category: 'Community Service',
+            image: '/yrcs/activity4.webp'
+        },
+        {
+            id: 'act-5',
+            title: 'Basic First Aid Training',
+            description:
+                'A one-day basic first aid training program was organized at the Campus Hall with technical support from the NRCS District Branch.',
+            date: '24 Chaitra 2080',
+            category: 'Training',
+            image: '/yrcs/activity5.webp'
+        }
+    ],
+
+    participation: [
+        {
+            id: 'p1',
+            title: 'Asia Pacific Youth Mobilization Summit 2023',
+            level: 'International',
+            participants: 'Sandesh Adhikari',
+            date: '15-18 June 2023',
+            location: 'Kuala Lumpur, Malaysia'
+        },
+        {
+            id: 'p2',
+            title: 'Y-Adapt Sub-Regional Training of Facilitators',
+            level: 'International',
+            participants: 'Sunita Tiwari',
+            date: '30 June - 8 July 2023',
+            location: 'Malé, Maldives'
+        },
+        {
+            id: 'p3',
+            title: 'National Youth Leadership Development Training',
+            level: 'National',
+            participants: 'Suman Khadka',
+            date: '9-11 June 2023',
+            location: 'Tanahun'
+        },
+        {
+            id: 'p4',
+            title: '41st National Junior/Youth Red Cross Seminar',
+            level: 'National',
+            participants: 'Suman Khadka',
+            date: '7-8 Poush 2080',
+            location: 'Pokhara'
+        },
+        {
+            id: 'p5',
+            title: 'Youth Capacity Development - Trainers Training',
+            level: 'Provincial',
+            participants: 'Puspa Pandit',
+            date: '1-5 October 2023',
+            location: 'Pokhara'
+        },
+        {
+            id: 'p6',
+            title: 'Gandaki Province Junior/Youth Red Cross Seminar',
+            level: 'Provincial',
+            participants: 'Mausami Thapa',
+            date: '',
+            location: 'Gandaki Province'
+        },
+        {
+            id: 'p7',
+            title: '40th Tanahun District Seminar',
+            level: 'District',
+            participants:
+                'Rupak Shrestha, Suman Khadka, Roshan Ojha, Roshni Kunwar',
+            date: '6-7 Asar 2082',
+            location: 'Satyawati S.S., Vyas-2'
+        },
+        {
+            id: 'p8',
+            title: 'Vyas Municipality Speech Competition',
+            level: 'District',
+            participants: 'Mausami Thapa',
+            date: '19 Bhadra 2080',
+            location: 'Satyawati S.S.'
+        },
+        {
+            id: 'p9',
+            title: 'District Quiz Competition',
+            level: 'District',
+            participants: 'Mausami Thapa, Pinka Tiwari, Kunjan Shrestha',
+            date: '26 Magh 2080',
+            location: 'Pabitra Ma.Vi.'
+        },
+        {
+            id: 'p10',
+            title: 'Basic First Aid Training',
+            level: 'District',
+            participants: 'Roshan Ojha, Sushila Lamsal',
+            date: '11-12 Falgun 2080',
+            location: 'Maharishi Ma.Vi., Vyas-3'
+        },
+        {
+            id: 'p11',
+            title: '41st Tanahun District Seminar',
+            level: 'District',
+            participants: 'Sanjip Gurung, Sadiksha Paudel',
+            date: '5-6 Asar 2083',
+            location: 'Barahi Ma.Vi., Vyas-13'
+        }
+    ],
+
+    galleryItems: [
+        {
+            id: 'gal-yrcs-1',
+            title: '',
+            date: '',
+            category: 'Activities',
+            description: '',
+            image: '/yrcs/g1.webp'
+        },
+        {
+            id: 'gal-yrcs-2',
+            title: '',
+            date: '',
+            category: 'Activities',
+            description: '',
+            image: '/yrcs/g2.webp'
+        },
+        {
+            id: 'gal-yrcs-3',
+            title: '',
+            date: '',
+            category: 'Activities',
+            description: '',
+            image: '/yrcs/g3.webp'
+        },
+        {
+            id: 'gal-yrcs-4',
+            title: '',
+            date: '',
+            category: 'Activities',
+            description: '',
+            image: '/yrcs/g4.webp'
+        },
+        {
+            id: 'gal-yrcs-5',
+            title: '',
+            date: '',
+            category: 'Activities',
+            description: '',
+            image: '/yrcs/g5.webp'
+        }
+    ],
+
+    contactInfo: {
+        email: 'aadikaviyouthcrosscircle@gmail.com',
+        facebook: 'https://www.facebook.com/yuabcampus',
+        phone: '065-590096',
+        mobile: '+977 9806580089'
+    }
 };
 export const abitClubData: Club = {
     id: 'abit-club',
@@ -1755,5 +2283,29 @@ export const UPCOMING_EVENTS: ClubEvent[] = [
         image: '/soon.webp'
     }, 
    //abit
-
+   //redcross
+   {
+    id: 'yr1',
+    clubId: 'yrcs-club',
+    clubName: 'Youth Red Cross Circle',
+    title: 'Disaster Management & Climate Change Awareness Program',
+    date: '2026',
+    time: 'Pending',
+    venue: 'Pending',
+    category: '',
+    description: 'An upcoming awareness program focused on disaster management and climate change, aimed at equipping students with knowledge on risk reduction, preparedness, and environmental responsibility.',
+    image: '/soon.webp'
+},
+{
+    id: 'yr2',
+    clubId: 'yrcs-club',
+    clubName: 'Youth Red Cross Circle',
+    title: 'Blood Donation Program',
+    date: '2026',
+    time: 'Pending',
+    venue: 'Pending',
+    category: '',
+    description: 'An upcoming blood donation campaign organized by the Youth Red Cross Circle to promote humanitarian service and provide life-saving support to the community.',
+    image: '/soon.webp'
+},
 ];
